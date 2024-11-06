@@ -1,0 +1,20 @@
+.top-bar {
+    height: 60px;
+    background-color: #333;
+    color: white;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    /* margin-left: 200px; */
+}
+
+.top-bar-left h2 {
+    margin: 0;
+}
+
+.top-bar-right .icon {
+    font-size: 1.5rem;
+    margin-left: 20px;
+    cursor: pointer;
+}

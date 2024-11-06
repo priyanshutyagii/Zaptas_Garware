@@ -1,5 +1,6 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import AppLayout from "./components/Layout/AppLayout";
+import AdminLayout from "./admin/AdminLayout";
 
 import "./App.css";
 
@@ -9,6 +10,8 @@ import Workplace from "./pages/Workplace";
 import ErrorPage from "./pages/ErrorPage";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
+import AdminPanel from "./admin/AdminPanel";
+import UploadBanners from "./admin/UploadBanners";
 
 const router = createBrowserRouter([
   {
@@ -38,9 +41,25 @@ const router = createBrowserRouter([
       },
     ],
   },
+  {
+    path: "/admin",
+    element: <AdminLayout />,
+    errorElement: <ErrorPage />,
+    children: [
+      {
+        path: "/admin",
+        element: <AdminPanel />,
+      },
+      {
+        path: "upload-banners",
+        element: <UploadBanners />,
+      },
+    ],
+  },
 ]);
+
 function App() {
-  return <RouterProvider router={router}> </RouterProvider>;
+  return <RouterProvider router={router} />;
 }
 
 export default App;
