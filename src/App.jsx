@@ -8,6 +8,7 @@ import Quicklinks from "./pages/Quicklinks";
 import Workplace from "./pages/Workplace";
 import ErrorPage from "./pages/ErrorPage";
 import Home from "./pages/Home";
+import Login from "./pages/Login";
 
 const router = createBrowserRouter([
   {
@@ -30,6 +31,10 @@ const router = createBrowserRouter([
       {
         path: "quicklinks",
         element: <Quicklinks />,
+      },
+      {
+        path: "login",
+        element: <Login />,
       },
     ],
   },
