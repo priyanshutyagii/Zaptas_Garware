@@ -1,87 +1,65 @@
-import React from "react";
+import  { useState, useEffect } from "react";
+
+import ConnectMe from "../../config/connect";
+import { apiCall, getTokenFromLocalStorage } from "../../utils/apiCall";
 
 export default function Banner() {
+  const [banners, setBanners] = useState([]);
+
+  // Fetch banners from the API
+  const fetchBanners = async () => {
+    try {
+      const url = `${ConnectMe.BASE_URL}/admin/getFs?type=Banners&active=true`;
+      const token = getTokenFromLocalStorage();
+
+      const headers = {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      };
+
+      const banners = await apiCall("GET", url, headers);
+      setBanners(banners);
+      console.log(banners, 'fetched');
+    } catch (error) {
+      setBanners([]);
+      console.error("Error fetching banners:", error.message);
+    }
+  };
+
+  useEffect(() => {
+    fetchBanners();
+  }, []);
+
   return (
     <div id="bannerCarousel" className="carousel slide" data-bs-ride="carousel">
       <div className="carousel-indicators">
-        <button
-          type="button"
-          data-bs-target="#bannerCarousel"
-          data-bs-slide-to="0"
-          className="active"
-          aria-current="true"
-          aria-label="Slide 1"
-        ></button>
-        <button
-          type="button"
-          data-bs-target="#bannerCarousel"
-          data-bs-slide-to="1"
-          aria-label="Slide 2"
-        ></button>
-        <button
-          type="button"
-          data-bs-target="#bannerCarousel"
-          data-bs-slide-to="2"
-          aria-label="Slide 3"
-        ></button>
-        <button
-          type="button"
-          data-bs-target="#bannerCarousel"
-          data-bs-slide-to="3"
-          aria-label="Slide 4"
-        ></button>
+        {banners.map((banner, index) => (
+          <button
+            key={banner._id}
+            type="button"
+            data-bs-target="#bannerCarousel"
+            data-bs-slide-to={index}
+            className={index === 0 ? "active" : ""}
+            aria-current={index === 0 ? "true" : "false"}
+            aria-label={`Slide ${index + 1}`}
+          ></button>
+        ))}
       </div>
+
       <div className="carousel-inner">
-        {/* Slide 1 */}
-        <div className="carousel-item active">
-          <img
-            src="public\banner1.jpg"
-            className="d-block w-100"
-            alt="Banner 1"
-          />
-          <div className="carousel-caption d-none d-md-block">
-            <h5>Slide 1 Title</h5>
-            <p>Some description for the first slide.</p>
+        {banners.map((banner, index) => (
+          <div key={banner._id} className={`carousel-item ${index === 0 ? "active" : ""}`}>
+            <img
+              src={`${ConnectMe.BASE_URL}${banner.imagePath}`}
+              className="d-block w-100"
+              alt={`Banner ${index + 1}`}
+            />
+            <div className="carousel-caption d-none d-md-block">
+              {/* <h5>{banner.title || `Slide ${index + 1} Title`}</h5> */}
+              {/* <p>{banner.description || `Some description for slide ${index + 1}.`}</p> */}
+            </div>
           </div>
-        </div>
-
-        {/* Slide 2 */}
-        <div className="carousel-item">
-          <img
-            src="public\banner2.jpg"
-            className="d-block w-100"
-            alt="Banner 2"
-          />
-          <div className="carousel-caption d-none d-md-block">
-            <h5>Slide 2 Title</h5>
-            <p>Some description for the second slide.</p>
-          </div>
-        </div>
-
-        {/* Slide 3 */}
-        <div className="carousel-item">
-          <img
-            src="public\banner3.jpg"
-            className="d-block w-100"
-            alt="Banner 3"
-          />
-          <div className="carousel-caption d-none d-md-block">
-            <h5>Slide 3 Title</h5>
-            <p>Some description for the third slide.</p>
-          </div>
-        </div>
-        {/* Slide 4 */}
-        <div className="carousel-item">
-          <img
-            src="public\banner4.jpg"
-            className="d-block w-100"
-            alt="Banner 4"
-          />
-          <div className="carousel-caption d-none d-md-block">
-            <h5>Slide 4 Title</h5>
-            <p>Some description for the third slide.</p>
-          </div>
-        </div>
+        ))}
       </div>
 
       {/* Previous and Next controls */}

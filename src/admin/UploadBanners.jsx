@@ -1,99 +1,225 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./UploadBanners.css";
+import { apiCall, getTokenFromLocalStorage } from "../utils/apiCall";
+import ConnectMe from "../config/connect";
+import { toast } from 'react-toastify';
 
 export default function UploadBanners() {
-  return (
-    <div className="upload-banners">
-      <div className="banners-section">
-        <h4>Current Banners</h4>
-        <div className="banners-row">
-          <div className="banner-card">
-            <img
-              src="public\banner1.jpg"
-              alt="Banner 1"
-              className="banner-image active"
-            />
-            <img
-              src="public\banner1.jpg"
-              alt="Banner 1"
-              className="banner-image"
-            />
-            <img
-              src="public\banner1.jpg"
-              alt="Banner 1"
-              className="banner-image"
-            />
-            <img
-              src="public\banner1.jpg"
-              alt="Banner 1"
-              className="banner-image"
-            />
-            <img
-              src="public\banner1.jpg"
-              alt="Banner 1"
-              className="banner-image"
-            />
-          </div>
-        </div>
+  const [banners, setBanners] = useState([]);
+  const [activeIndex, setActiveIndex] = useState(null);
+  const [selectedImages, setSelectedImages] = useState([]);
+  const [isBannerUpdated, setIsBannerUpdated] = useState(''); // Track banner update
+  const fileInputRef = React.createRef();
 
-        <div className="banners-btn">
-          <div className="banner-actions">
-            <button
-              type="button"
-              className="btn btn-outline-primary btn-sm m-1"
-            >
-              Active
-            </button>
-            <button
-              type="button"
-              className="btn btn-outline-secondary btn-sm m-1"
-            >
-              Rename
-            </button>
-          </div>
-          <div className="save-cancel">
-            <button className="btn btn-danger save-btn btn-sm m-1">Save</button>
-            <button className="btn btn-info cancel-btn btn-sm m-1">
-              Cancel
-            </button>
-          </div>
+  useEffect(() => {
+    fetchBanners();
+  }, [isBannerUpdated]); // Only re-fetch when isBannerUpdated changes
+
+  const fetchBanners = async () => {
+    try {
+      const url = `${ConnectMe.BASE_URL}/admin/getFs?type=Banners`;
+      const token = getTokenFromLocalStorage();
+
+      const headers = {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      };
+
+      const banners = await apiCall("GET", url, headers);
+      setBanners(banners);
+      console.log(banners, 'fetched');
+    } catch (error) {
+      setBanners([]);
+      console.error("Error fetching banners:", error.message);
+    }
+  };
+
+  const toggleActiveState = async (index) => {
+    try {
+      setActiveIndex(activeIndex === index ? null : index);
+    } catch (error) {
+      console.error("Error toggling banner active state:", error.message);
+    }
+  };
+
+  const deleteBanner = async (bannerId) => {
+    try {
+      const url = `${ConnectMe.BASE_URL}/admin/banners/${bannerId}`;
+      const token = getTokenFromLocalStorage();
+
+      const headers = {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      };
+
+      await apiCall("DELETE", url, headers);
+      console.log("Banner deleted successfully");
+
+      setIsBannerUpdated(!isBannerUpdated); // Trigger banner update state
+    } catch (error) {
+      console.error("Error deleting banner:", error.message);
+    }
+  };
+
+  const updateBannerStatus = async (bannerId) => {
+    try {
+      const url = `${ConnectMe.BASE_URL}/admin/banners/${bannerId}/toggle-status`;
+      const token = getTokenFromLocalStorage();
+
+      const headers = {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      };
+
+      const updatedBanner = await apiCall("PATCH", url, headers);
+      console.log("Banner status updated:", updatedBanner);
+
+      setIsBannerUpdated(!isBannerUpdated);  // Trigger banner update state
+    } catch (error) {
+      console.error("Error updating banner status:", error.message);
+    }
+  };
+
+  const uploadBanner = async () => {
+    if (!selectedImages || selectedImages.length === 0) {
+      toast.error('Please select at least one banner image.');
+      return;
+    }
+
+    try {
+      const url = `${ConnectMe.BASE_URL}/file/upload`;
+      const token = getTokenFromLocalStorage();
+
+      const formData = new FormData();
+      for (const image of selectedImages) {
+        if (typeof image === 'string') {
+          const response = await fetch(image);
+          if (!response.ok) {
+            toast.error(`Failed to fetch the image from URL: ${image}`);
+            return;
+          }
+          const blob = await response.blob();
+          const file = new File([blob], 'banner.jpg', { type: blob.type });
+          formData.append('files', file);
+        } else {
+          formData.append('files', image);
+        }
+      }
+
+      formData.append('name', 'Banners');
+
+      const headers = {
+        'Authorization': `Bearer ${token}`,
+      };
+
+      await apiCall('POST', url, headers, formData);
+
+
+      toast.success('Banner uploaded successfully!');
+      setSelectedImages([]); // Clear images after upload
+      setIsBannerUpdated(!isBannerUpdated);  // Trigger banner update state
+      fileInputRef.current.value = null;
+
+    } catch (error) {
+      console.error('Error uploading banner:', error.message);
+      toast.error(`Error uploading banner: ${error.message || 'An unexpected error occurred'}`);
+    }
+  };
+
+  const handleFileChange = (e) => {
+    const files = e.target.files;
+    const fileArray = Array.from(files).map(file => URL.createObjectURL(file));
+    setSelectedImages(fileArray);
+  };
+
+  const handleCancel = () => {
+    setSelectedImages([]);
+    fileInputRef.current.value = null;
+  };
+
+  return (
+    <div className="upload-banners container">
+      {/* Current Banners Section */}
+      <div className="banners-section mb-4">
+        <h4>Current Banners</h4>
+        <div className="row">
+          {banners.length > 0 ? (
+            banners.map((banner, index) => (
+              <div key={banner._id} className="col-6 col-sm-3 mb-4">
+                <div className="banner-card">
+                  <img
+                    src={`${ConnectMe.BASE_URL}${banner.imagePath}`}
+                    alt={`Banner ${index + 1}`}
+                    className={`banner-image ${activeIndex === index ? "active" : ""}`}
+                    onClick={() => toggleActiveState(index, banner._id)}
+                  />
+                </div>
+
+                <div className="banner-actions text-center">
+                  <button
+                    type="button"
+                    className="btn btn-outline-primary btn-sm me-2"
+                    onClick={() => updateBannerStatus(banner._id)}
+                  >
+                    {banner?.active ? "Mark as Inactive" : "Mark as Active"}
+                  </button>
+                  <button
+                    type="button"
+                    className="btn btn-outline-secondary btn-sm"
+                    onClick={() => deleteBanner(banner._id)}
+                  >
+                    Delete
+                  </button>
+                </div>
+              </div>
+            ))
+          ) : (
+            <p>No banners available.</p>
+          )}
         </div>
       </div>
 
+      {/* Upload New Banners Section */}
       <div className="banners-section">
         <h4>Upload New Banners</h4>
-        <input type="file" className="upload-input" multiple />
+        <input
+          type="file"
+          className="form-control upload-input mb-3"
+          multiple
+          onChange={handleFileChange}
+          ref={fileInputRef}
+        />
 
-        <div className="banners-row">
-          <div className="banner-card">
-            <img
-              src="public\banner1.jpg"
-              alt="Banner 1"
-              className="banner-image"
-            />
+        {selectedImages.length > 0 && (
+          <div className="row">
+            {selectedImages.map((image, index) => (
+              <div key={index} className="col-6 col-sm-3 mb-4">
+                <div className="banner-card">
+                  <img
+                    src={image}
+                    alt={`Selected Banner ${index + 1}`}
+                    className="banner-image"
+                  />
+              
+                </div>
+              </div>
+            ))}
           </div>
-        </div>
-        <div className="banners-btn">
-          <div className="banner-actions">
-            <button
-              type="button"
-              className="btn btn-outline-primary btn-sm m-1"
-            >
-              Active
-            </button>
-            <button
-              type="button"
-              className="btn btn-outline-secondary btn-sm m-1"
-            >
-              Rename
-            </button>
-          </div>
-          <div className="save-cancel">
-            <button className="btn btn-danger save-btn btn-sm m-1">Save</button>
-            <button className="btn btn-info cancel-btn btn-sm m-1">
-              Cancel
-            </button>
-          </div>
+        )}
+
+        <div className="d-flex justify-content-between mt-3">
+          <button
+            className="btn btn-danger btn-sm"
+            onClick={uploadBanner}
+          >
+            Upload
+          </button>
+          <button
+            className="btn btn-info btn-sm"
+            onClick={handleCancel}
+          >
+            Cancel
+          </button>
         </div>
       </div>
     </div>
