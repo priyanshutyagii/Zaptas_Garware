@@ -1,20 +1,21 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { FaLinkedin } from "react-icons/fa";
 import { HiArrowCircleRight } from "react-icons/hi";
 import { FaThumbsUp } from 'react-icons/fa';
 
 import { apiCall, getTokenFromLocalStorage } from "../../utils/apiCall";
 import ConnectMe from "../../config/connect";
+import showToast from "../../utils/toastHelper";
 
 export default function LinkedInCard() {
   const [posts, setPosts] = useState([]);
-
+  const [loggin, setloggin] = useState(false)
   // Function to fetch LinkedIn posts
   const fetchPosts = async () => {
     try {
-      const url = `${ConnectMe.BASE_URL}/fetchOrgPosts?start=0&count=3&show=posts,images`;
+      const url = `${ConnectMe.BASE_URL}/fetchOrgPosts?start=0&count=3&show=posts,multimedia,likeStatus,text,likeCount,id`;
       const token = getTokenFromLocalStorage();
-
+      console.log(token)
       const headers = {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
@@ -22,8 +23,19 @@ export default function LinkedInCard() {
 
       const response = await apiCall("GET", url, headers);
 
-      setPosts(response.posts);
+      if (response.success) {
+        setPosts(response?.data?.posts);
+      } else {
+        if (!response.success && response.errorMessage == 'loginRequired') {
+          setloggin(true)
+          showToast("You need to Logged in first", 'success')
+          return
+        }
+        showToast("failed to load posts", 'error')
+      }
+
     } catch (error) {
+      showToast("failed to load posts", 'error')
       console.error("Error fetching posts:", error.message);
       setPosts([]);
     }
@@ -40,7 +52,7 @@ export default function LinkedInCard() {
   }
 
 
-  const handleLikeToggle = async (postId,method) => {
+  const handleLikeToggle = async (postId, method) => {
     try {
       // Get the authentication token
       const token = getTokenFromLocalStorage();
@@ -55,11 +67,12 @@ export default function LinkedInCard() {
 
       // Prepare the body for the request
       const Passed = {
-        postId: `urn:li:share:${postId}`
+        // postId: `urn:li:share:${postId}`
+         postId: `${postId}`
       }
       const body = JSON.stringify(
         Passed
-      ); 
+      );
 
       // Make the API call to like or unlike the post
       await apiCall("POST", url, headers, body);
@@ -76,6 +89,32 @@ export default function LinkedInCard() {
     }
   };
 
+  const handleLinkedInCallback = async () => {
+    try {
+      const url = `${ConnectMe.BASE_URL}/auth/linkedin`;
+      const token = getTokenFromLocalStorage();
+      const headers = {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      };
+
+      const response = await apiCall("GET", url, headers);
+
+      if (response.success) {
+        showToast("Login Success", "success");
+
+        // Open the LinkedIn authorization URL in a new tab
+        window.open(response.data, "_blank");
+      } else {
+        showToast("Login Failed", "error");
+        console.error("LinkedIn login failed:", response.message);
+      }
+    } catch (error) {
+      showToast("Login Failed", "error");
+      console.error("Error during LinkedIn login:", error.message);
+    }
+  };
+
 
 
   return (
@@ -89,24 +128,25 @@ export default function LinkedInCard() {
           View All <HiArrowCircleRight />
         </a>
       </div>
-      <div className="card-body">
-        {posts && posts.map((post) => (
-          <div key={post.id} className="d-flex align-items-start mb-3">
-            <div className="csrimg">
-              <img src={post.imageUrl} alt="CSR" style={{ width: "100px", height: "100px" }} />
-            </div>
-            <div className="announcement-disc ms-2">
-              <p className="card-text fs-6">{truncateText(post.text, 12)}</p>
-              <p className="card-text fs-6" >
+      {loggin ? <button onClick={handleLinkedInCallback}>Login with linkedin</button> :
+        <div className="card-body">
+          {posts && posts.map((post) => (
+            <div key={post.id} className="d-flex align-items-start mb-3">
+              <div className="csrimg">
+                <img src={post.imageUrl} alt="CSR" style={{ width: "100px", height: "100px" }} />
+              </div>
+              <div className="announcement-disc ms-2">
+                <p className="card-text fs-6">{truncateText(post.text, 12)}</p>
+                <p className="card-text fs-6" >
 
-                <FaThumbsUp style={{ color: post?.fetchUserLikesStatus ? 'blue' : 'gray' }} onClick={(() => { handleLikeToggle(post.id, post?.fetchUserLikesStatus ? 'disslike':"likePost") })} /></p>
-              <a href="#" className="text-decoration-none">
-                Read More +
-              </a>
+                  <FaThumbsUp style={{ color: post?.fetchUserLikesStatus ? 'blue' : 'gray' }} onClick={(() => { handleLikeToggle(post.id, post?.fetchUserLikesStatus ? 'disslike' : "likePost") })} />{post?.likeCount?.totalLikes}</p>
+                <a href="#" className="text-decoration-none">
+                  Read More +
+                </a>
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>}
     </div>
   );
 }

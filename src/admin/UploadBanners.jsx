@@ -3,6 +3,7 @@ import "./UploadBanners.css";
 import { apiCall, getTokenFromLocalStorage } from "../utils/apiCall";
 import ConnectMe from "../config/connect";
 import { toast } from 'react-toastify';
+import showToast from "../utils/toastHelper";
 
 export default function UploadBanners() {
   const [banners, setBanners] = useState([]);
@@ -17,7 +18,7 @@ export default function UploadBanners() {
 
   const fetchBanners = async () => {
     try {
-      const url = `${ConnectMe.BASE_URL}/admin/getFs?type=Banners`;
+      const url = `${ConnectMe.BASE_URL}/banner/getFs?type=Banners`;
       const token = getTokenFromLocalStorage();
 
       const headers = {
@@ -25,9 +26,15 @@ export default function UploadBanners() {
         "Content-Type": "application/json",
       };
 
-      const banners = await apiCall("GET", url, headers);
-      setBanners(banners);
-      console.log(banners, 'fetched');
+      const response = await apiCall("GET", url, headers);
+
+      if (response.success) {
+        setBanners(response.data);
+      } else {
+        setBanners([]);
+        showToast("Failed to load banner", 'error')
+      }
+
     } catch (error) {
       setBanners([]);
       console.error("Error fetching banners:", error.message);
@@ -52,10 +59,16 @@ export default function UploadBanners() {
         "Content-Type": "application/json",
       };
 
-      await apiCall("DELETE", url, headers);
-      console.log("Banner deleted successfully");
+      const response = await apiCall("DELETE", url, headers);
 
-      setIsBannerUpdated(!isBannerUpdated); // Trigger banner update state
+
+      if (response.success) {
+        showToast("Deleted", 'success')
+      } else {
+
+        showToast("Failed to delete banner", 'error')
+      }
+
     } catch (error) {
       console.error("Error deleting banner:", error.message);
     }
@@ -63,7 +76,7 @@ export default function UploadBanners() {
 
   const updateBannerStatus = async (bannerId) => {
     try {
-      const url = `${ConnectMe.BASE_URL}/admin/banners/${bannerId}/toggle-status`;
+      const url = `${ConnectMe.BASE_URL}/banner/banners/${bannerId}/toggle-status`;
       const token = getTokenFromLocalStorage();
 
       const headers = {
@@ -71,10 +84,17 @@ export default function UploadBanners() {
         "Content-Type": "application/json",
       };
 
-      const updatedBanner = await apiCall("PATCH", url, headers);
-      console.log("Banner status updated:", updatedBanner);
+      const response = await apiCall("PATCH", url, headers);
+      if (response.success) {
+        showToast("Banner status updated:", 'success')
+        setIsBannerUpdated(!isBannerUpdated);  // Trigger banner update state
+      } else {
 
-      setIsBannerUpdated(!isBannerUpdated);  // Trigger banner update state
+        showToast("Failed to update banner", 'error')
+      }
+
+
+
     } catch (error) {
       console.error("Error updating banner status:", error.message);
     }
@@ -112,13 +132,16 @@ export default function UploadBanners() {
         'Authorization': `Bearer ${token}`,
       };
 
-      await apiCall('POST', url, headers, formData);
+      const response = await apiCall('POST', url, headers, formData);
+      if (response.success) {
+        showToast('Banner uploaded successfully!', 'success')
+        setSelectedImages([]); // Clear images after upload
+        setIsBannerUpdated(!isBannerUpdated);  // Trigger banner update state
+        fileInputRef.current.value = null;
+      } else {
+        showToast("Failed to upload banner", 'error')
+      }
 
-
-      toast.success('Banner uploaded successfully!');
-      setSelectedImages([]); // Clear images after upload
-      setIsBannerUpdated(!isBannerUpdated);  // Trigger banner update state
-      fileInputRef.current.value = null;
 
     } catch (error) {
       console.error('Error uploading banner:', error.message);
@@ -200,7 +223,7 @@ export default function UploadBanners() {
                     alt={`Selected Banner ${index + 1}`}
                     className="banner-image"
                   />
-              
+
                 </div>
               </div>
             ))}

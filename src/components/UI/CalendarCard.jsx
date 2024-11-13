@@ -6,6 +6,7 @@ import "./CalendarCard.css";
 import { SlCalender } from "react-icons/sl";
 import { apiCall, getTokenFromLocalStorage } from "../../utils/apiCall";
 import ConnectMe from "../../config/connect";
+import showToast from "../../utils/toastHelper";
 
 export default function CalendarCard() {
   const [date, setDate] = useState(new Date());
@@ -20,8 +21,15 @@ export default function CalendarCard() {
           "Content-Type": "application/json",
         };
         const url = `${ConnectMe.BASE_URL}/calendar/holidays?active=true`;
-        const data = await apiCall("GET", url, headers);
-        setEvents(data);
+        const response = await apiCall("GET", url, headers);
+
+        if (response.success) {
+          setEvents(response?.data);
+         
+        } else {
+          showToast("Failed to load Holiday", 'error')
+        }
+      
       } catch (error) {
         console.error("Error fetching events:", error.message);
       }
