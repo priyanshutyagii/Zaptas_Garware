@@ -2,6 +2,7 @@ import  { useState, useEffect } from "react";
 
 import ConnectMe from "../../config/connect";
 import { apiCall, getTokenFromLocalStorage } from "../../utils/apiCall";
+import showToast from "../../utils/toastHelper";
 
 export default function Banner() {
   const [banners, setBanners] = useState([]);
@@ -9,7 +10,7 @@ export default function Banner() {
   // Fetch banners from the API
   const fetchBanners = async () => {
     try {
-      const url = `${ConnectMe.BASE_URL}/admin/getFs?type=Banners&active=true`;
+      const url = `${ConnectMe.BASE_URL}/banner/getFs?type=Banners&active=true`;
       const token = getTokenFromLocalStorage();
 
       const headers = {
@@ -17,12 +18,18 @@ export default function Banner() {
         "Content-Type": "application/json",
       };
 
-      const banners = await apiCall("GET", url, headers);
-      setBanners(banners);
-      console.log(banners, 'fetched');
+      const response = await apiCall("GET", url, headers);
+      if (response.success) {
+        setBanners(response.data);
+       
+      } else {
+        setBanners([]);
+        showToast("Failed to load banner", 'error')
+      }
+   
     } catch (error) {
       setBanners([]);
-      console.error("Error fetching banners:", error.message);
+      showToast("Failed to load banner", 'error')
     }
   };
 
