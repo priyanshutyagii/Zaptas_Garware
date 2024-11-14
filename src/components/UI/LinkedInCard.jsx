@@ -68,7 +68,7 @@ export default function LinkedInCard() {
       // Prepare the body for the request
       const Passed = {
         // postId: `urn:li:share:${postId}`
-         postId: `${postId}`
+        postId: `${postId}`
       }
       const body = JSON.stringify(
         Passed
@@ -132,9 +132,29 @@ export default function LinkedInCard() {
         <div className="card-body">
           {posts && posts.map((post) => (
             <div key={post.id} className="d-flex align-items-start mb-3">
-              <div className="csrimg">
-                <img src={post.imageUrl} alt="CSR" style={{ width: "100px", height: "100px" }} />
+              <div className="csr-media">
+                {post.multimedia.type === "image" ? (
+                  <img
+                    src={post.multimedia.url}
+                    alt="CSR"
+                    style={{ width: "100px", height: "100px" }}
+                  />
+                ) : post.multimedia.type === "video" ? (
+                  <video
+                    width="100"
+                    height="100"
+                    controls
+                    autoPlay
+                    muted // Optional: Mute the video to allow autoplay on some browsers
+                    loop   // Optional: Loop the video
+                  >
+                    <source src={post.multimedia.url} type="video/mp4" />
+                    Your browser does not support the video tag.
+                  </video>
+                ) : null}
               </div>
+
+
               <div className="announcement-disc ms-2">
                 <p className="card-text fs-6">{truncateText(post.text, 12)}</p>
                 <p className="card-text fs-6" >
