@@ -57,7 +57,7 @@ export default function Banner() {
         {banners.map((banner, index) => (
           <div key={banner._id} className={`carousel-item ${index === 0 ? "active" : ""}`}>
             <img
-              src={`${ConnectMe.BASE_URL}${banner.imagePath}`}
+              src={banner.imagePath}
               className="d-block w-100"
               alt={`Banner ${index + 1}`}
             />

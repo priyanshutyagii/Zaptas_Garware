@@ -8,7 +8,7 @@ export default function Headers() {
     <header className="navbar navbar-expand-lg navbar-light bg-light">
       <div className="container-fluid">
         <a className="navbar-brand" href="/">
-          <img src="public\logo.PNG" alt="Logo" />
+          <img src="\logo.PNG" alt="Logo" />
         </a>
 
         <button
