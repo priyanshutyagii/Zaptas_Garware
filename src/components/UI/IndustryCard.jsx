@@ -18,7 +18,7 @@ export default function IndustryCard() {
         <div>
           <div className="d-flex align-items-start">
             <div className="csrimg">
-              <img src="public\csrimg.png" alt="CSR" />
+              <img src="\csrimg.PNG" alt="CSR" />
             </div>
             <div className="announcement-disc">
               <p className="card-text">
@@ -34,7 +34,7 @@ export default function IndustryCard() {
         <div>
           <div className="d-flex align-items-start pt-3">
             <div className="csrimg">
-              <img src="public\csrimg.png" alt="CSR" />
+              <img src="\csrimg.PNG" alt="CSR" />
             </div>
             <div className="announcement-disc">
               <p className="card-text">

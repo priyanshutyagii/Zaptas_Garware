@@ -18,10 +18,10 @@ export default function GalleryCard() {
         <div>
           <div className="d-flex align-items-start">
             <div className="galley">
-              <img src="public\csrimg.png" className="p-1" alt="CSR" />
-              <img src="public\csrimg.png" className="p-1" alt="CSR" />
-              <img src="public\csrimg.png" className="p-1" alt="CSR" />
-              <img src="public\csrimg.png" className="p-1" alt="CSR" />
+              <img src="\csrimg.PNG" className="p-1" alt="CSR" />
+              <img src="\csrimg.PNG" className="p-1" alt="CSR" />
+              <img src="\csrimg.PNG" className="p-1" alt="CSR" />
+              <img src="\csrimg.PNG" className="p-1" alt="CSR" />
             </div>
           </div>
         </div>

@@ -19,7 +19,7 @@ export default function AwardsCard() {
         <div className="d-flex align-items-center mb-5">
           {/* User Image */}
           <div className="user-img me-3">
-            <img src="public\user.png" alt="User" />
+            <img src="\user.PNG" alt="User" />
           </div>
           <div className="flex-grow-1">
             <h6 className="mb-0">
@@ -31,7 +31,7 @@ export default function AwardsCard() {
         <div className="d-flex align-items-center mb-5">
           {/* User Image */}
           <div className="user-img me-3">
-            <img src="public\user.png" alt="User" />
+            <img src="\user.PNG" alt="User" />
           </div>
           <div className="flex-grow-1">
             <h6 className="mb-0">
@@ -43,7 +43,7 @@ export default function AwardsCard() {
         <div className="d-flex align-items-center mb-5">
           {/* User Image */}
           <div className="user-img me-3">
-            <img src="public\user.png" alt="User" />
+            <img src="\user.PNG" alt="User" />
           </div>
           <div className="flex-grow-1">
             <h6 className="mb-0">
@@ -55,7 +55,7 @@ export default function AwardsCard() {
         <div className="d-flex align-items-center">
           {/* User Image */}
           <div className="user-img me-3">
-            <img src="public\user.png" alt="User" />
+            <img src="\user.PNG" alt="User" />
           </div>
           <div className="flex-grow-1">
             <h6 className="mb-0">

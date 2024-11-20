@@ -17,7 +17,7 @@ export default function ManagementMessageCard() {
           <div className="d-flex align-items-end">
             <div className="image-section" style={{ width: "50%" }}>
               <img
-                src="https://png.pngtree.com/png-vector/20231116/ourmid/pngtree-office-worker-with-laptop-png-image_10451263.png"
+                src="https://png.PNGtree.com/png-vector/20231116/ourmid/pngtree-office-worker-with-laptop-png-image_10451263.PNG"
                 alt="Management"
                 className="img-fluid"
               />
