@@ -51,7 +51,7 @@ export default function UploadBanners() {
 
   const deleteBanner = async (bannerId) => {
     try {
-      const url = `${ConnectMe.BASE_URL}/admin/banners/${bannerId}`;
+      const url = `${ConnectMe.BASE_URL}/banner/uploadAdminImages/${bannerId}`;
       const token = getTokenFromLocalStorage();
 
       const headers = {
@@ -64,6 +64,7 @@ export default function UploadBanners() {
 
       if (response.success) {
         showToast("Deleted", 'success')
+        fetchBanners()
       } else {
 
         showToast("Failed to delete banner", 'error')
