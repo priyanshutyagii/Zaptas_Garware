@@ -3,12 +3,7 @@
     object-fit: cover;
 }
 
-.carousel-caption h5 {
-    font-size: 2rem;
-    color: #fff;
-}
-
-.carousel-caption p {
-    font-size: 1.25rem;
-    color: #ddd;
+.carousel-item {
+    max-height: 500px;
+    overflow: hidden;
 }
