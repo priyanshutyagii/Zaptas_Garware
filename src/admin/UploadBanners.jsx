@@ -120,7 +120,9 @@ export default function UploadBanners() {
             return;
           }
           const blob = await response.blob();
-          const file = new File([blob], 'banner.jpg', { type: blob.type });
+          const fileName = image.split('/').pop();  // Extracts the file name from the URL
+          const file = new File([blob], fileName, { type: blob.type });
+          
           formData.append('files', file);
         } else {
           formData.append('files', image);
@@ -172,7 +174,7 @@ export default function UploadBanners() {
               <div key={banner._id} className="col-6 col-sm-3 mb-4">
                 <div className="banner-card">
                   <img
-                    src={`${ConnectMe.BASE_URL}${banner.imagePath}`}
+                     src={`${ConnectMe.img_URL}${banner.imagePath}`}
                     alt={`Banner ${index + 1}`}
                     className={`banner-image ${activeIndex === index ? "active" : ""}`}
                     onClick={() => toggleActiveState(index, banner._id)}

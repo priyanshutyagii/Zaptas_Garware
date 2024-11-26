@@ -10,6 +10,11 @@ import {
   FaSignOutAlt,
   FaQuestionCircle,
 } from "react-icons/fa";
+import { Link } from "react-router-dom";
+
+
+
+
 
 export default function Sidebar() {
   return (
@@ -19,10 +24,14 @@ export default function Sidebar() {
           <FaTachometerAlt /> <span>Dashboard</span>
         </li>
         <li>
-          <FaImages /> <span>Upload Banners</span>
+          <Link to="/admin/upload-banners" style={{ textDecoration: 'none', color: 'inherit' }}>
+            <FaUsers /> <span>upload-banners</span>
+          </Link>
         </li>
         <li>
-          <FaUsers /> <span>Customer</span>
+          <Link to="/admin/announcements" style={{ textDecoration: 'none', color: 'inherit' }}>
+            <FaUsers /> <span>Announcements</span>
+          </Link>
         </li>
         <li>
           <FaServicestack /> <span>Services</span>
