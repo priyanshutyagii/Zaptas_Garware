@@ -84,8 +84,8 @@ export default function LinkedInCard() {
         const authUrl = `${response.data}`;
         // Open the LinkedIn authorization URL in a new tab
         console.log(authUrl)
-        
-         window.open(authUrl, "_blank");
+
+        window.open(authUrl, "_blank");
       } else {
         showToast("Login Failed", "error");
         console.error("LinkedIn login failed:", response.message);
@@ -93,7 +93,8 @@ export default function LinkedInCard() {
     } catch (error) {
       showToast("Login Failed", "error");
       console.error("Error during LinkedIn login:", error.message);
-    }}
+    }
+  }
   const openPostPopup = (post) => {
     setSelectedPost(post);
     setShowModal(true);
@@ -110,6 +111,19 @@ export default function LinkedInCard() {
       setNewComment("");
     }
   };
+
+
+  const formatText = (text) => {
+    if (!text) return null;
+
+    // Replace `{hashtag|#|tag}` with `#tag` and style it in blue
+    return text
+      .replace(/{hashtag\|\\#\|/g, '#') // Replace starting hashtag syntax
+      .replace(/}/g, '') // Remove closing syntax
+      .replace(/#(\w+)/g, '<span style="color:blue;">#$1</span>') // Make hashtags blue
+      .replace(/(\r\n|\n|\r)/gm, '<br>'); // Replace line breaks with HTML <br> tags for proper rendering
+  };
+
 
   return (
     <div className="card mb-3">
@@ -143,7 +157,14 @@ export default function LinkedInCard() {
                 ) : null}
               </div>
               <div className="announcement-disc col-sm-8">
-                <p className="card-text fs-6">{post.text.slice(0, 50)}...</p>
+
+                <p
+                  className="card-text fs-6"
+                  dangerouslySetInnerHTML={{
+                    __html: `${formatText(post.text.slice(0, 50))}...`,
+                  }}
+                ></p>
+
                 <p className="card-text fs-6">
                   <FaThumbsUp
                     style={{
@@ -175,11 +196,25 @@ export default function LinkedInCard() {
       {/* Modal for LinkedIn Post */}
       <Modal show={showModal} onHide={closePostPopup} size="lg">
         <Modal.Header closeButton>
-          <Modal.Title>{selectedPost?.text}</Modal.Title>
+          <Modal.Title>
+            <div dangerouslySetInnerHTML={{ __html: formatText(selectedPost?.text) }} />
+          </Modal.Title>
+
         </Modal.Header>
         <Modal.Body>
           <div>
-            <p>{selectedPost?.text}</p>
+            {selectedPost?.multimedia?.type === "image" ? (
+              <img
+                src={selectedPost.multimedia.url}
+                alt="LinkedIn selectedPost"
+                style={{ width: "100%", height: "100px" }}
+              />
+            ) : selectedPost?.multimedia?.type === "video" ? (
+              <video width="100%" height="100" controls autoPlay muted loop>
+                <source src={selectedPost.multimedia.url} type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            ) : null}
             <FaThumbsUp
               style={{
                 color: selectedPost?.fetchUserLikesStatus ? "blue" : "gray",

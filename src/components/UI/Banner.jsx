@@ -58,7 +58,7 @@ export default function Banner() {
             className={`carousel-item ${index === 0 ? "active" : ""}`}
           >
             <img
-              src={`${ConnectMe.image_url}${banner.imagePath}`}
+              src={`${ConnectMe.img_URL}${banner.imagePath}`}
               className="d-block w-100"
               alt={`Banner ${index + 1}`}
             />
