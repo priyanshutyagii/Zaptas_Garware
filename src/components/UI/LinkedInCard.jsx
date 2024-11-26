@@ -182,7 +182,7 @@ export default function LinkedInCard() {
                         post?.fetchUserLikesStatus ? "disslike" : "likePost"
                       )
                     }
-                  />
+                  />{" "}
                   {post?.likeCount?.totalLikes}
                 </p>
                 <a
@@ -269,9 +269,19 @@ export default function LinkedInCard() {
                 </button>
               </div>
 
-              <ul>
+              <ul className="list-unstyled mb-3">
                 {comments.map((comment, index) => (
-                  <li key={index}>{comment}</li>
+                  <li key={index} className="d-flex mb-2">
+                    <img
+                      src="public\user.PNG"
+                      alt="Commenter"
+                      className="rounded-circle"
+                    />
+                    <div>
+                      <strong>Kinjal Gandhi</strong>
+                      <p>{comment}</p>
+                    </div>
+                  </li>
                 ))}
               </ul>
             </div>

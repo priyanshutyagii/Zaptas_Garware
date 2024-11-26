@@ -10,7 +10,7 @@ video, image {
 
 .modal-body video, image {
     width: 100%;
-    height: auto;
+    height: 200px;
 }
 
 button.btn-close {
@@ -58,4 +58,11 @@ button.btn-close {
     cursor: pointer;
     color: #0a66c2;
     /* LinkedIn Blue */
+}
+
+.list-unstyled li img {
+    width: 30px;
+    height: 30px;
+    margin-right: 8px;
+    border: 1px solid #ccc;
 }
