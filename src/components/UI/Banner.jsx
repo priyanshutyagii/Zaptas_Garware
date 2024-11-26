@@ -1,9 +1,9 @@
-import  { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 
 import ConnectMe from "../../config/connect";
 import { apiCall, getTokenFromLocalStorage } from "../../utils/apiCall";
 import showToast from "../../utils/toastHelper";
-
+import "./Banner.css";
 export default function Banner() {
   const [banners, setBanners] = useState([]);
 
@@ -21,15 +21,13 @@ export default function Banner() {
       const response = await apiCall("GET", url, headers);
       if (response.success) {
         setBanners(response.data);
-       
       } else {
         setBanners([]);
-        showToast("Failed to load banner", 'error')
+        showToast("Failed to load banner", "error");
       }
-   
     } catch (error) {
       setBanners([]);
-      showToast("Failed to load banner", 'error')
+      showToast("Failed to load banner", "error");
     }
   };
 
@@ -55,7 +53,10 @@ export default function Banner() {
 
       <div className="carousel-inner">
         {banners.map((banner, index) => (
-          <div key={banner._id} className={`carousel-item ${index === 0 ? "active" : ""}`}>
+          <div
+            key={banner._id}
+            className={`carousel-item ${index === 0 ? "active" : ""}`}
+          >
             <img
               src={`${ConnectMe.image_url}${banner.imagePath}`}
               className="d-block w-100"
