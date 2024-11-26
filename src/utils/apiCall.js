@@ -5,6 +5,7 @@ const apiCall = async (method, url, headers = {}, data = null) => {
             method,
             url,
             headers,
+            withCredentials: true,
             ...(data && { data }), // Include data only if it exists
         };
 

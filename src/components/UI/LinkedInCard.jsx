@@ -102,9 +102,11 @@ export default function LinkedInCard() {
 
       if (response.success) {
         showToast("Login Success", "success");
-
+        const authUrl = `${response.data}`;
         // Open the LinkedIn authorization URL in a new tab
-        window.open(response.data, "_blank");
+        console.log(authUrl)
+        
+         window.open(authUrl, "_blank");
       } else {
         showToast("Login Failed", "error");
         console.error("LinkedIn login failed:", response.message);
