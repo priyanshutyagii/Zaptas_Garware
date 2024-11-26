@@ -1,0 +1,61 @@
+video, image {
+    width: 100%;
+    height: 100px;
+}
+
+
+.modal-title.h4 {
+    font-size: 14px;
+}
+
+.modal-body video, image {
+    width: 100%;
+    height: auto;
+}
+
+button.btn-close {
+    top: 15px;
+    position: absolute;
+    right: 15px;
+    font-size: 12px;
+}
+
+.likencmt {
+    display: flex;
+    justify-content: space-between;
+}
+
+.comments-section {
+    transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+}
+
+.comments-section.show {
+    max-height: 500px;
+    opacity: 1;
+}
+
+
+.comment-input {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 15px;
+}
+
+.comment-input input {
+    flex: 1;
+}
+
+.comment-input button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: #0a66c2;
+    /* LinkedIn Blue */
+}

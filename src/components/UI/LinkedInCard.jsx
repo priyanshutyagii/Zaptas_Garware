@@ -1,11 +1,18 @@
 import { useEffect, useState } from "react";
-import { FaLinkedin, FaThumbsUp } from "react-icons/fa";
+import {
+  FaLinkedin,
+  FaPaperPlane,
+  FaRegCommentDots,
+  FaThumbsUp,
+} from "react-icons/fa";
 import { HiArrowCircleRight } from "react-icons/hi";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import { apiCall, getTokenFromLocalStorage } from "../../utils/apiCall";
 import ConnectMe from "../../config/connect";
 import showToast from "../../utils/toastHelper";
+import "./LinkedInCard.css";
+import { TfiCommentAlt } from "react-icons/tfi";
 
 export default function LinkedInCard() {
   const [posts, setPosts] = useState([]);
@@ -18,6 +25,7 @@ export default function LinkedInCard() {
     "Congratulations!",
   ]);
   const [newComment, setNewComment] = useState("");
+  const [showComments, setShowComments] = useState(false);
 
   const fetchPosts = async () => {
     try {
@@ -83,7 +91,7 @@ export default function LinkedInCard() {
         showToast("Login Success", "success");
         const authUrl = `${response.data}`;
         // Open the LinkedIn authorization URL in a new tab
-        console.log(authUrl)
+        console.log(authUrl);
 
         window.open(authUrl, "_blank");
       } else {
@@ -94,7 +102,7 @@ export default function LinkedInCard() {
       showToast("Login Failed", "error");
       console.error("Error during LinkedIn login:", error.message);
     }
-  }
+  };
   const openPostPopup = (post) => {
     setSelectedPost(post);
     setShowModal(true);
@@ -112,18 +120,16 @@ export default function LinkedInCard() {
     }
   };
 
-
   const formatText = (text) => {
     if (!text) return null;
 
     // Replace `{hashtag|#|tag}` with `#tag` and style it in blue
     return text
-      .replace(/{hashtag\|\\#\|/g, '#') // Replace starting hashtag syntax
-      .replace(/}/g, '') // Remove closing syntax
+      .replace(/{hashtag\|\\#\|/g, "#") // Replace starting hashtag syntax
+      .replace(/}/g, "") // Remove closing syntax
       .replace(/#(\w+)/g, '<span style="color:blue;">#$1</span>') // Make hashtags blue
-      .replace(/(\r\n|\n|\r)/gm, '<br>'); // Replace line breaks with HTML <br> tags for proper rendering
+      .replace(/(\r\n|\n|\r)/gm, "<br>"); // Replace line breaks with HTML <br> tags for proper rendering
   };
-
 
   return (
     <div className="card mb-3">
@@ -157,7 +163,6 @@ export default function LinkedInCard() {
                 ) : null}
               </div>
               <div className="announcement-disc col-sm-8">
-
                 <p
                   className="card-text fs-6"
                   dangerouslySetInnerHTML={{
@@ -194,12 +199,15 @@ export default function LinkedInCard() {
       )}
 
       {/* Modal for LinkedIn Post */}
-      <Modal show={showModal} onHide={closePostPopup} size="lg">
+      <Modal show={showModal} onHide={closePostPopup}>
         <Modal.Header closeButton>
           <Modal.Title>
-            <div dangerouslySetInnerHTML={{ __html: formatText(selectedPost?.text) }} />
+            <div
+              dangerouslySetInnerHTML={{
+                __html: formatText(selectedPost?.text),
+              }}
+            />
           </Modal.Title>
-
         </Modal.Header>
         <Modal.Body>
           <div>
@@ -207,46 +215,67 @@ export default function LinkedInCard() {
               <img
                 src={selectedPost.multimedia.url}
                 alt="LinkedIn selectedPost"
-                style={{ width: "100%", height: "100px" }}
               />
             ) : selectedPost?.multimedia?.type === "video" ? (
-              <video width="100%" height="100" controls autoPlay muted loop>
+              <video controls autoPlay muted loop>
                 <source src={selectedPost.multimedia.url} type="video/mp4" />
                 Your browser does not support the video tag.
               </video>
             ) : null}
-            <FaThumbsUp
-              style={{
-                color: selectedPost?.fetchUserLikesStatus ? "blue" : "gray",
-                cursor: "pointer",
-              }}
-              onClick={() =>
-                handleLikeToggle(
-                  selectedPost.id,
-                  selectedPost?.fetchUserLikesStatus ? "disslike" : "likePost"
-                )
-              }
-            />
-            {selectedPost?.likeCount?.totalLikes} Likes
           </div>
-          <div className="comments-section mt-3">
-            <h5>Comments</h5>
-            <ul>
-              {comments.map((comment, index) => (
-                <li key={index}>{comment}</li>
-              ))}
-            </ul>
-            <input
-              type="text"
-              value={newComment}
-              onChange={(e) => setNewComment(e.target.value)}
-              placeholder="Add a comment..."
-              className="form-control mb-2"
-            />
-            <Button variant="primary" onClick={addComment}>
-              Post Comment
-            </Button>
+          <div className="likencmt">
+            <div>
+              <FaThumbsUp
+                style={{
+                  color: selectedPost?.fetchUserLikesStatus ? "blue" : "gray",
+                  cursor: "pointer",
+                }}
+                onClick={() =>
+                  handleLikeToggle(
+                    selectedPost.id,
+                    selectedPost?.fetchUserLikesStatus ? "disslike" : "likePost"
+                  )
+                }
+              />
+              &nbsp;
+              {selectedPost?.likeCount?.totalLikes} Likes
+            </div>
+            <div
+              onClick={() => setShowComments(!showComments)}
+              style={{ cursor: "pointer" }}
+            >
+              <FaRegCommentDots
+                style={{
+                  color: "gray",
+                }}
+              />{" "}
+              Comment
+            </div>
           </div>
+          {showComments && (
+            <div
+              className={`comments-section mt-3 ${showComments ? "show" : ""}`}
+            >
+              <div className="comment-input">
+                <input
+                  type="text"
+                  value={newComment}
+                  onChange={(e) => setNewComment(e.target.value)}
+                  placeholder="Add a comment..."
+                  className="form-control"
+                />
+                <button onClick={addComment}>
+                  <FaPaperPlane size={20} />
+                </button>
+              </div>
+
+              <ul>
+                {comments.map((comment, index) => (
+                  <li key={index}>{comment}</li>
+                ))}
+              </ul>
+            </div>
+          )}
         </Modal.Body>
       </Modal>
     </div>
