@@ -1,14 +1,17 @@
 import { useState, useEffect } from "react";
-
 import ConnectMe from "../../config/connect";
 import { apiCall, getTokenFromLocalStorage } from "../../utils/apiCall";
 import showToast from "../../utils/toastHelper";
+import Loader from "../../components/Loader"; // Import the Loader component
 import "./Banner.css";
+
 export default function Banner() {
   const [banners, setBanners] = useState([]);
+  const [loading, setLoading] = useState(true); // Add loading state
 
   // Fetch banners from the API
   const fetchBanners = async () => {
+    setLoading(true); // Set loading to true before API call
     try {
       const url = `${ConnectMe.BASE_URL}/banner/getFs?type=Banners&active=true`;
       const token = getTokenFromLocalStorage();
@@ -23,11 +26,13 @@ export default function Banner() {
         setBanners(response.data);
       } else {
         setBanners([]);
-        showToast("Failed to load banner", "error");
+        showToast("Failed to load banners", "error");
       }
     } catch (error) {
       setBanners([]);
-      showToast("Failed to load banner", "error");
+      showToast("Failed to load banners", "error");
+    } finally {
+      setLoading(false); // Stop loading after API call
     }
   };
 
@@ -35,8 +40,25 @@ export default function Banner() {
     fetchBanners();
   }, []);
 
+  if (loading) {
+    return (
+      <div className="banner-loader-container">
+        <Loader /> {/* Show loader while banners are being fetched */}
+      </div>
+    );
+  }
+
+  if (banners.length === 0) {
+    return (
+      <div className="no-banner-message">
+        <p>No banners available.</p>
+      </div>
+    );
+  }
+
   return (
     <div id="bannerCarousel" className="carousel slide" data-bs-ride="carousel">
+      {/* Carousel Indicators */}
       <div className="carousel-indicators">
         {banners.map((banner, index) => (
           <button
@@ -51,6 +73,7 @@ export default function Banner() {
         ))}
       </div>
 
+      {/* Carousel Items */}
       <div className="carousel-inner">
         {banners.map((banner, index) => (
           <div
@@ -63,8 +86,9 @@ export default function Banner() {
               alt={`Banner ${index + 1}`}
             />
             <div className="carousel-caption d-none d-md-block">
-              {/* <h5>{banner.title || `Slide ${index + 1} Title`}</h5> */}
-              {/* <p>{banner.description || `Some description for slide ${index + 1}.`}</p> */}
+              {/* Uncomment these if you have title and description */}
+              {/* <h5>{banner.title || `Slide ${index + 1}`}</h5>
+              <p>{banner.description || `Description for slide ${index + 1}`}</p> */}
             </div>
           </div>
         ))}

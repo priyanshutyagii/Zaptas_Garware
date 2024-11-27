@@ -50,17 +50,26 @@ export default function Announcements() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    let Id = await uploadImageAnnouncement()
+    let imageId = null;
+
+    // Check if formData.images is provided and not empty
+    if (formData.images && formData.images.length > 0) {
+      // Call the uploadImageAnnouncement function only if images are provided
+      imageId = await uploadImageAnnouncement();
+    }
+    
     const dataToSave = {
-      fullName:formData.fullName,
+      fullName: formData.fullName,
       title: formData.title,
       location: formData.location,
       description: formData.description,
       Designation: formData.Designation,
       name: formData.name,
       links: formData.links,
-      images: Id?.data?.idForUnderverslaUpload[0]
+      // If imageId is populated, use it; otherwise, it will be null (or you can handle it accordingly)
+      images: imageId?.data?.idForUnderverslaUpload[0] || null 
     };
+    
 
     const token = getTokenFromLocalStorage();
     const headers = {
@@ -71,8 +80,8 @@ export default function Announcements() {
     const url = `${ConnectMe.BASE_URL}/announcements/create`;
     const result = await apiCall('POST', url, headers, JSON.stringify(dataToSave));
 
-    if (result.status) {
-      console.log('Announcement saved successfully:', result.data);
+    if (result.success) {
+      showToast('Uploaded Successfully', 'success')
       setFormData({
         title: "",
         location: "",
@@ -90,7 +99,7 @@ export default function Announcements() {
 
   const uploadImageAnnouncement = async () => {
     if (!formData.images || formData.images.length === 0) {
-      showToast('Please select at least one banner image.', 'error');
+      showToast('Please select at least one image.', 'error');
       return;
     }
 
@@ -131,7 +140,7 @@ export default function Announcements() {
       }
     } catch (error) {
       console.error('Error uploading banner:', error.message);
-      showToast(`Error uploading banner: ${error.message || 'An unexpected error occurred'}`,'error');
+      showToast(`Error uploading banner: ${error.message || 'An unexpected error occurred'}`, 'error');
     }
   };
 
@@ -227,7 +236,7 @@ export default function Announcements() {
           </div>
 
           <div className="form-group">
-            <label htmlFor="location">Your Location</label>
+            <label htmlFor="location">For Which Location Announcement is for?</label>
             <input
               type="text"
               id="location"

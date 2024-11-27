@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import {
   FaLinkedin,
   FaPaperPlane,
@@ -8,11 +8,11 @@ import {
 import { HiArrowCircleRight } from "react-icons/hi";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
+import ClipLoader from "react-spinners/ClipLoader"; // Loader library
 import { apiCall, getTokenFromLocalStorage } from "../../utils/apiCall";
 import ConnectMe from "../../config/connect";
 import showToast from "../../utils/toastHelper";
 import "./LinkedInCard.css";
-import { TfiCommentAlt } from "react-icons/tfi";
 
 export default function LinkedInCard() {
   const [posts, setPosts] = useState([]);
@@ -26,8 +26,10 @@ export default function LinkedInCard() {
   ]);
   const [newComment, setNewComment] = useState("");
   const [showComments, setShowComments] = useState(false);
+  const [loading, setLoading] = useState(false); // Loader state
 
   const fetchPosts = async () => {
+    setLoading(true); // Show loader
     try {
       const url = `${ConnectMe.BASE_URL}/fetchOrgPosts?start=0&count=3&show=posts,multimedia,likeStatus,text,likeCount,id`;
       const token = getTokenFromLocalStorage();
@@ -52,6 +54,8 @@ export default function LinkedInCard() {
       showToast("Failed to load posts", "error");
       console.error("Error fetching posts:", error.message);
       setPosts([]);
+    } finally {
+      setLoading(false); // Hide loader
     }
   };
 
@@ -90,9 +94,6 @@ export default function LinkedInCard() {
       if (response.success) {
         showToast("Login Success", "success");
         const authUrl = `${response.data}`;
-        // Open the LinkedIn authorization URL in a new tab
-        console.log(authUrl);
-
         window.open(authUrl, "_blank");
       } else {
         showToast("Login Failed", "error");
@@ -103,6 +104,7 @@ export default function LinkedInCard() {
       console.error("Error during LinkedIn login:", error.message);
     }
   };
+
   const openPostPopup = (post) => {
     setSelectedPost(post);
     setShowModal(true);
@@ -115,7 +117,7 @@ export default function LinkedInCard() {
 
   const addComment = () => {
     if (newComment.trim()) {
-      setComments([...comments, newComment]);
+      setComments((prevComments) => [...prevComments, newComment]);
       setNewComment("");
     }
   };
@@ -123,13 +125,12 @@ export default function LinkedInCard() {
   const formatText = (text) => {
     if (!text) return null;
 
-    // Replace `{hashtag|#|tag}` with `#tag` and style it in blue
     return text
-      .replace(/{hashtag\|\\#\|/g, "#") // Replace starting hashtag syntax
-      .replace(/}/g, "") // Remove closing syntax
       .replace(/#(\w+)/g, '<span style="color:blue;">#$1</span>') // Make hashtags blue
-      .replace(/(\r\n|\n|\r)/gm, "<br>"); // Replace line breaks with HTML <br> tags for proper rendering
+      .replace(/(\r\n|\n|\r)/gm, "<br>"); // Replace line breaks with <br>
   };
+
+  const memoizedPosts = useMemo(() => posts, [posts]);
 
   return (
     <div className="card mb-3">
@@ -142,11 +143,16 @@ export default function LinkedInCard() {
           View All <HiArrowCircleRight />
         </a>
       </div>
-      {loggin ? (
+
+      {loading ? (
+        <div className="text-center my-4">
+          <ClipLoader color="#0073b1" size={50} />
+        </div>
+      ) : loggin ? (
         <button onClick={handleLinkedInCallback}>Login with LinkedIn</button>
       ) : (
         <div className="card-body">
-          {posts.map((post) => (
+          {memoizedPosts.map((post) => (
             <div key={post.id} className="row mb-3">
               <div className="csr-media col-sm-4 text-center">
                 {post.multimedia.type === "image" ? (
@@ -169,7 +175,6 @@ export default function LinkedInCard() {
                     __html: `${formatText(post.text.slice(0, 50))}...`,
                   }}
                 ></p>
-
                 <p className="card-text fs-6">
                   <FaThumbsUp
                     style={{
@@ -233,7 +238,9 @@ export default function LinkedInCard() {
                 onClick={() =>
                   handleLikeToggle(
                     selectedPost.id,
-                    selectedPost?.fetchUserLikesStatus ? "disslike" : "likePost"
+                    selectedPost?.fetchUserLikesStatus
+                      ? "disslike"
+                      : "likePost"
                   )
                 }
               />
@@ -244,49 +251,34 @@ export default function LinkedInCard() {
               onClick={() => setShowComments(!showComments)}
               style={{ cursor: "pointer" }}
             >
-              <FaRegCommentDots
-                style={{
-                  color: "gray",
-                }}
-              />{" "}
-              Comment
+              <FaRegCommentDots /> 1 comment
             </div>
           </div>
-          {showComments && (
-            <div
-              className={`comments-section mt-3 ${showComments ? "show" : ""}`}
-            >
-              <div className="comment-input">
-                <input
-                  type="text"
-                  value={newComment}
-                  onChange={(e) => setNewComment(e.target.value)}
-                  placeholder="Add a comment..."
-                  className="form-control"
-                />
-                <button onClick={addComment}>
-                  <FaPaperPlane size={20} />
-                </button>
-              </div>
 
-              <ul className="list-unstyled mb-3">
-                {comments.map((comment, index) => (
-                  <li key={index} className="d-flex mb-2">
-                    <img
-                      src="public\user.PNG"
-                      alt="Commenter"
-                      className="rounded-circle"
-                    />
-                    <div>
-                      <strong>Kinjal Gandhi</strong>
-                      <p>{comment}</p>
-                    </div>
-                  </li>
-                ))}
-              </ul>
+          {showComments && (
+            <div>
+              {comments.map((comment, index) => (
+                <div key={index}>
+                  <p>{comment}</p>
+                </div>
+              ))}
             </div>
           )}
         </Modal.Body>
+        <Modal.Footer>
+          <div className="add-comment-box">
+            <input
+              type="text"
+              value={newComment}
+              onChange={(e) => setNewComment(e.target.value)}
+              placeholder="Write a comment..."
+            />
+            <FaPaperPlane onClick={addComment} />
+          </div>
+          <Button variant="secondary" onClick={closePostPopup}>
+            Close
+          </Button>
+        </Modal.Footer>
       </Modal>
     </div>
   );
