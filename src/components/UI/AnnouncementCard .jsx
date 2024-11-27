@@ -25,8 +25,6 @@ export default function AnnouncementCard() {
 
 
 
-
-
   const fetchAnnouncements = async (page = 1, limit = 3) => {
     try {
       setLoading(true); // Show loader while fetching
