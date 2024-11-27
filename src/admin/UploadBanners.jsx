@@ -120,8 +120,8 @@ export default function UploadBanners() {
             return;
           }
           const blob = await response.blob();
-          const fileName = image.split('/').pop();  // Extracts the file name from the URL
-          const file = new File([blob], fileName, { type: blob.type });
+          // const fileName = image.split('/').pop();  // Extracts the file name from the URL
+          const file = new File([blob], 'banners.png', { type: blob.type });
           
           formData.append('files', file);
         } else {

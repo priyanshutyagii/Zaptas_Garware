@@ -1,4 +1,4 @@
-import  { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 
 import { HiArrowCircleRight } from "react-icons/hi";
 import { AiOutlineSound } from "react-icons/ai";
@@ -7,6 +7,7 @@ import { FaThumbsUp } from "react-icons/fa";
 import "./AnnouncementCard.css";
 import ConnectMe from "../../config/connect";
 import { apiCall, getTokenFromLocalStorage } from "../../utils/apiCall";
+import showToast from "../../utils/toastHelper";
 
 export default function AnnouncementCard() {
   const [announcements, setAnnouncements] = useState([]);
@@ -14,45 +15,45 @@ export default function AnnouncementCard() {
   const [error, setError] = useState("");
   const [show, setShow] = useState(false);
   const [selectedAnnouncement, setSelectedAnnouncement] = useState(null);
-  const [likesCount, setLikesCount] = useState({}); // Track likes count for each announcement
+
 
   // Fetch announcements on component mount
   useEffect(() => {
-    const fetchAnnouncements = async (page = 1, limit = 3) => {
-      try {
-        setLoading(true); // Show loader while fetching
-        const url = `${ConnectMe.BASE_URL}/announcements/latest?page=${page}&limit=${limit}`;
-        const token = getTokenFromLocalStorage();
-        const headers = {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        };
-
-        const response = await apiCall("GET", url, headers);
-        if (response.success) {
-          setAnnouncements(response.data.announcements);
-          // Track the like counts for each announcement
-          const likesMap = {};
-          response.data.announcements.forEach((announcement) => {
-            likesMap[announcement._id] = announcement.likes.length;
-          });
-          setLikesCount(likesMap);
-        } else {
-          setError("Failed to fetch announcements.");
-        }
-      } catch (err) {
-        setError("Error fetching announcements.");
-      } finally {
-        setLoading(false); // Hide loader after fetching
-      }
-    };
-
     fetchAnnouncements();
   }, []);
 
+
+
+
+
+
+  const fetchAnnouncements = async (page = 1, limit = 3) => {
+    try {
+      setLoading(true); // Show loader while fetching
+      const url = `${ConnectMe.BASE_URL}/announcements/latest?page=${page}&limit=${limit}`;
+      const token = getTokenFromLocalStorage();
+      const headers = {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      };
+
+      const response = await apiCall("GET", url, headers);
+      if (response.success) {
+        setAnnouncements(response?.data?.announcements);
+
+      } else {
+        setError("Failed to fetch announcements.");
+      }
+    } catch (err) {
+      setError("Error fetching announcements.");
+    } finally {
+      setLoading(false); // Hide loader after fetching
+    }
+  };
+
   // Handle like/unlike
-  const handleLikeDislike = async (announcementId) => {
-    const isLiked = likesCount[announcementId] > 0;
+  const handleLikeDislike = async (announcementId, isLiked) => {
+    showToast(isLiked ? "unlike success" : "like success",'success')
     const token = getTokenFromLocalStorage();
     const url = `${ConnectMe.BASE_URL}/announcements/${announcementId}/${isLiked ? "unlike" : "like"}`;
     const headers = {
@@ -63,14 +64,26 @@ export default function AnnouncementCard() {
     try {
       const response = await apiCall("POST", url, headers);
       if (response.success) {
-        // Update the like count
-        setLikesCount((prevLikesCount) => {
-          const updatedLikes = { ...prevLikesCount };
-          updatedLikes[announcementId] = isLiked
-            ? updatedLikes[announcementId] - 1
-            : updatedLikes[announcementId] + 1;
-          return updatedLikes;
-        });
+     
+        // Update the local state to reflect the like/unlike action
+        setAnnouncements((prevAnnouncements) =>
+          prevAnnouncements.map((announcement) => {
+            if (announcement._id === announcementId) {
+              // Update the likes array and the likesCount locally
+              const updatedLikes = isLiked
+                ? announcement.likes.filter(userId => userId !== response.userId)
+                : [...announcement.likes, response.userId];
+
+              return {
+                ...announcement,
+                likes: updatedLikes,
+                likesCount: updatedLikes.length,  // Update the likes count directly
+                likedByUser: !isLiked,  // Toggle the likedByUser state
+              };
+            }
+            return announcement; // Return the unchanged announcement if not matching
+          })
+        );
       } else {
         setError("Failed to update like.");
       }
@@ -78,6 +91,7 @@ export default function AnnouncementCard() {
       setError("Error updating like.");
     }
   };
+
 
   const handleClose = () => setShow(false);
   const handleShow = (announcement) => {
@@ -111,8 +125,14 @@ export default function AnnouncementCard() {
         </div>
         <div className="card-body">
           {announcements.map((announcement) => (
-            <div className="mb-3" key={announcement._id}>
+            <div
+              className="mb-3 announcement-card"
+              key={announcement._id}
+              onClick={() => handleShow(announcement)} // Open modal when clicking the card
+              style={{ cursor: "pointer" }}
+            >
               <div className="d-flex align-items-start">
+                {/* Date Badge */}
                 <div className="date-badge-container">
                   <div className="date-badge">
                     {new Date(announcement.createdAt).toLocaleString("default", {
@@ -124,21 +144,29 @@ export default function AnnouncementCard() {
                     {new Date(announcement.createdAt).getDate()}
                   </span>
                 </div>
+
+                {/* Announcement Content */}
                 <div className="announcement-disc">
                   <p className="card-text">{announcement.title}</p>
-                  <p>
+                  <p
+                    className="like-section"
+                    onClick={(e) => {
+                      e.stopPropagation(); // Prevent triggering `handleShow`
+                      handleLikeDislike(announcement._id, announcement.likedByUser);
+                    }}
+                  >
                     <FaThumbsUp
-                      onClick={() => handleLikeDislike(announcement._id)}
                       style={{
-                        color: likesCount[announcement._id] > 0 ? "blue" : "gray",
+                        color: announcement.likedByUser ? "blue" : "gray",
                         cursor: "pointer",
                       }}
                     />{" "}
-                    {likesCount[announcement._id] || 0} {/* Display likes count */}
+                    {announcement?.likes?.length}
                   </p>
                   <a
-                    onClick={() => handleShow(announcement)}
+                    href="#"
                     className="text-decoration-none"
+                  
                   >
                     Read More +
                   </a>
@@ -147,6 +175,7 @@ export default function AnnouncementCard() {
             </div>
           ))}
         </div>
+
       </div>
 
       {/* Popup Modal */}
@@ -217,14 +246,14 @@ export default function AnnouncementCard() {
             {/* Like Button */}
             <div className="d-flex align-items-center">
               <FaThumbsUp
-                onClick={() => handleLikeDislike(selectedAnnouncement._id)}
+                onClick={() => handleLikeDislike(selectedAnnouncement._id, selectedAnnouncement.likedByUser)}
                 style={{
-                  color: likesCount[selectedAnnouncement._id] > 0 ? "blue" : "gray",
+                  color: selectedAnnouncement.likedByUser ? "blue" : "gray",
                   cursor: "pointer",
                   marginRight: "8px",
                 }}
               />
-              <span> {likesCount[selectedAnnouncement._id] || 0} Likes</span> {/* Display likes count */}
+              <span>  {selectedAnnouncement?.likes?.length} Likes</span> {/* Display likes count */}
             </div>
           </Modal.Body>
         </Modal>
