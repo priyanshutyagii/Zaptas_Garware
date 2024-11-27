@@ -125,10 +125,15 @@ export default function LinkedInCard() {
   const formatText = (text) => {
     if (!text) return null;
 
+    // Replace `{hashtag|#|tag}` with `#tag` and style it in blue
     return text
+      .replace(/{hashtag\|\\#\|/g, '#') // Replace starting hashtag syntax
+      .replace(/}/g, '') // Remove closing syntax
       .replace(/#(\w+)/g, '<span style="color:blue;">#$1</span>') // Make hashtags blue
-      .replace(/(\r\n|\n|\r)/gm, "<br>"); // Replace line breaks with <br>
+      .replace(/(\r\n|\n|\r)/gm, '<br>'); // Replace line breaks with HTML <br> tags for proper rendering
   };
+
+  
 
   const memoizedPosts = useMemo(() => posts, [posts]);
 
@@ -206,13 +211,10 @@ export default function LinkedInCard() {
       {/* Modal for LinkedIn Post */}
       <Modal show={showModal} onHide={closePostPopup}>
         <Modal.Header closeButton>
-          <Modal.Title>
-            <div
-              dangerouslySetInnerHTML={{
-                __html: formatText(selectedPost?.text),
-              }}
-            />
+        <Modal.Title>
+            <div dangerouslySetInnerHTML={{ __html: formatText(selectedPost?.text) }} />
           </Modal.Title>
+
         </Modal.Header>
         <Modal.Body>
           <div>
