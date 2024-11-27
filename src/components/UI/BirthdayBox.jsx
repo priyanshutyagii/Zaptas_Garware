@@ -18,7 +18,7 @@ export default function BirthdayBox() {
       <div className="col-md-3">
         <div className="wish-card">
           <div className="user-image">
-            <img src="public\user.png" alt="User" className="rounded-circle" />
+            <img src="./user.png" alt="User" className="rounded-circle" />
           </div>
           <div className="wish-content">
             <h5 className="title">Mukesh singh</h5>
@@ -40,7 +40,7 @@ export default function BirthdayBox() {
       <div className="col-md-3">
         <div className="wish-card">
           <div className="user-image">
-            <img src="public\user.png" alt="User" className="rounded-circle" />
+            <img src="./user.png" alt="User" className="rounded-circle" />
           </div>
           <div className="wish-content">
             <h5 className="title">Mukesh singh</h5>
@@ -62,7 +62,7 @@ export default function BirthdayBox() {
       <div className="col-md-3">
         <div className="wish-card">
           <div className="user-image">
-            <img src="public\user.png" alt="User" className="rounded-circle" />
+            <img src="./user.png" alt="User" className="rounded-circle" />
           </div>
           <div className="wish-content">
             <h5 className="title">Mukesh singh</h5>
