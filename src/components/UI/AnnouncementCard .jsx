@@ -51,7 +51,7 @@ export default function AnnouncementCard() {
 
   // Handle like/unlike
   const handleLikeDislike = async (announcementId, isLiked) => {
-    showToast(isLiked ? "unlike success" : "like success",'success')
+    showToast(isLiked ? "Unlike success" : "Like success", "success");
     const token = getTokenFromLocalStorage();
     const url = `${ConnectMe.BASE_URL}/announcements/${announcementId}/${isLiked ? "unlike" : "like"}`;
     const headers = {
@@ -62,31 +62,48 @@ export default function AnnouncementCard() {
     try {
       const response = await apiCall("POST", url, headers);
       if (response.success) {
-     
         // Update the local state to reflect the like/unlike action
         setAnnouncements((prevAnnouncements) =>
           prevAnnouncements.map((announcement) => {
             if (announcement._id === announcementId) {
               // Update the likes array and the likesCount locally
               const updatedLikes = isLiked
-                ? announcement.likes.filter(userId => userId !== response.userId)
+                ? announcement.likes.filter((userId) => userId !== response.userId)
                 : [...announcement.likes, response.userId];
 
               return {
                 ...announcement,
                 likes: updatedLikes,
-                likesCount: updatedLikes.length,  // Update the likes count directly
-                likedByUser: !isLiked,  // Toggle the likedByUser state
+                likesCount: updatedLikes.length, // Update the likes count directly
+                likedByUser: !isLiked, // Toggle the likedByUser state
               };
             }
             return announcement; // Return the unchanged announcement if not matching
           })
         );
+
+        // Update the modal if the selected announcement matches
+        if (selectedAnnouncement && selectedAnnouncement._id === announcementId) {
+          setSelectedAnnouncement((prev) => {
+            const updatedLikes = isLiked
+              ? prev.likes.filter((userId) => userId !== response.userId)
+              : [...prev.likes, response.userId];
+
+            return {
+              ...prev,
+              likes: updatedLikes,
+              likesCount: updatedLikes.length, // Update the likes count
+              likedByUser: !isLiked, // Toggle the likedByUser state
+            };
+          });
+        }
       } else {
         setError("Failed to update like.");
+        fetchAnnouncements()
       }
     } catch (err) {
       setError("Error updating like.");
+      fetchAnnouncements()
     }
   };
 
@@ -105,9 +122,7 @@ export default function AnnouncementCard() {
     );
   }
 
-  if (error) {
-    return <div className="text-danger text-center mt-5">{error}</div>;
-  }
+
 
   return (
     <div>
@@ -131,15 +146,17 @@ export default function AnnouncementCard() {
             >
               <div className="d-flex align-items-start">
                 {/* Date Badge */}
+
+
                 <div className="date-badge-container">
                   <div className="date-badge">
-                    {new Date(announcement.createdAt).toLocaleString("default", {
+                    {new Date(announcement?.AnnouncementDate)?.toLocaleString("default", {
                       month: "short",
-                    })}{" "}
-                    {new Date(announcement.createdAt).getFullYear()}
+                    }) || ''}
+                    {new Date(announcement?.AnnouncementDate)?.getFullYear() || ""}
                   </div>
                   <span className="date">
-                    {new Date(announcement.createdAt).getDate()}
+                    {new Date(announcement?.AnnouncementDate)?.getDate() || ''}
                   </span>
                 </div>
 
@@ -164,7 +181,7 @@ export default function AnnouncementCard() {
                   <a
                     href="#"
                     className="text-decoration-none"
-                  
+
                   >
                     Read More +
                   </a>
@@ -194,11 +211,16 @@ export default function AnnouncementCard() {
               {/* Right Div */}
               <div>
                 <img
-                  src={`${ConnectMe.img_URL}${selectedAnnouncement?.images?.imagePath}`}
+                  src={
+                    selectedAnnouncement?.imagePath
+                      ? `${ConnectMe.img_URL}${selectedAnnouncement?.imagePath}`
+                      : "./user.png"
+                  }
                   alt="User"
                   className="rounded-circle"
                   style={{ width: "50px", height: "50px" }}
                 />
+
               </div>
             </div>
 
@@ -236,10 +258,20 @@ export default function AnnouncementCard() {
             ))}
 
             <p className="mt-3">
-              <strong>
-                Location: {selectedAnnouncement.location || "N/A"}
+              Location:  <strong>{selectedAnnouncement.location}  </strong>
+            </p>
+
+
+            <p className="mt-3">
+              Date: <strong>
+                {new Date(selectedAnnouncement.AnnouncementDate).toLocaleDateString("en-US", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                })}
               </strong>
             </p>
+
 
             {/* Like Button */}
             <div className="d-flex align-items-center">

@@ -18,7 +18,7 @@ export default function Announcements() {
     Designation: "",
     name: 'announcement',
     links: [{ linkTitle: '', link: '' }],
-
+    AnnouncementDate: ''
 
   });
 
@@ -57,7 +57,7 @@ export default function Announcements() {
       // Call the uploadImageAnnouncement function only if images are provided
       imageId = await uploadImageAnnouncement();
     }
-    
+
     const dataToSave = {
       fullName: formData.fullName,
       title: formData.title,
@@ -66,10 +66,11 @@ export default function Announcements() {
       Designation: formData.Designation,
       name: formData.name,
       links: formData.links,
+      AnnouncementDate: formData.AnnouncementDate,
       // If imageId is populated, use it; otherwise, it will be null (or you can handle it accordingly)
-      images: imageId?.data?.idForUnderverslaUpload[0] || null 
+      images: imageId?.data?.idForUnderverslaUpload[0] || null
     };
-    
+
 
     const token = getTokenFromLocalStorage();
     const headers = {
@@ -86,11 +87,14 @@ export default function Announcements() {
         title: "",
         location: "",
         description: "",
+        images: [],
+        fullName: "",
         Designation: "",
-        name: "announcement",
-        links: [{ linkTitle: "", link: "" }],
-        images: null,
+        name: 'announcement',
+        links: [{ linkTitle: '', link: '' }],
+        AnnouncementDate: ''
       });
+      setSelectedImages([])
     } else {
       console.error('Error saving announcement:', result.message);
     }
@@ -218,6 +222,7 @@ export default function Announcements() {
             <input
               type="text"
               id="fullName"
+              required
               value={formData.fullName}
               onChange={handleChange}
               placeholder="Kushagra Kamal"
@@ -229,6 +234,7 @@ export default function Announcements() {
             <input
               type="text"
               id="Designation"
+              required
               value={formData.Designation}
               onChange={handleChange}
               placeholder="Assistant Manager - Accounts"
@@ -236,10 +242,19 @@ export default function Announcements() {
           </div>
 
           <div className="form-group">
+            <label htmlFor="date">Announcement Date</label>
+            <input type="date" id="AnnouncementDate" value={formData.AnnouncementDate}
+              onChange={handleChange}
+              required
+              placeholder="29 Nov 2024" />
+          </div>
+
+          <div className="form-group">
             <label htmlFor="location">For Which Location Announcement is for?</label>
             <input
               type="text"
               id="location"
+              required
               value={formData.location}
               onChange={handleChange}
               placeholder="Chhatrapati Sambhajinagar (Maharashtra)"
@@ -262,6 +277,7 @@ export default function Announcements() {
             <textarea
               id="description"
               value={formData.description}
+              required
               onChange={handleChange}
               placeholder="Enter description"
             ></textarea>
@@ -325,7 +341,7 @@ export default function Announcements() {
       </div> */}
 
 
-          {formData.links.map((link, index) => (
+          {formData?.links?.map((link, index) => (
             <div className="form-group d-flex" key={index}>
               <div className="col-2">
                 <label htmlFor={`link-title-${index}`}>Link Title</label>
