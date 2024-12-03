@@ -1,0 +1,44 @@
+.upload-banners {
+    padding: 20px;
+    background-color: #f9f9f9;
+}
+
+.banners-section {
+    margin-bottom: 30px;
+}
+
+.banners-row {
+
+    margin-top: 15px;
+}
+
+.banner-card {
+    display: flex;
+    gap: 10px;
+}
+
+.banner-image {
+    width: 150px;
+    height: 130px;
+    padding: 5px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.banner-image.active {
+    border: 2px solid #7272ff;
+}
+
+.banner-actions {
+    margin-top: 10px;
+}
+
+.banners-btn {
+    display: flex;
+    justify-content: space-between;
+}
+
+.upload-input {
+    margin: 10px 0;
+}

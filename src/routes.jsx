@@ -3,6 +3,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import AppLayout from "./components/Layout/AppLayout";
 import AdminLayout from "./admin/AdminLayout";
 import ErrorPage from "./pages/ErrorPage";
+import PhotosVideos from "./admin/photosVideo";
 
 const Home = lazy(() => import("./pages/Home"));
 const About = lazy(() => import("./pages/About"));
@@ -44,6 +45,7 @@ export const routes = [
       { index: true, element: <AdminPanel /> }, // Default route for "/admin"
       { path: "upload-banners", element: <UploadBanners /> },
       { path: "announcements", element: <Announcements /> },
+      { path: "photosVideo", element: <PhotosVideos /> },
     ],
   },
   { path: "/login", element: <Login /> },

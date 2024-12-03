@@ -34,7 +34,9 @@ export default function Sidebar() {
           </Link>
         </li>
         <li>
-          <FaServicestack /> <span>Services</span>
+          <Link to="/admin/photosVideo" style={{ textDecoration: 'none', color: 'inherit' }}>
+            <FaUsers /> <span>Photos-Videos</span>
+          </Link>
         </li>
         <li>
           <FaFileInvoice /> <span>Tax Reports</span>
