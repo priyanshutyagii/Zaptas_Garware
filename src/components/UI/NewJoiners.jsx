@@ -5,84 +5,148 @@ import { apiCall, getTokenFromLocalStorage } from "../../utils/apiCall";
 import ConnectMe from "../../config/connect";
 
 export default function NewJoiners() {
-  const [newJoiners, setNewJoiners] = useState([]);
+  const [workAnniversaries, setWorkAnniversaries] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState("");
+  const [currentIndex, setCurrentIndex] = useState(0);
 
-  // Fetch new joiners from the API
-  useEffect(() => {
-    const fetchNewJoiners = async () => {
-      const token = getTokenFromLocalStorage();
+  const handleNext = () => {
+    if ((currentIndex + 1) * 3 < workAnniversaries.length) {
+      setCurrentIndex(currentIndex + 1);
+    }
+  };
+
+  const handlePrev = () => {
+    if (currentIndex > 0) {
+      setCurrentIndex(currentIndex - 1);
+    }
+  }; const fetchWorkAnniversaries = async () => {
+    try {
+      setLoading(true); // Show loader while fetching
+      const url = `${ConnectMe.BASE_URL}/hrms/joined-today`; // Replace with actual URL
+      const token = localStorage.getItem("authToken"); // Assuming the token is stored in localStorage
       const headers = {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       };
-      setLoading(true);
-      const response = await apiCall("GET", `${ConnectMe.BASE_URL}/hrms/joined-today`,headers);
 
+      const response = await apiCall("GET", url, headers);
       if (response.success) {
-        setNewJoiners(response.data.joinedToday || []);
+        setWorkAnniversaries(response?.data?.joinedToday);
       } else {
-        setError("Failed to fetch new joiners.");
+        setError("Failed to fetch work anniversaries.");
       }
-      setLoading(false);
-    };
+    } catch (err) {
+      setError("Error fetching work anniversaries.");
+    } finally {
+      setLoading(false); // Hide loader after fetching
+    }
+  };
 
-    fetchNewJoiners();
+  useEffect(() => {
+    fetchWorkAnniversaries();
   }, []);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div className="error">{error}</div>;
+  }
+
 
   return (
     <div className="row">
-      {/* Card Header */}
       <div className="col-md-3">
         <div className="card text-center wish">
           <div className="card-header">
-            <FaBirthdayCake /> &nbsp;New Joiners
+          <FaBirthdayCake /> &nbsp;New Joiners
+
           </div>
           <div className="card-body d-flex align-items-center justify-content-center">
-            <button className="btn btn-primary cartbtn">New Joiners</button>
+          <button className="btn btn-primary cartbtn">New Joiners</button>
           </div>
         </div>
       </div>
 
-      {/* Loading/Error State */}
-      {loading && <div>Loading...</div>}
-      {error && <div>{error}</div>}
-
-      {/* Display New Joiners */}
-      {!loading && !error && newJoiners.length > 0 ? (
-        newJoiners.map((joiner, index) => (
-          <div className="col-md-3" key={index}>
-            <div className="wish-card">
-              <div className="user-image">
-                <img src="./user.png" alt="User" className="rounded-circle" />
-              </div>
-              <div className="wish-content">
-                <h5 className="title">
-                  {joiner.FirstName} {joiner.MiddleName || ""} {joiner.LastName}
-                </h5>
-                <p className="message">Employee Code: {joiner.EmployeeCode}</p>
-                <div className="info">
-                  <span className="location">
-                    <FaMapMarkerAlt className="icon" /> Chaubepur, Kanpur
-                  </span>
-                  <span className="date">
-                    <FaBirthdayCake className="icon" />{" "}
-                    {new Date(joiner.JoinDate).toLocaleDateString("en-GB", {
-                      day: "numeric",
-                      month: "short",
-                      year: "numeric",
-                    })}
-                  </span>
+      <div
+        id="birthdayCarousel"
+        className="carousel slide col-md-8"
+        data-bs-ride="carousel"
+        data-bs-interval="false"
+      >
+        {/* Carousel Items */}
+        <div className="carousel-inner">
+          {loading && <div>Loading...</div>}
+          {error && <div>{error}</div>}
+          {workAnniversaries.length > 0 ? (
+            <>
+              {/* Display the current slide */}
+              <div className="carousel-item active">
+                <div className="row">
+                  {workAnniversaries
+                    .slice(currentIndex * 3, currentIndex * 3 + 3)
+                    .map((wish, index) => (
+                      <div className="col-md-4" key={index}>
+                        <div className="wish-card">
+                          <div className="user-image">
+                            <img
+                              src="./user.png"
+                              alt="User"
+                              className="rounded-circle"
+                            />
+                          </div>
+                          <div className="wish-content">
+                            <h5 className="title">
+                              {`${wish.FirstName} ${wish.MiddleName} ${wish.LastName}`}
+                            </h5>
+                            <p className="message">{wish.CustomField6}</p>
+                            <p className="message">{`Employee Code: ${wish.EmployeeCode}`}</p>
+                            <div className="info">
+                              {/* <span className="location">
+                                <FaMapMarkerAlt className="icon" /> Chaubepur, Kanpur
+                              </span> */}
+                              <span className="date">
+                                <FaBirthdayCake className="icon" />{" "}
+                                {new Date(wish.JoinDate).toLocaleDateString("en-GB", {
+                                  day: "2-digit",
+                                  month: "short",
+                                  year: "numeric",
+                                })}
+                              </span>
+                            </div>
+                            <button className="send-wish-btn">Send Wish</button>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
                 </div>
-                <button className="send-wish-btn">Send Wish</button>
               </div>
-            </div>
-          </div>
-        ))
-      ) : (
-        !loading && <div>No new joiners found.</div>
-      )}
+            </>
+          ) : (
+            <div>No birthday wishes found.</div>
+          )}
+        </div>
+
+        {/* Previous and Next controls */}
+        <button
+          className="carousel-control-prev"
+          type="button"
+          onClick={handlePrev}
+        >
+          <span className="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span className="visually-hidden">Previous</span>
+        </button>
+        <button
+          className="carousel-control-next"
+          type="button"
+          onClick={handleNext}
+        >
+          <span className="carousel-control-next-icon" aria-hidden="true"></span>
+          <span className="visually-hidden">Next</span>
+        </button>
+      </div>
     </div>
   );
 }

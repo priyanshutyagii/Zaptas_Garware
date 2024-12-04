@@ -21,7 +21,9 @@ export default function Sidebar() {
     <div className="sidebar">
       <ul className="sidebar-menu">
         <li>
-          <FaTachometerAlt /> <span>Dashboard</span>
+        <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
+            <FaUsers /> <span>Home</span>
+          </Link>
         </li>
         <li>
           <Link to="/admin/upload-banners" style={{ textDecoration: 'none', color: 'inherit' }}>
@@ -39,7 +41,9 @@ export default function Sidebar() {
           </Link>
         </li>
         <li>
-          <FaFileInvoice /> <span>Tax Reports</span>
+          <Link to="/admin/qlink" style={{ textDecoration: 'none', color: 'inherit' }}>
+            <FaUsers /> <span>Quick Links</span>
+          </Link>
         </li>
         <li>
           <FaFileInvoice /> <span>PO Create</span>

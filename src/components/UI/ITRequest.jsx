@@ -4,10 +4,14 @@ import { FaUsersGear } from "react-icons/fa6";
 import { HiArrowCircleRight, HiUserRemove } from "react-icons/hi";
 import { MdAttachEmail } from "react-icons/md";
 import { TiUserAdd } from "react-icons/ti";
-
+import { useNavigate } from "react-router-dom";
 export default function ITRequest() {
+const navigate = useNavigate();
+
   return (
-    <div className="card mb-3">
+    <div className="card mb-3" onClick={(()=>{
+      navigate("/ITService")
+    })}>
       <div className="card-header d-flex justify-content-between align-items-center">
         <div className="d-flex align-items-center">
           <FaUsersGear className="me-2" />

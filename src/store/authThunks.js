@@ -1,6 +1,6 @@
 // src/store/authThunks.js
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import apiCall from '../utils/apiCall';
+import { apiCall } from '../utils/apiCall';
 import ConnectMe from '../config/connect';
 
 

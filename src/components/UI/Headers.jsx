@@ -1,9 +1,46 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { FaSearch, FaHome, FaInfoCircle, FaBuilding } from "react-icons/fa";
 import { RiLink } from "react-icons/ri";
 
 import "./Header.css";
+import { apiCall, getTokenFromLocalStorage } from "../../utils/apiCall";
+import ConnectMe from "../../config/connect";
+
 export default function Headers() {
+  const [formData, setFormData] = useState({
+    links: [{ title: '', link: '', id: '' }],
+  });
+
+  // Fetch quick links when the component mounts
+  useEffect(() => {
+    fetchQuickLinks();
+  }, []);
+
+  const fetchQuickLinks = async () => {
+    try {
+      const token = getTokenFromLocalStorage();
+      const headers = {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      };
+
+      const response = await apiCall('GET', `${ConnectMe.BASE_URL}/qlink/quick-links`, headers);
+      if (response.success) {
+        const fetchedLinks = response?.data?.map((link) => ({
+          id: link._id,  // Make sure to store the ID for each link
+          title: link.title,
+          link: link.url,
+        }));
+        setFormData({ links: fetchedLinks });
+      } else {
+        console.error('Error fetching quick links.');
+      }
+    } catch (error) {
+      console.error('Error fetching quick links:', error);
+      alert('Error fetching quick links');
+    }
+  };
+
   return (
     <header className="navbar navbar-expand-lg navbar-light bg-light">
       <div className="container-fluid">
@@ -28,8 +65,8 @@ export default function Headers() {
             <li className="nav-item">
               <a className="nav-link" href="/">
                 <div className="d-flex flex-column align-items-center">
-                  <FaHome className="navbar-icon" /> {/* Top Icon */}
-                  <span>Home</span> {/* Bottom Text */}
+                  <FaHome className="navbar-icon" />
+                  <span>Home</span>
                 </div>
               </a>
             </li>
@@ -63,25 +100,20 @@ export default function Headers() {
                   <span>Quicklinks </span>
                 </span>
               </a>
-              <ul
-                className="dropdown-menu"
-                aria-labelledby="quicklinksDropdown"
-              >
-                <li>
-                  <a className="dropdown-item" href="/quicklink1">
-                    Quicklink 1
-                  </a>
-                </li>
-                <li>
-                  <a className="dropdown-item" href="/quicklink2">
-                    Quicklink 2
-                  </a>
-                </li>
-                <li>
-                  <a className="dropdown-item" href="/quicklink3">
-                    Quicklink 3
-                  </a>
-                </li>
+              <ul className="dropdown-menu" aria-labelledby="quicklinksDropdown">
+                {/* Dynamically render quick links from state */}
+                {formData.links.map((link) => (
+                  <li key={link.id}>
+                    <a
+                      className="dropdown-item"
+                      href={link.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {link.title}
+                    </a>
+                  </li>
+                ))}
               </ul>
             </li>
           </ul>

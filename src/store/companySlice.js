@@ -1,8 +1,8 @@
 // src/slices/companySlice.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
-import apiCall from '../utils/apiCall';
+import { apiCall } from '../utils/apiCall';
 import ConnectMe from '../config/connect';
+
 
 export const fetchCompanyDetails = createAsyncThunk(
     'company/fetchDetails',

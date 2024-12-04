@@ -8,7 +8,7 @@ import ITServiceRequestForm from "./components/UI/ITServiceRequestForm";
 
 const Home = lazy(() => import("./pages/Home"));
 const About = lazy(() => import("./pages/About"));
-const Quicklinks = lazy(() => import("./pages/Quicklinks"));
+const Quicklinks = lazy(() => import("./admin/QuickLinks"));
 const Workplace = lazy(() => import("./pages/Workplace"));
 const Login = lazy(() => import("./pages/Login"));
 const AdminPanel = lazy(() => import("./admin/AdminPanel"));
@@ -48,6 +48,8 @@ export const routes = [
       { path: "upload-banners", element: <UploadBanners /> },
       { path: "announcements", element: <Announcements /> },
       { path: "photosVideo", element: <PhotosVideos /> },
+      { path: "qlink", element: <Quicklinks/> },
+      
     ],
   },
   { path: "/login", element: <Login /> },
