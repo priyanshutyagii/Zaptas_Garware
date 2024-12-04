@@ -4,6 +4,7 @@ import AppLayout from "./components/Layout/AppLayout";
 import AdminLayout from "./admin/AdminLayout";
 import ErrorPage from "./pages/ErrorPage";
 import PhotosVideos from "./admin/photosVideo";
+import ITServiceRequestForm from "./components/UI/ITServiceRequestForm";
 
 const Home = lazy(() => import("./pages/Home"));
 const About = lazy(() => import("./pages/About"));
@@ -30,6 +31,7 @@ export const routes = [
       { path: "workplace", element: <Workplace /> },
       { path: "quicklinks", element: <Quicklinks /> },
       { path: "view-all", element: <ViewAllPosts /> },
+      { path: "ITService", element: <ITServiceRequestForm /> },
     ],
   },
   {
