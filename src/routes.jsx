@@ -5,6 +5,7 @@ import AdminLayout from "./admin/AdminLayout";
 import ErrorPage from "./pages/ErrorPage";
 import PhotosVideos from "./admin/photosVideo";
 import ITServiceRequestForm from "./components/UI/ITServiceRequestForm";
+import GalleryDetails from "./components/UI/GalleryDetails";
 
 const Home = lazy(() => import("./pages/Home"));
 const About = lazy(() => import("./pages/About"));
@@ -32,6 +33,7 @@ export const routes = [
       { path: "quicklinks", element: <Quicklinks /> },
       { path: "view-all", element: <ViewAllPosts /> },
       { path: "ITService", element: <ITServiceRequestForm /> },
+      { path: "/gallery/:id", element: <GalleryDetails /> },
     ],
   },
   {
@@ -48,8 +50,7 @@ export const routes = [
       { path: "upload-banners", element: <UploadBanners /> },
       { path: "announcements", element: <Announcements /> },
       { path: "photosVideo", element: <PhotosVideos /> },
-      { path: "qlink", element: <Quicklinks/> },
-      
+      { path: "qlink", element: <Quicklinks /> },
     ],
   },
   { path: "/login", element: <Login /> },
