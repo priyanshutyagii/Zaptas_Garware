@@ -42,3 +42,8 @@
 .upload-input {
     margin: 10px 0;
 }
+.type-selector {
+    gap: 5px;
+    display: flex
+;
+}

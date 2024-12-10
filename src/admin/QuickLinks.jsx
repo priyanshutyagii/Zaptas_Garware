@@ -153,7 +153,7 @@ export default function Quicklinks() {
   return (
     <div>
       {formData?.links?.map((link, index) => (
-        <div className="form-group d-flex" key={index}>
+        <div className="form-group d-flex justify-content-center align-items-center" key={index}>
           <div className="col-2">
             <label htmlFor={`link-title-${index}`}>Link Title</label>
             <input
@@ -176,6 +176,7 @@ export default function Quicklinks() {
 
           {/* Add link icon */}
           <div className="col-1" onClick={handleAddLink} style={{ cursor: 'pointer', fontSize: '20px' }}>
+          <label>&nbsp;</label>
             <FaPlusCircle style={{ color: 'green' }} />
           </div>
 
@@ -186,6 +187,7 @@ export default function Quicklinks() {
               onClick={() => handleRemoveLink(index)}
               style={{ cursor: 'pointer', fontSize: '20px' }}
             >
+               <label>&nbsp;</label>
               <FaTimesCircle style={{ color: 'red' }} />
             </div>
           )}

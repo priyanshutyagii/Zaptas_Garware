@@ -413,7 +413,7 @@ export default function IndustryPage() {
     <div className="admin-announcements">
       <div className="container mt-4">
         {/* <h2> Current Announcements</h2> */}
-        <div className="old-announcements border p-3" style={{ height: "200px", overflowY: "scroll" }}>
+        <div className="old-announcements border p-3">
           <h4>Current News</h4>
           <ul className="list-group">
             {existingAnnouncements.map((announcement) => (

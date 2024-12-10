@@ -68,7 +68,7 @@ export default function Banner() {
             data-bs-slide-to={index}
             className={index === 0 ? "active" : ""}
             aria-current={index === 0 ? "true" : "false"}
-            aria-label={`Slide ${index + 1}`}
+            aria-label={`Slide ${index + 3}`}
           ></button>
         ))}
       </div>

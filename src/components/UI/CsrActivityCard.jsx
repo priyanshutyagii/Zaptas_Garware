@@ -178,16 +178,11 @@ export default function AnnouncementCard() {
                   <p
                   className="card-text fs-6"
                   dangerouslySetInnerHTML={{
-                    __html: `${formatText(announcement.description.slice(0, 100))}...`,
+                    __html: `${formatText(announcement.description.slice(0, 40))}...`,
                   }}
                 ></p>
-                  <a
-                    href="#"
-                    className="text-decoration-none"
-
-                  >
-                    Read More +
-                  </a>
+                  <div className="d-flex justify-content-between mt-2">
+                
                   <p
                     className="like-section"
                     onClick={(e) => {
@@ -203,7 +198,14 @@ export default function AnnouncementCard() {
                     />{" "}
                     {announcement?.likes?.length}
                   </p>
+                  <a
+                    href="#"
+                    className="text-decoration-none"
 
+                  >
+                    Read More +
+                  </a>
+</div>
 
           
                 </div>

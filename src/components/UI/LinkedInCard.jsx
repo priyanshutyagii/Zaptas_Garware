@@ -159,35 +159,30 @@ export default function LinkedInCard() {
         <div className="card-body">
           {memoizedPosts.map((post) => (
             <div key={post.id} className="row mb-3">
-              <div className="csr-media col-sm-4 text-center">
+              <div className="csr-media col-sm-12 text-center" onMouseEnter={() => openPostPopup(post)} style={{ cursor: "pointer" }}>
                 {post.multimedia.type === "image" ? (
                   <img
                     src={post.multimedia.url}
                     alt="LinkedIn Post"
-                    style={{ width: "100%", height: "100px" }}
+                    style={{ width: "100%", height: "250px" }}
                   />
                 ) : post.multimedia.type === "video" ? (
-                  <video width="100%" height="100" controls autoPlay muted loop>
+                  <video width="100%" height="250" controls autoPlay muted loop>
                     <source src={post.multimedia.url} type="video/mp4" />
                     Your browser does not support the video tag.
                   </video>
                 ) : null}
               </div>
-              <div className="announcement-disc col-sm-8">
+              <div className="announcement-disc col-sm-12 mt-2">
                 <p
                   className="card-text fs-6"
                   dangerouslySetInnerHTML={{
-                    __html: `${formatText(post.text.slice(0, 50))}...`,
+                    __html: `${formatText(post.text.slice(0, 108))}...`,
                   }}
                 ></p>
-                    <a
-                  href="#"
-                  onClick={() => openPostPopup(post)}
-                  className="text-decoration-none"
-                >
-                  Read More +
-                </a>
-                <p className="card-text fs-6">
+              
+                <div className="d-flex justify-content-between mt-2">
+                <p className="card-like fs-6">
                   <FaThumbsUp
                     style={{
                       color: post?.fetchUserLikesStatus ? "blue" : "gray",
@@ -202,6 +197,16 @@ export default function LinkedInCard() {
                   />{" "}
                   {post?.likeCount?.totalLikes}
                 </p>
+                <a
+                  href="#"
+                  onClick={() => openPostPopup(post)}
+                  className="text-decoration-none"
+                >
+                  Read More +
+                </a>
+                </div>
+              
+                 
             
               </div>
             </div>
@@ -210,10 +215,10 @@ export default function LinkedInCard() {
       )}
 
       {/* Modal for LinkedIn Post */}
-      <Modal show={showModal} onHide={closePostPopup}>
+      <Modal show={showModal} onHide={closePostPopup} size="lg">
         <Modal.Header closeButton>
         <Modal.Title>
-            <div dangerouslySetInnerHTML={{ __html: formatText(selectedPost?.text) }} />
+            <div dangerouslySetInnerHTML={{ __html:  `${formatText(selectedPost?.text.slice(0, 300)) } ...` }} />
           </Modal.Title>
 
         </Modal.Header>
@@ -272,6 +277,7 @@ export default function LinkedInCard() {
           <div className="add-comment-box">
             <input
               type="text"
+              className="form-control"
               value={newComment}
               onChange={(e) => setNewComment(e.target.value)}
               placeholder="Write a comment..."

@@ -155,7 +155,7 @@ export default function AnnouncementCard() {
               onClick={() => handleShow(announcement)} // Open modal when clicking the card
               style={{ cursor: "pointer" }}
             >
-              <div className="d-flex align-items-start">
+              <div className="d-flex align-items-start mb-4">
                 {/* Date Badge */}
 
 
@@ -175,7 +175,7 @@ export default function AnnouncementCard() {
                 <div className="announcement-disc">
                   <p className="card-text">{announcement.title}</p>
 
-
+                  
 
                   <p
                   className="card-text fs-6"
@@ -183,19 +183,9 @@ export default function AnnouncementCard() {
                     __html: `${formatText(announcement.description.slice(0, 50))}...`,
                   }}
                 ></p>
-                  <a
-                    href="#"
-                    className="text-decoration-none"
-
-                  >
-                    Read More +
-                  </a>
-
-
-
-
-
-                  <p
+                <div className="d-flex justify-content-between mt-2">
+                  
+                <p
                     className="like-section"
                     onClick={(e) => {
                       e.stopPropagation(); // Prevent triggering `handleShow`
@@ -210,6 +200,18 @@ export default function AnnouncementCard() {
                     />{" "}
                     {announcement?.likes?.length}
                   </p>
+                  <a
+                    href="#"
+                    className="text-decoration-none"
+
+                  >
+                    Read More +
+                  </a>
+
+</div>
+
+
+
             
                 </div>
               </div>
