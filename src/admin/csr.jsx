@@ -19,7 +19,7 @@ export default function CsrPage() {
     images: [],
     fullName: "",
     Designation: "",
-    name: 'Announcements',
+    name: 'CSR',
     links: [{ linkTitle: '', link: '' }],
     AnnouncementDate: ''
   });
@@ -105,7 +105,7 @@ export default function CsrPage() {
       'Content-Type': 'application/json',
     };
 
-    const url = `${ConnectMe.BASE_URL}/announcements/create`;
+    const url = `${ConnectMe.BASE_URL}/csr/create`;
     const result = await apiCall('POST', url, headers, JSON.stringify(dataToSave));
 
     if (result.success) {
@@ -155,7 +155,7 @@ export default function CsrPage() {
         }
       }
 
-      formData.append('name', 'Announcements');
+      formData.append('name', 'CsrType');
 
       const headers = {
         'Authorization': `Bearer ${token}`,
@@ -234,7 +234,7 @@ export default function CsrPage() {
   const fetchExistingAnnouncements = async (page = 1, limit = 3) => {
     try {
       setLoading(true); // Show loader while fetching
-      const url = `${ConnectMe.BASE_URL}/announcements/latest?page=${page}&limit=${limit}`;
+      const url = `${ConnectMe.BASE_URL}/csr/latest?page=${page}&limit=${limit}`;
       const token = getTokenFromLocalStorage();
       const headers = {
         Authorization: `Bearer ${token}`,
@@ -359,7 +359,7 @@ console.log(selectedImages,'abcdef')
       };
 
       // Define the API endpoint
-      const url = `${ConnectMe.BASE_URL}/announcements/${selectedAnnouncement._id}`;
+      const url = `${ConnectMe.BASE_URL}/csr/${selectedAnnouncement._id}`;
 
       // Make the API call using PUT method
       const result = await apiCall('PUT', url, headers, JSON.stringify(dataToUpdate));
@@ -391,7 +391,7 @@ console.log(selectedImages,'abcdef')
       'Content-Type': 'application/json',
     };
 
-    const url = `${ConnectMe.BASE_URL}/announcements/${_id}`;
+    const url = `${ConnectMe.BASE_URL}/csr/${_id}`;
     const result = await apiCall('DELETE', url, headers);
     if (result.success) {
 

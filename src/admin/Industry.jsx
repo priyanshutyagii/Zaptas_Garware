@@ -4,7 +4,12 @@ import { apiCall, getTokenFromLocalStorage } from "../utils/apiCall";
 import ConnectMe from "../config/connect";
 import showToast from "../utils/toastHelper";
 import { FaPlusCircle, FaTimesCircle } from 'react-icons/fa';
-export default function CsrPage() {
+
+
+
+
+
+export default function IndustryPage() {
   const [selectedImages, setSelectedImages] = useState([]); // Initializing the state for selected images
   const [existingAnnouncements, setExistingAnnouncements] = useState([]);
   const [page, setPage] = useState(1);
@@ -19,7 +24,7 @@ export default function CsrPage() {
     images: [],
     fullName: "",
     Designation: "",
-    name: 'Announcements',
+    name: 'CSR',
     links: [{ linkTitle: '', link: '' }],
     AnnouncementDate: ''
   });
@@ -105,7 +110,7 @@ export default function CsrPage() {
       'Content-Type': 'application/json',
     };
 
-    const url = `${ConnectMe.BASE_URL}/announcements/create`;
+    const url = `${ConnectMe.BASE_URL}/industry/create`;
     const result = await apiCall('POST', url, headers, JSON.stringify(dataToSave));
 
     if (result.success) {
@@ -129,7 +134,7 @@ export default function CsrPage() {
 
 
   const uploadImageAnnouncement = async () => {
-    if (selectedImages.length === 0) {
+    if (selectedImages?.length === 0) {
       showToast('Please select at least one image.', 'error');
       return;
     }
@@ -147,7 +152,7 @@ export default function CsrPage() {
             return;
           }
           const blob = await response.blob();
-          const file = new File([blob], 'banners.png', { type: blob.type });
+          const file = new File([blob], '123.png', { type: blob.type });
 
           formData.append('files', file);
         } else {
@@ -155,7 +160,7 @@ export default function CsrPage() {
         }
       }
 
-      formData.append('name', 'Announcements');
+      formData.append('name', 'News');
 
       const headers = {
         'Authorization': `Bearer ${token}`,
@@ -234,7 +239,7 @@ export default function CsrPage() {
   const fetchExistingAnnouncements = async (page = 1, limit = 3) => {
     try {
       setLoading(true); // Show loader while fetching
-      const url = `${ConnectMe.BASE_URL}/announcements/latest?page=${page}&limit=${limit}`;
+      const url = `${ConnectMe.BASE_URL}/industry/latest?page=${page}&limit=${limit}`;
       const token = getTokenFromLocalStorage();
       const headers = {
         Authorization: `Bearer ${token}`,
@@ -319,8 +324,8 @@ export default function CsrPage() {
   };
 
   const handleUpdateSubmit = async (e) => {
-    e.preventDefault()
-console.log(selectedImages,'abcdef')
+    e.preventDefault();
+
     try {
       let imageId = null;
 
@@ -359,7 +364,7 @@ console.log(selectedImages,'abcdef')
       };
 
       // Define the API endpoint
-      const url = `${ConnectMe.BASE_URL}/announcements/${selectedAnnouncement._id}`;
+      const url = `${ConnectMe.BASE_URL}/industry/${selectedAnnouncement._id}`;
 
       // Make the API call using PUT method
       const result = await apiCall('PUT', url, headers, JSON.stringify(dataToUpdate));
@@ -391,7 +396,7 @@ console.log(selectedImages,'abcdef')
       'Content-Type': 'application/json',
     };
 
-    const url = `${ConnectMe.BASE_URL}/announcements/${_id}`;
+    const url = `${ConnectMe.BASE_URL}/industry/${_id}`;
     const result = await apiCall('DELETE', url, headers);
     if (result.success) {
 
@@ -409,7 +414,7 @@ console.log(selectedImages,'abcdef')
       <div className="container mt-4">
         {/* <h2> Current Announcements</h2> */}
         <div className="old-announcements border p-3" style={{ height: "200px", overflowY: "scroll" }}>
-          <h4>Current CSR</h4>
+          <h4>Current News</h4>
           <ul className="list-group">
             {existingAnnouncements.map((announcement) => (
               <li
@@ -635,10 +640,10 @@ console.log(selectedImages,'abcdef')
       {
         selectedAnnouncement == null &&
         <div className="new-announcements">
-          <h4>New CSR</h4>
+          <h4>Upaload Latest News</h4>
           <form onSubmit={handleSubmit}>
             <div className="form-group">
-              <label htmlFor="title">CSR Title</label>
+              <label htmlFor="title">News Title</label>
               <input
                 type="text"
                 id="title"
