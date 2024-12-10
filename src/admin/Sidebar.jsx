@@ -36,6 +36,16 @@ export default function Sidebar() {
           </Link>
         </li>
         <li>
+          <Link to="/admin/csr" style={{ textDecoration: 'none', color: 'inherit' }}>
+            <FaUsers /> <span>CSR</span>
+          </Link>
+        </li>
+        <li>
+          <Link to="/admin/industry" style={{ textDecoration: 'none', color: 'inherit' }}>
+            <FaUsers /> <span>Industry News</span>
+          </Link>
+        </li>
+        <li>
           <Link to="/admin/photosVideo" style={{ textDecoration: 'none', color: 'inherit' }}>
             <FaUsers /> <span>Photos-Videos</span>
           </Link>

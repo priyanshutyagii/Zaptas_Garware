@@ -6,6 +6,8 @@ import ErrorPage from "./pages/ErrorPage";
 import PhotosVideos from "./admin/photosVideo";
 import ITServiceRequestForm from "./components/UI/ITServiceRequestForm";
 import GalleryDetails from "./components/UI/GalleryDetails";
+import CsrPage from "./admin/csr";
+import IndustryPage from "./admin/Industry";
 
 const Home = lazy(() => import("./pages/Home"));
 const About = lazy(() => import("./pages/About"));
@@ -51,6 +53,8 @@ export const routes = [
       { path: "announcements", element: <Announcements /> },
       { path: "photosVideo", element: <PhotosVideos /> },
       { path: "qlink", element: <Quicklinks /> },
+      { path: "csr", element: <CsrPage /> },
+      { path: "industry", element: <IndustryPage /> },
     ],
   },
   { path: "/login", element: <Login /> },

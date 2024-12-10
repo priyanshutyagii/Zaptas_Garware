@@ -1,10 +1,35 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom"; // For navigation
 import { FaCameraRetro } from "react-icons/fa";
 import { HiArrowCircleRight } from "react-icons/hi";
+import ConnectMe from "../../config/connect";
+import { apiCall, getTokenFromLocalStorage } from "../../utils/apiCall";
+import showToast from "../../utils/toastHelper";
 
 export default function GalleryCard() {
   const navigate = useNavigate();
+  const [data, setData] = useState([]);
+
+
+  useEffect(() => { fetchData() }, [])
+  const fetchData = async () => {
+    try {
+      const url = `${ConnectMe.BASE_URL}/photosVideos/byGroup`;
+      const token = getTokenFromLocalStorage();
+      const headers = { Authorization: `Bearer ${token}` };
+
+      const response = await apiCall("GET", url, headers);
+      if (response.success) {
+        setData(response.data?.data || []);
+        console.log(response.data,'ddddd')
+      } else {
+        showToast(`Failed to load `, "error");
+      }
+    } catch (error) {
+      console.error(`Error fetching :`, error.message);
+      showToast(`Error fetching `, "error");
+    }
+  };
 
   // Sample gallery data
   const galleryItems = [
@@ -32,7 +57,7 @@ export default function GalleryCard() {
       </div>
       <div className="card-body">
         <div className="gallery d-flex flex-wrap">
-          {galleryItems.map((item) => (
+          {galleryItems?.map((item) => (
             <div
               key={item.id}
               className="gallery-item text-center p-2"

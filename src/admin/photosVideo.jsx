@@ -5,26 +5,20 @@ import ConnectMe from "../config/connect";
 import { toast } from "react-toastify";
 import showToast from "../utils/toastHelper";
 
-
 export default function PhotosVideos() {
   const [data, setData] = useState([]);
   const [currentType, setCurrentType] = useState("Announcements");
-  const [selectedImages, setSelectedImages] = useState([]);
+  const [selectedFiles, setSelectedFiles] = useState([]); // Changed from selectedImages to selectedFiles
   const [uploadTypes, setUploadTypes] = useState([]);
   const fileInputRef = useRef();
 
   useEffect(() => {
     fetchData();
-
   }, [currentType]);
+
   useEffect(() => {
-  
-    fetchUploadTypes()
+    fetchUploadTypes();
   }, []);
-
-
-
-
 
   const fetchUploadTypes = async () => {
     try {
@@ -37,7 +31,6 @@ export default function PhotosVideos() {
       const response = await apiCall("GET", url, headers);
       if (response.success) {
         setUploadTypes(response.data);
-       
       } else {
         toast.error("Failed to fetch upload types");
       }
@@ -46,14 +39,6 @@ export default function PhotosVideos() {
       toast.error("Error fetching upload types");
     }
   };
-
-
-
-
-
-
-
-
 
   const fetchData = async () => {
     try {
@@ -93,8 +78,8 @@ export default function PhotosVideos() {
   };
 
   const uploadItem = async () => {
-    if (selectedImages.length === 0) {
-      showToast(`Please select at least one ${currentType} image.`, "error");
+    if (selectedFiles.length === 0) {
+      showToast(`Please select at least one ${currentType} file.`, "error");
       return;
     }
 
@@ -104,18 +89,19 @@ export default function PhotosVideos() {
       const headers = { Authorization: `Bearer ${token}` };
       const formData = new FormData();
 
-      for (const image of selectedImages) {
-        if (typeof image === "string") {
-          const response = await fetch(image);
+      for (const file of selectedFiles) {
+        if (typeof file === "string") {
+          // If it's a URL, fetch and convert to a file
+          const response = await fetch(file);
           if (!response.ok) {
-            showToast(`Failed to fetch the image from URL: ${image}`, "error");
+            showToast(`Failed to fetch the file from URL: ${file}`, "error");
             return;
           }
           const blob = await response.blob();
-          const file = new File([blob], `${currentType}.png`, { type: blob.type });
-          formData.append("files", file);
+          const newFile = new File([blob], `${currentType}.${file.split(".").pop()}`, { type: blob.type });
+          formData.append("files", newFile);
         } else {
-          formData.append("files", image);
+          formData.append("files", file);
         }
       }
 
@@ -124,7 +110,7 @@ export default function PhotosVideos() {
       const response = await apiCall("POST", url, headers, formData);
       if (response.success) {
         showToast(`${currentType} uploaded successfully!`, "success");
-        setSelectedImages([]);
+        setSelectedFiles([]);
         fetchData(); // Refresh the list
         if (fileInputRef.current) fileInputRef.current.value = null;
       } else {
@@ -138,12 +124,12 @@ export default function PhotosVideos() {
 
   const handleFileChange = (e) => {
     const files = Array.from(e.target.files);
-    const fileURLs = files.map((file) => URL.createObjectURL(file));
-    setSelectedImages(fileURLs);
+    const fileURLs = files.map((file) => URL.createObjectURL(file)); // Updated to handle both image and video files
+    setSelectedFiles(files); // Update the selected files state
   };
 
   const handleCancel = () => {
-    setSelectedImages([]);
+    setSelectedFiles([]);
     if (fileInputRef.current) fileInputRef.current.value = null;
   };
 
@@ -152,14 +138,21 @@ export default function PhotosVideos() {
     return types?.map((type) => (
       <button
         key={type._id}
-        className={`btn btn-sm ${
-          currentType === type.name ? "btn-primary" : "btn-outline-primary"
-        }`}
+        className={`btn btn-sm ${currentType === type.name ? "btn-primary" : "btn-outline-primary"}`}
         onClick={() => setCurrentType(type.name)}
       >
         {type.name}
       </button>
     ));
+  };
+
+  const renderPreview = (file) => {
+    if (file.type.startsWith("image")) {
+      return <img src={URL.createObjectURL(file)} alt="Selected" className="banner-image" />;
+    } else if (file.type.startsWith("video")) {
+      return <video controls className="banner-video"><source src={URL.createObjectURL(file)} type={file.type} />Your browser does not support the video tag.</video>;
+    }
+    return null;
   };
 
   return (
@@ -208,11 +201,11 @@ export default function PhotosVideos() {
           onChange={handleFileChange}
           ref={fileInputRef}
         />
-        {selectedImages.length > 0 && (
+        {selectedFiles.length > 0 && (
           <div className="row">
-            {selectedImages.map((image, index) => (
+            {selectedFiles.map((file, index) => (
               <div key={index} className="col-6 col-sm-3 mb-4">
-                <img src={image} alt="Selected" className="banner-image" />
+                {renderPreview(file)}
               </div>
             ))}
           </div>

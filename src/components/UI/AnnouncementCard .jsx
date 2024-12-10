@@ -212,9 +212,7 @@ export default function AnnouncementCard() {
               <div>
                 <img
                   src={
-                    selectedAnnouncement?.imagePath
-                      ? `${ConnectMe.img_URL}${selectedAnnouncement?.imagePath}`
-                      : "./user.png"
+                    "./user.png"
                   }
                   alt="User"
                   className="rounded-circle"
@@ -272,6 +270,33 @@ export default function AnnouncementCard() {
               </strong>
             </p>
 
+            <div className="row">
+              {selectedAnnouncement?.imagePath && (
+                Array.isArray(selectedAnnouncement.imagePath)
+                  ? selectedAnnouncement.imagePath.map((image, index) => (
+                    <div key={index} className="col-6 col-sm-3 mb-4 position-relative">
+                      <div className="banner-card">
+                        <img
+                          src={`${ConnectMe.img_URL}${image}`} // Display the existing image
+                          alt={`Selected Banner ${index + 1}`}
+                          className="banner-image"
+                        />
+                      </div>
+                    </div>
+                  ))
+                  : (
+                    <div className="col-6 col-sm-3 mb-4 position-relative">
+                      <div className="banner-card">
+                        <img
+                          src={`${ConnectMe.img_URL}${selectedAnnouncement.imagePath}`} // Display the single image
+                          alt="Selected Banner"
+                          className="banner-image"
+                        />
+                      </div>
+                    </div>
+                  )
+              )}
+            </div>
 
             {/* Like Button */}
             <div className="d-flex align-items-center">
