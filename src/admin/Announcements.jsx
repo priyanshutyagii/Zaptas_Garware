@@ -4,7 +4,7 @@ import { apiCall, getTokenFromLocalStorage } from "../utils/apiCall";
 import ConnectMe from "../config/connect";
 import showToast from "../utils/toastHelper";
 import { FaPlusCircle, FaTimesCircle } from 'react-icons/fa';
-export default function Announcements() {
+export default function CsrPage() {
   const [selectedImages, setSelectedImages] = useState([]); // Initializing the state for selected images
   const [existingAnnouncements, setExistingAnnouncements] = useState([]);
   const [page, setPage] = useState(1);
@@ -19,7 +19,7 @@ export default function Announcements() {
     images: [],
     fullName: "",
     Designation: "",
-    name: 'announcement',
+    name: 'Announcements',
     links: [{ linkTitle: '', link: '' }],
     AnnouncementDate: ''
   });
@@ -27,19 +27,21 @@ export default function Announcements() {
 
 
   const handleChange = (e) => {
-    const { id, value, type, files } = e.target;
+    const { id, value, type } = e.target;
 
     // If the input is a file input, handle it separately
     if (type === "file") {
-      const fileUrl = URL.createObjectURL(files[0]); // Create a preview URL for the selected image
+      const files = Array.from(e.target.files); // Convert FileList to an array
+      const fileUrls = files.map((file) => URL.createObjectURL(file)); // Generate preview URLs
 
-      // Update formData and selectedImages state
-      setFormData({
-        ...formData,
-        images: [files[0]], // Store the actual file in images
-      });
 
-      setSelectedImages([fileUrl]); // Store the preview URL in an array
+      setFormData((prev) => ({
+        ...prev,
+        images: [...(prev.images || []), ...files], // Append new files to existing images
+      }));
+
+
+      setSelectedImages((prev) => [...prev, ...fileUrls]); // Append new URLs to existing selected images
     } else {
       // Handle regular text inputs
       setFormData({
@@ -49,6 +51,29 @@ export default function Announcements() {
     }
 
   };
+
+
+  const removeImage = (index,name=null) => {
+
+
+    if(name=='update'){
+      setSelectedAnnouncement((prev) => ({
+        ...prev,
+        images: prev.images.filter((_, i) => i !== index), // Remove the specific file from form data
+        imagePath: prev.imagePath.filter((_, i) => i !== index), // Remove the specific file from form data
+      }));
+
+    }
+    else{
+      setSelectedImages((prev) => prev.filter((_, i) => i !== index)); // Remove the specific image URL
+      setFormData((prev) => ({
+        ...prev,
+        images: prev.images.filter((_, i) => i !== index), // Remove the specific file from form data
+      }));
+    }
+
+  };
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -70,7 +95,7 @@ export default function Announcements() {
       links: formData.links,
       AnnouncementDate: formData.AnnouncementDate,
       // If imageId is populated, use it; otherwise, it will be null (or you can handle it accordingly)
-      images: imageId?.data?.idForUnderverslaUpload[0] || null
+      images: imageId?.data?.idForUnderverslaUpload || null
     };
 
 
@@ -104,7 +129,7 @@ export default function Announcements() {
 
 
   const uploadImageAnnouncement = async () => {
-    if (!selectedAnnouncement.images || selectedAnnouncement.images.length === 0) {
+    if (selectedImages.length === 0) {
       showToast('Please select at least one image.', 'error');
       return;
     }
@@ -206,11 +231,6 @@ export default function Announcements() {
   };
 
 
-
-
-
-
-
   const fetchExistingAnnouncements = async (page = 1, limit = 3) => {
     try {
       setLoading(true); // Show loader while fetching
@@ -299,18 +319,18 @@ export default function Announcements() {
   };
 
   const handleUpdateSubmit = async (e) => {
-    e.preventDefault();
-  
+    e.preventDefault()
+console.log(selectedImages,'abcdef')
     try {
       let imageId = null;
-  
+
       // Check if images are provided in the selectedAnnouncement object
-      if (selectedAnnouncement.images && selectedAnnouncement.images.length > 0) {
+      if (selectedImages && selectedImages.length > 0) {
         // Upload images and get the image ID
         const uploadResponse = await uploadImageAnnouncement();
-        imageId = uploadResponse?.data?.idForUnderverslaUpload[0] || null;
+        imageId = uploadResponse?.data?.idForUnderverslaUpload || null;
       }
-  
+
       // Prepare the data to update
       const dataToUpdate = {
         updates: {
@@ -327,23 +347,23 @@ export default function Announcements() {
           images: imageId || selectedAnnouncement.images, // Use uploaded image ID or retain existing images
         },
       };
-      
-  
+
+
       // Retrieve token from local storage
       const token = getTokenFromLocalStorage();
-  
+
       // Prepare request headers
       const headers = {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
       };
-  
+
       // Define the API endpoint
       const url = `${ConnectMe.BASE_URL}/announcements/${selectedAnnouncement._id}`;
-  
+
       // Make the API call using PUT method
       const result = await apiCall('PUT', url, headers, JSON.stringify(dataToUpdate));
-  
+
       // Handle API response
       if (result.success) {
         showToast('Updated Successfully', 'success');
@@ -358,7 +378,7 @@ export default function Announcements() {
       showToast('An unexpected error occurred. Please try again.', 'error');
     }
   };
-  
+
 
 
 
@@ -387,9 +407,9 @@ export default function Announcements() {
   return (
     <div className="admin-announcements">
       <div className="container mt-4">
-        <h2> Current Announcements</h2>
+        {/* <h2> Current Announcements</h2> */}
         <div className="old-announcements border p-3" style={{ height: "200px", overflowY: "scroll" }}>
-          <h4>Old Announcements</h4>
+          <h4>Current CSR</h4>
           <ul className="list-group">
             {existingAnnouncements.map((announcement) => (
               <li
@@ -545,30 +565,39 @@ export default function Announcements() {
 
 
               <div className="form-group">
-                {selectedImages.length == 0 &&
-                  <div>
-                    <label htmlFor="profile-image">Profile Image  **Only ONE</label>
-                    <img
-                      src={`${ConnectMe.img_URL}${selectedAnnouncement.imagePath}`} // Display the existing image first
-                      alt="Existing Banner"
-                      className="banner-image"
-                    />
-                  </div>}
+                {/* Render existing images if no new images are selected */}
+                {selectedImages.length == 0 && selectedAnnouncement.imagePath?.length > 0 &&
+                  selectedAnnouncement.imagePath.map((el, index) => (
+                    <div key={index} className="mb-2">
+                      <label htmlFor="profile-image">Images</label>
+                      <img
+                        src={`${ConnectMe.img_URL}${el}`} // Display the existing image
+                        alt={`Existing Banner ${index + 1}`}
+                        className="banner-image"
+                      />
+                      <div
+                        className="delete-icon"
+                        onClick={() => removeImage(index,'update')} // Remove the specific image
+                        style={{ cursor: 'pointer' }}
+                      >
+                        <FaTimesCircle style={{ color: 'red', fontSize: '24px' }} />
+                      </div>
+                    </div>
+                  ))
+                }
 
-                {/* <div
-                  className="delete-icon"
-                  onClick={handleInputChange} // Remove the existing image
-                  style={{ cursor: 'pointer' }}
-                >
-                  <FaTimesCircle style={{ color: 'red', fontSize: '24px' }} />
-                </div> */}
-
+                {/* File input for selecting new images */}
                 <input
                   type="file"
                   id="profile-image"
                   onChange={handleChange}
+                  multiple // Allow multiple file uploads
+                  className="form-control"
                 />
+
+                ** Note It will replace existing CSR Image
               </div>
+
 
 
               <div className="row">
@@ -583,9 +612,7 @@ export default function Announcements() {
                       {/* Cross icon in the top-right corner */}
                       <div
                         className="delete-icon"
-                        onClick={(() => {
-                          setSelectedImages([])
-                        })}
+                        onClick={() => removeImage(index)} // Remove the specific image
                         style={{ cursor: 'pointer' }}
                       >
                         <FaTimesCircle style={{ color: 'red', fontSize: '24px' }} />
@@ -608,10 +635,10 @@ export default function Announcements() {
       {
         selectedAnnouncement == null &&
         <div className="new-announcements">
-          <h4>New Announcement</h4>
+          <h4>New CSR</h4>
           <form onSubmit={handleSubmit}>
             <div className="form-group">
-              <label htmlFor="title">Announcement Title</label>
+              <label htmlFor="title">CSR Title</label>
               <input
                 type="text"
                 id="title"
@@ -627,7 +654,6 @@ export default function Announcements() {
               <input
                 type="text"
                 id="fullName"
-                required
                 value={formData.fullName}
                 onChange={handleChange}
                 placeholder="Kushagra Kamal"
@@ -639,7 +665,6 @@ export default function Announcements() {
               <input
                 type="text"
                 id="Designation"
-                required
                 value={formData.Designation}
                 onChange={handleChange}
                 placeholder="Assistant Manager - Accounts"
@@ -647,19 +672,17 @@ export default function Announcements() {
             </div>
 
             <div className="form-group">
-              <label htmlFor="date">Announcement Date</label>
+              <label htmlFor="date">CSR Date</label>
               <input type="date" id="AnnouncementDate" value={formData.AnnouncementDate}
                 onChange={handleChange}
-                required
                 placeholder="29 Nov 2024" />
             </div>
 
             <div className="form-group">
-              <label htmlFor="location">For Which Location Announcement is for?</label>
+              <label htmlFor="location">For Which Location CSR is for?</label>
               <input
                 type="text"
                 id="location"
-                required
                 value={formData.location}
                 onChange={handleChange}
                 placeholder="Chhatrapati Sambhajinagar (Maharashtra)"
@@ -678,11 +701,12 @@ export default function Announcements() {
             </div>
 
             <div className="form-group">
-              <label htmlFor="profile-image">Profile Image  **Only ONE</label>
+              <label htmlFor="profile-image">Images  </label>
               <input
                 type="file"
                 id="profile-image"
                 onChange={handleChange}
+                multiple // Allow multiple file selection
               />
             </div>
 
@@ -699,9 +723,7 @@ export default function Announcements() {
                     {/* Cross icon in the top-right corner */}
                     <div
                       className="delete-icon"
-                      onClick={(() => {
-                        setSelectedImages([])
-                      })}
+                      onClick={() => removeImage(index)} // Remove the specific image
                       style={{ cursor: 'pointer' }}
                     >
                       <FaTimesCircle style={{ color: 'red', fontSize: '24px' }} />

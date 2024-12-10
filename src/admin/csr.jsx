@@ -129,7 +129,7 @@ export default function CsrPage() {
 
 
   const uploadImageAnnouncement = async () => {
-    if (selectedAnnouncement?.images?.length === 0) {
+    if (selectedImages.length === 0) {
       showToast('Please select at least one image.', 'error');
       return;
     }
@@ -147,7 +147,7 @@ export default function CsrPage() {
             return;
           }
           const blob = await response.blob();
-          const file = new File([blob], '123.png', { type: blob.type });
+          const file = new File([blob], 'banners.png', { type: blob.type });
 
           formData.append('files', file);
         } else {
@@ -155,7 +155,7 @@ export default function CsrPage() {
         }
       }
 
-      formData.append('name', 'CSR');
+      formData.append('name', 'CsrType');
 
       const headers = {
         'Authorization': `Bearer ${token}`,
@@ -319,13 +319,13 @@ export default function CsrPage() {
   };
 
   const handleUpdateSubmit = async (e) => {
-    e.preventDefault();
-
+    e.preventDefault()
+console.log(selectedImages,'abcdef')
     try {
       let imageId = null;
 
       // Check if images are provided in the selectedAnnouncement object
-      if (selectedAnnouncement.images && selectedAnnouncement.images.length > 0) {
+      if (selectedImages && selectedImages.length > 0) {
         // Upload images and get the image ID
         const uploadResponse = await uploadImageAnnouncement();
         imageId = uploadResponse?.data?.idForUnderverslaUpload || null;

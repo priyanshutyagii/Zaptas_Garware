@@ -22,6 +22,17 @@ export default function AnnouncementCard() {
     fetchAnnouncements();
   }, []);
 
+  const formatText = (text) => {
+    if (!text) return null;
+
+    // Replace `{hashtag|#|tag}` with `#tag` and style it in blue
+    return text
+      .replace(/{hashtag\|\\#\|/g, '#') // Replace starting hashtag syntax
+      .replace(/}/g, '') // Remove closing syntax
+      .replace(/#(\w+)/g, '<span style="color:blue;">#$1</span>') // Make hashtags blue
+      .replace(/(\r\n|\n|\r)/gm, '<br>'); // Replace line breaks with HTML <br> tags for proper rendering
+  };
+
 
 
 
@@ -163,6 +174,27 @@ export default function AnnouncementCard() {
                 {/* Announcement Content */}
                 <div className="announcement-disc">
                   <p className="card-text">{announcement.title}</p>
+
+
+
+                  <p
+                  className="card-text fs-6"
+                  dangerouslySetInnerHTML={{
+                    __html: `${formatText(announcement.description.slice(0, 50))}...`,
+                  }}
+                ></p>
+                  <a
+                    href="#"
+                    className="text-decoration-none"
+
+                  >
+                    Read More +
+                  </a>
+
+
+
+
+
                   <p
                     className="like-section"
                     onClick={(e) => {
@@ -178,13 +210,7 @@ export default function AnnouncementCard() {
                     />{" "}
                     {announcement?.likes?.length}
                   </p>
-                  <a
-                    href="#"
-                    className="text-decoration-none"
-
-                  >
-                    Read More +
-                  </a>
+            
                 </div>
               </div>
             </div>
@@ -271,32 +297,24 @@ export default function AnnouncementCard() {
             </p>
 
             <div className="row">
-              {selectedAnnouncement?.imagePath && (
-                Array.isArray(selectedAnnouncement.imagePath)
-                  ? selectedAnnouncement.imagePath.map((image, index) => (
-                    <div key={index} className="col-6 col-sm-3 mb-4 position-relative">
-                      <div className="banner-card">
-                        <img
-                          src={`${ConnectMe.img_URL}${image}`} // Display the existing image
-                          alt={`Selected Banner ${index + 1}`}
-                          className="banner-image"
-                        />
-                      </div>
+              {selectedAnnouncement?.imagePath?.length > 0 &&
+                selectedAnnouncement.imagePath?.map((image, index) => (
+                  <div key={index} className="col-6 col-sm-3 mb-4 position-relative">
+                    <div className="banner-card">
+                      <img
+                        src={`${ConnectMe.img_URL}${image}`} // Display the existing image
+                        alt={`Selected Banner ${index + 1}`}
+                        className="banner-image"
+                      />
+                      {/* Cross icon in the top-right corner */}
+
                     </div>
-                  ))
-                  : (
-                    <div className="col-6 col-sm-3 mb-4 position-relative">
-                      <div className="banner-card">
-                        <img
-                          src={`${ConnectMe.img_URL}${selectedAnnouncement.imagePath}`} // Display the single image
-                          alt="Selected Banner"
-                          className="banner-image"
-                        />
-                      </div>
-                    </div>
-                  )
-              )}
+                  </div>
+                ))}
             </div>
+
+
+
 
             {/* Like Button */}
             <div className="d-flex align-items-center">

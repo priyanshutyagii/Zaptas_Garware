@@ -122,6 +122,17 @@ export default function AnnouncementCard() {
     );
   }
 
+  const formatText = (text) => {
+    if (!text) return null;
+
+    // Replace `{hashtag|#|tag}` with `#tag` and style it in blue
+    return text
+      .replace(/{hashtag\|\\#\|/g, '#') // Replace starting hashtag syntax
+      .replace(/}/g, '') // Remove closing syntax
+      .replace(/#(\w+)/g, '<span style="color:blue;">#$1</span>') // Make hashtags blue
+      .replace(/(\r\n|\n|\r)/gm, '<br>'); // Replace line breaks with HTML <br> tags for proper rendering
+  };
+
 
 
   return (
@@ -130,7 +141,7 @@ export default function AnnouncementCard() {
         <div className="card-header d-flex justify-content-between align-items-center">
           <div className="d-flex align-items-center">
             <AiOutlineSound className="me-2" />
-            <h5 className="mb-0">CSR</h5>
+            <h5 className="mb-0">Industry News</h5>
           </div>
           <a href="#" className="text-decoration-none">
             View All <HiArrowCircleRight />
@@ -148,12 +159,36 @@ export default function AnnouncementCard() {
                 {/* Date Badge */}
 
                 <div className="csrimg">
-                  <img src="./csrimg.png" alt="CSR" />
+                  <img
+                    src={
+                      announcement?.imagePath[0]
+                        ? `${ConnectMe.img_URL}${announcement.imagePath[0]}`
+                        : "./csrimg.png"
+                    }
+                    alt="CSR"
+                    className="banner-image"
+                  />
                 </div>
+
 
                 {/* Announcement Content */}
                 <div className="announcement-disc">
                   <p className="card-text">{announcement.title}</p>
+
+
+                  <p
+                  className="card-text fs-6"
+                  dangerouslySetInnerHTML={{
+                    __html: `${formatText(announcement.description.slice(0, 100))}...`,
+                  }}
+                ></p>
+                  <a
+                    href="#"
+                    className="text-decoration-none"
+
+                  >
+                    Read More +
+                  </a>
                   <p
                     className="like-section"
                     onClick={(e) => {
@@ -169,13 +204,7 @@ export default function AnnouncementCard() {
                     />{" "}
                     {announcement?.likes?.length}
                   </p>
-                  <a
-                    href="#"
-                    className="text-decoration-none"
-
-                  >
-                    Read More +
-                  </a>
+              
                 </div>
               </div>
             </div>

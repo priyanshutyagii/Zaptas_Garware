@@ -31,7 +31,7 @@ export default function LinkedInCard() {
   const fetchPosts = async () => {
     setLoading(true); // Show loader
     try {
-      const url = `${ConnectMe.BASE_URL}/fetchOrgPosts?start=0&count=3&show=posts,multimedia,likeStatus,text,likeCount,id`;
+      const url = `${ConnectMe.BASE_URL}/fetchOrgPosts?start=0&count=1&show=posts,multimedia,likeStatus,text,likeCount,id`;
       const token = getTokenFromLocalStorage();
       const headers = {
         Authorization: `Bearer ${token}`,
@@ -180,6 +180,13 @@ export default function LinkedInCard() {
                     __html: `${formatText(post.text.slice(0, 50))}...`,
                   }}
                 ></p>
+                    <a
+                  href="#"
+                  onClick={() => openPostPopup(post)}
+                  className="text-decoration-none"
+                >
+                  Read More +
+                </a>
                 <p className="card-text fs-6">
                   <FaThumbsUp
                     style={{
@@ -195,13 +202,7 @@ export default function LinkedInCard() {
                   />{" "}
                   {post?.likeCount?.totalLikes}
                 </p>
-                <a
-                  href="#"
-                  onClick={() => openPostPopup(post)}
-                  className="text-decoration-none"
-                >
-                  Read More +
-                </a>
+            
               </div>
             </div>
           ))}

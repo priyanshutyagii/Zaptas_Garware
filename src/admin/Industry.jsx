@@ -134,7 +134,7 @@ export default function IndustryPage() {
 
 
   const uploadImageAnnouncement = async () => {
-    if (selectedAnnouncement?.images?.length === 0) {
+    if (selectedImages?.length === 0) {
       showToast('Please select at least one image.', 'error');
       return;
     }
@@ -330,7 +330,7 @@ export default function IndustryPage() {
       let imageId = null;
 
       // Check if images are provided in the selectedAnnouncement object
-      if (selectedAnnouncement.images && selectedAnnouncement.images.length > 0) {
+      if (selectedImages && selectedImages.length > 0) {
         // Upload images and get the image ID
         const uploadResponse = await uploadImageAnnouncement();
         imageId = uploadResponse?.data?.idForUnderverslaUpload || null;
