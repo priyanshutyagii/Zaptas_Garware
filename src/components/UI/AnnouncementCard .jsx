@@ -303,12 +303,12 @@ export default function AnnouncementCard() {
             <div className="row">
               {selectedAnnouncement?.imagePath?.length > 0 &&
                 selectedAnnouncement.imagePath?.map((image, index) => (
-                  <div key={index} className="col-6 col-sm-3 mb-4 position-relative">
-                    <div className="banner-card">
+                  <div key={index} className="col-sm-4 mb-4 position-relative">
+                    <div className="model-card">
                       <img
                         src={`${ConnectMe.img_URL}${image}`} // Display the existing image
                         alt={`Selected Banner ${index + 1}`}
-                        className="banner-image"
+                        className="modelcard-image"
                       />
                       {/* Cross icon in the top-right corner */}
 
