@@ -19,7 +19,7 @@ export default function CsrPage() {
     images: [],
     fullName: "",
     Designation: "",
-    name: 'CSR',
+    name: 'CsrType',
     links: [{ linkTitle: '', link: '' }],
     AnnouncementDate: ''
   });
@@ -314,13 +314,11 @@ export default function CsrPage() {
         [name]: value,
       }));
     }
-
-    console.log(selectedAnnouncement)
   };
 
   const handleUpdateSubmit = async (e) => {
     e.preventDefault()
-console.log(selectedImages,'abcdef')
+
     try {
       let imageId = null;
 

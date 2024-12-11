@@ -19,7 +19,7 @@ export default function CsrPage() {
     images: [],
     fullName: "",
     Designation: "",
-    name: 'CSR',
+    name: 'manage',
     links: [{ linkTitle: '', link: '' }],
     AnnouncementDate: ''
   });
@@ -153,7 +153,7 @@ export default function CsrPage() {
         }
       }
 
-      formData.append('name', 'CsrType');
+      formData.append('name', 'manage');
 
       const headers = {
         'Authorization': `Bearer ${token}`,
