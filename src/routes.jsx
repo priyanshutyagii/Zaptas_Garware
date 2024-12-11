@@ -8,6 +8,7 @@ import ITServiceRequestForm from "./components/UI/ITServiceRequestForm";
 import GalleryDetails from "./components/UI/GalleryDetails";
 import CsrPage from "./admin/csr";
 import IndustryPage from "./admin/Industry";
+import ManagementMessage from "./admin/managemenetMessage";
 
 const Home = lazy(() => import("./pages/Home"));
 const About = lazy(() => import("./pages/About"));
@@ -55,6 +56,7 @@ export const routes = [
       { path: "qlink", element: <Quicklinks /> },
       { path: "csr", element: <CsrPage /> },
       { path: "industry", element: <IndustryPage /> },
+      { path: "ManagementMessage", element: <ManagementMessage /> },
     ],
   },
   { path: "/login", element: <Login /> },

@@ -8,6 +8,7 @@ import "./AnnouncementCard.css";
 import ConnectMe from "../../config/connect";
 import { apiCall, getTokenFromLocalStorage } from "../../utils/apiCall";
 import showToast from "../../utils/toastHelper";
+import PostCard from "./postDisplay";
 
 export default function AnnouncementCard() {
   const [announcements, setAnnouncements] = useState([]);
@@ -177,35 +178,33 @@ export default function AnnouncementCard() {
 
 
                   <p
-                  className="card-text fs-6"
-                  dangerouslySetInnerHTML={{
-                    __html: `${formatText(announcement.description.slice(0, 40))}...`,
-                  }}
-                ></p>
-                 <div className="d-flex justify-content-between mt-2">
-                 
-                  <p
-                    className="like-section"
-                    onClick={(e) => {
-                      e.stopPropagation(); // Prevent triggering `handleShow`
-                      handleLikeDislike(announcement._id, announcement.likedByUser);
-                    }}
-                  >
-                    <FaThumbsUp
-                      style={{
-                        color: announcement.likedByUser ? "blue" : "gray",
-                        cursor: "pointer",
-                      }}
-                    />{" "}
-                    {announcement?.likes?.length}
+                    className="card-text fs-6">
+                    <PostCard post={announcement.description} size={140} />
                   </p>
-                  <a
+                  <div className="d-flex justify-content-between mt-2">
+
+                    <p
+                      className="like-section"
+                      onClick={(e) => {
+                        e.stopPropagation(); // Prevent triggering `handleShow`
+                        handleLikeDislike(announcement._id, announcement.likedByUser);
+                      }}
+                    >
+                      <FaThumbsUp
+                        style={{
+                          color: announcement.likedByUser ? "blue" : "gray",
+                          cursor: "pointer",
+                        }}
+                      />{" "}
+                      {announcement?.likes?.length}
+                    </p>
+                    {/* <a
                     href="#"
                     className="text-decoration-none"
 
                   >
                     Read More +
-                  </a>
+                  </a> */}
                   </div>
                 </div>
               </div>
@@ -255,10 +254,9 @@ export default function AnnouncementCard() {
               }}
             >
               <p
-                dangerouslySetInnerHTML={{
-                  __html: selectedAnnouncement.description.replace(/\n/g, "<br />"),
-                }}
-              />
+                className="card-text fs-6">
+                <PostCard post={selectedAnnouncement.description} size={200} />
+              </p>
             </div>
 
             {selectedAnnouncement.links.map((link) => (

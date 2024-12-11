@@ -8,6 +8,7 @@ import "./AnnouncementCard.css";
 import ConnectMe from "../../config/connect";
 import { apiCall, getTokenFromLocalStorage } from "../../utils/apiCall";
 import showToast from "../../utils/toastHelper";
+import PostCard from "./postDisplay";
 
 export default function AnnouncementCard() {
   const [announcements, setAnnouncements] = useState([]);
@@ -161,58 +162,58 @@ export default function AnnouncementCard() {
 
                 <div className="date-badge-container">
                   <div className="date-badge">
-                    {new Date(announcement?.AnnouncementDate)?.toLocaleString("default", {
-                      month: "short",
-                    }) || ''}
+
                     {new Date(announcement?.AnnouncementDate)?.getFullYear() || ""}
                   </div>
                   <span className="date">
                     {new Date(announcement?.AnnouncementDate)?.getDate() || ''}
+                    &nbsp;
+                    {new Date(announcement?.AnnouncementDate)?.toLocaleString("default", {
+                      month: "short",
+                    }) || ''}
+                    
                   </span>
+                  <span className="date">{announcement?.location}</span>
+
                 </div>
+
+
+
 
                 {/* Announcement Content */}
                 <div className="announcement-disc">
                   <p className="card-text">{announcement.title}</p>
 
-                  
+
 
                   <p
-                  className="card-text fs-6"
-                  dangerouslySetInnerHTML={{
-                    __html: `${formatText(announcement.description.slice(0, 50))}...`,
-                  }}
-                ></p>
-                <div className="d-flex justify-content-between mt-2">
-                  
-                <p
-                    className="like-section"
-                    onClick={(e) => {
-                      e.stopPropagation(); // Prevent triggering `handleShow`
-                      handleLikeDislike(announcement._id, announcement.likedByUser);
-                    }}
-                  >
-                    <FaThumbsUp
-                      style={{
-                        color: announcement.likedByUser ? "blue" : "gray",
-                        cursor: "pointer",
+                    className="card-text fs-6"
+
+                  > <PostCard post={announcement.description} size={70} /></p>
+                  <div className="d-flex justify-content-between mt-2">
+
+                    <p
+                      className="like-section"
+                      onClick={(e) => {
+                        e.stopPropagation(); // Prevent triggering `handleShow`
+                        handleLikeDislike(announcement._id, announcement.likedByUser);
                       }}
-                    />{" "}
-                    {announcement?.likes?.length}
-                  </p>
-                  <a
-                    href="#"
-                    className="text-decoration-none"
-
-                  >
-                    Read More +
-                  </a>
-
-</div>
+                    >
+                      <FaThumbsUp
+                        style={{
+                          color: announcement.likedByUser ? "blue" : "gray",
+                          cursor: "pointer",
+                        }}
+                      />{" "}
+                      {announcement?.likes?.length}
+                    </p>
 
 
+                  </div>
 
-            
+
+
+
                 </div>
               </div>
             </div>
@@ -259,12 +260,13 @@ export default function AnnouncementCard() {
                 padding: "10px",
                 borderRadius: "5px",
               }}
+
             >
               <p
-                dangerouslySetInnerHTML={{
-                  __html: selectedAnnouncement.description.replace(/\n/g, "<br />"),
-                }}
-              />
+                className="card-text fs-6">
+                <PostCard post={selectedAnnouncement.description} size={180} />
+              </p>
+
             </div>
 
             {selectedAnnouncement.links.map((link) => (

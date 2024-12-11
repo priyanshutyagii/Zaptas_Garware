@@ -56,6 +56,12 @@ export default function Sidebar() {
           </Link>
         </li>
         <li>
+          <Link to="/admin/ManagementMessage" style={{ textDecoration: 'none', color: 'inherit' }}>
+            <FaUsers /> <span>Management Message</span>
+          </Link>
+        </li>
+        
+        <li>
           <FaFileInvoice /> <span>PO Create</span>
         </li>
         <li>

@@ -12,7 +12,9 @@ import ClipLoader from "react-spinners/ClipLoader"; // Loader library
 import { apiCall, getTokenFromLocalStorage } from "../../utils/apiCall";
 import ConnectMe from "../../config/connect";
 import showToast from "../../utils/toastHelper";
+import { Carousel } from "react-bootstrap"; // Import Carousel
 import "./LinkedInCard.css";
+import PostCard from "./postDisplay";
 
 export default function LinkedInCard() {
   const [posts, setPosts] = useState([]);
@@ -31,7 +33,7 @@ export default function LinkedInCard() {
   const fetchPosts = async () => {
     setLoading(true); // Show loader
     try {
-      const url = `${ConnectMe.BASE_URL}/fetchOrgPosts?start=0&count=1&show=posts,multimedia,likeStatus,text,likeCount,id`;
+      const url = `${ConnectMe.BASE_URL}/fetchOrgPosts?start=0&count=5&show=posts,multimedia,likeStatus,text,likeCount,id`;
       const token = getTokenFromLocalStorage();
       const headers = {
         Authorization: `Bearer ${token}`,
@@ -122,19 +124,6 @@ export default function LinkedInCard() {
     }
   };
 
-  const formatText = (text) => {
-    if (!text) return null;
-
-    // Replace `{hashtag|#|tag}` with `#tag` and style it in blue
-    return text
-      .replace(/{hashtag\|\\#\|/g, '#') // Replace starting hashtag syntax
-      .replace(/}/g, '') // Remove closing syntax
-      .replace(/#(\w+)/g, '<span style="color:blue;">#$1</span>') // Make hashtags blue
-      .replace(/(\r\n|\n|\r)/gm, '<br>'); // Replace line breaks with HTML <br> tags for proper rendering
-  };
-
-  
-
   const memoizedPosts = useMemo(() => posts, [posts]);
 
   return (
@@ -157,70 +146,60 @@ export default function LinkedInCard() {
         <button onClick={handleLinkedInCallback}>Login with LinkedIn</button>
       ) : (
         <div className="card-body">
-          {memoizedPosts.map((post) => (
-            <div key={post.id} className="row mb-3">
-              <div className="csr-media col-sm-12 text-center" onMouseEnter={() => openPostPopup(post)} style={{ cursor: "pointer" }}>
-                {post.multimedia.type === "image" ? (
-                  <img
-                    src={post.multimedia.url}
-                    alt="LinkedIn Post"
-                    style={{ width: "100%", height: "250px" }}
-                  />
-                ) : post.multimedia.type === "video" ? (
-                  <video width="100%" height="250" controls autoPlay muted loop>
-                    <source src={post.multimedia.url} type="video/mp4" />
-                    Your browser does not support the video tag.
-                  </video>
-                ) : null}
-              </div>
-              <div className="announcement-disc col-sm-12 mt-2">
-                <p
-                  className="card-text fs-6"
-                  dangerouslySetInnerHTML={{
-                    __html: `${formatText(post.text.slice(0, 108))}...`,
-                  }}
-                ></p>
-              
-                <div className="d-flex justify-content-between mt-2">
-                <p className="card-like fs-6">
-                  <FaThumbsUp
-                    style={{
-                      color: post?.fetchUserLikesStatus ? "blue" : "gray",
-                      cursor: "pointer",
-                    }}
-                    onClick={() =>
-                      handleLikeToggle(
-                        post.id,
-                        post?.fetchUserLikesStatus ? "disslike" : "likePost"
-                      )
-                    }
-                  />{" "}
-                  {post?.likeCount?.totalLikes}
-                </p>
-                <a
-                  href="#"
-                  onClick={() => openPostPopup(post)}
-                  className="text-decoration-none"
-                >
-                  Read More +
-                </a>
+          {/* Carousel for Posts */}
+          <Carousel>
+            {memoizedPosts.map((post) => (
+              <Carousel.Item key={post.id}>
+                <div className="row mb-3" onClick={() => openPostPopup(post)}>
+                  <div className="csr-media col-sm-12 text-center" style={{ cursor: "pointer" }}>
+                    {post.multimedia.type === "image" ? (
+                      <img
+                        src={post.multimedia.url}
+                        alt="LinkedIn Post"
+                        style={{ width: "100%", height: "250px" }}
+                      />
+                    ) : post.multimedia.type === "video" ? (
+                      <video width="100%" height="250" controls autoPlay muted loop>
+                        <source src={post.multimedia.url} type="video/mp4" />
+                        Your browser does not support the video tag.
+                      </video>
+                    ) : null}
+                  </div>
+                  <div className="announcement-disc col-sm-12 mt-2">
+                    <p className="card-text fs-6">
+                      <PostCard post={post.text} size={180} />
+                    </p>
+                    <div className="d-flex justify-content-between mt-2">
+                      <p className="card-like fs-6">
+                        <FaThumbsUp
+                          style={{
+                            color: post?.fetchUserLikesStatus ? "blue" : "gray",
+                            cursor: "pointer",
+                          }}
+                          onClick={() =>
+                            handleLikeToggle(
+                              post.id,
+                              post?.fetchUserLikesStatus ? "disslike" : "likePost"
+                            )
+                          }
+                        />{" "}
+                        {post?.likeCount?.totalLikes}
+                      </p>
+                    </div>
+                  </div>
                 </div>
-              
-                 
-            
-              </div>
-            </div>
-          ))}
+              </Carousel.Item>
+            ))}
+          </Carousel>
         </div>
       )}
 
       {/* Modal for LinkedIn Post */}
       <Modal show={showModal} onHide={closePostPopup} size="lg">
         <Modal.Header closeButton>
-        <Modal.Title>
-            <div dangerouslySetInnerHTML={{ __html:  `${formatText(selectedPost?.text.slice(0, 300)) } ...` }} />
+          <Modal.Title>
+            <PostCard post={selectedPost?.text} />
           </Modal.Title>
-
         </Modal.Header>
         <Modal.Body>
           <div>
@@ -255,15 +234,15 @@ export default function LinkedInCard() {
               &nbsp;
               {selectedPost?.likeCount?.totalLikes} Likes
             </div>
-            <div
+            {/* <div
               onClick={() => setShowComments(!showComments)}
               style={{ cursor: "pointer" }}
             >
               <FaRegCommentDots /> 1 comment
-            </div>
+            </div> */}
           </div>
 
-          {showComments && (
+          {/* {showComments && (
             <div>
               {comments.map((comment, index) => (
                 <div key={index}>
@@ -271,9 +250,9 @@ export default function LinkedInCard() {
                 </div>
               ))}
             </div>
-          )}
+          )} */}
         </Modal.Body>
-        <Modal.Footer>
+        {/* <Modal.Footer>
           <div className="add-comment-box">
             <input
               type="text"
@@ -284,10 +263,7 @@ export default function LinkedInCard() {
             />
             <FaPaperPlane onClick={addComment} />
           </div>
-          <Button variant="secondary" onClick={closePostPopup}>
-            Close
-          </Button>
-        </Modal.Footer>
+        </Modal.Footer> */}
       </Modal>
     </div>
   );
