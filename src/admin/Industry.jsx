@@ -24,7 +24,7 @@ export default function IndustryPage() {
     images: [],
     fullName: "",
     Designation: "",
-    name: 'CSR',
+    name: 'News',
     links: [{ linkTitle: '', link: '' }],
     AnnouncementDate: ''
   });

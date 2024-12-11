@@ -16,10 +16,12 @@ export default function AwardsPage() {
     title: "",
     location: "",
     description: "",
+    AwardierName:"",
+    PersonDesignation:"",
     images: [],
     fullName: "",
     Designation: "",
-    name: 'CSR',
+    name: 'awards',
     links: [{ linkTitle: '', link: '' }],
     AnnouncementDate: ''
   });
@@ -88,6 +90,8 @@ export default function AwardsPage() {
     const dataToSave = {
       fullName: formData.fullName,
       title: formData.title,
+      AwardierName:formData?.AwardierName,
+      PersonDesignation:formData?.PersonDesignation,
       location: formData.location,
       description: formData.description,
       Designation: formData.Designation,
@@ -105,7 +109,7 @@ export default function AwardsPage() {
       'Content-Type': 'application/json',
     };
 
-    const url = `${ConnectMe.BASE_URL}/csr/create`;
+    const url = `${ConnectMe.BASE_URL}/awards/create`;
     const result = await apiCall('POST', url, headers, JSON.stringify(dataToSave));
 
     if (result.success) {
@@ -117,7 +121,9 @@ export default function AwardsPage() {
         images: [],
         fullName: "",
         Designation: "",
-        name: 'announcement',
+        AwardierName:"",
+        PersonDesignation:"",
+        name: 'awards',
         links: [{ linkTitle: '', link: '' }],
         AnnouncementDate: ''
       });
@@ -155,7 +161,7 @@ export default function AwardsPage() {
         }
       }
 
-      formData.append('name', 'CsrType');
+      formData.append('name', 'awards');
 
       const headers = {
         'Authorization': `Bearer ${token}`,
@@ -234,7 +240,7 @@ export default function AwardsPage() {
   const fetchExistingAnnouncements = async (page = 1, limit = 3) => {
     try {
       setLoading(true); // Show loader while fetching
-      const url = `${ConnectMe.BASE_URL}/csr/latest?page=${page}&limit=${limit}`;
+      const url = `${ConnectMe.BASE_URL}/awards/latest?page=${page}&limit=${limit}`;
       const token = getTokenFromLocalStorage();
       const headers = {
         Authorization: `Bearer ${token}`,
@@ -359,7 +365,7 @@ console.log(selectedImages,'abcdef')
       };
 
       // Define the API endpoint
-      const url = `${ConnectMe.BASE_URL}/csr/${selectedAnnouncement._id}`;
+      const url = `${ConnectMe.BASE_URL}/awards/${selectedAnnouncement._id}`;
 
       // Make the API call using PUT method
       const result = await apiCall('PUT', url, headers, JSON.stringify(dataToUpdate));
@@ -391,7 +397,7 @@ console.log(selectedImages,'abcdef')
       'Content-Type': 'application/json',
     };
 
-    const url = `${ConnectMe.BASE_URL}/csr/${_id}`;
+    const url = `${ConnectMe.BASE_URL}/awards/${_id}`;
     const result = await apiCall('DELETE', url, headers);
     if (result.success) {
 
@@ -484,6 +490,27 @@ console.log(selectedImages,'abcdef')
                 />
               </div>
 
+              <div className="form-group">
+              <label htmlFor="manager">Whom to Award His/Her full name</label>
+              <input
+                type="text"
+                id="AwardierName"
+                value={selectedAnnouncement.AwardierName}
+                onChange={handleChange}
+                placeholder="Kushagra kamal"
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="manager">Person Designation</label>
+              <input
+                type="text"
+                id="PersonDesignation"
+                value={selectedAnnouncement.PersonDesignation}
+                onChange={handleChange}
+                placeholder="Assistant Manager - Accounts"
+              />
+            </div>
+
 
               <div className="mb-3">
                 <label htmlFor="description" className="form-label">Description</label>
@@ -509,7 +536,7 @@ console.log(selectedImages,'abcdef')
                 />
               </div>
               <div className="mb-3">
-                <label htmlFor="AnnouncementDate" className="form-label">Announcement Date</label>
+                <label htmlFor="AnnouncementDate" className="form-label">Award Date</label>
                 <input
                   type="date"
                   className="form-control"
@@ -522,47 +549,7 @@ console.log(selectedImages,'abcdef')
 
 
 
-              {selectedAnnouncement?.links?.map((link, index) => (
-                <div className="form-group d-flex" key={index}>
-                  <div className="col-2">
-                    <label htmlFor={`link-title-${index}`}>Link Title</label>
-                    <input
-                      id={`link-title-${index}`}
-                      name="linkTitle"
-                      value={link.linkTitle}
-                      onChange={(e) => handleInputChange(e, index, "linkTitle")} // Pass index and fieldName
-                    />
-                  </div>
-
-                  <div className="col-8">
-                    <label htmlFor={`Links-${index}`}>Links</label>
-                    <input
-                      id={`Links-${index}`}
-                      name="link"
-                      value={link.link}
-                      onChange={(e) => handleInputChange(e, index, "link")} // Pass index and fieldName
-                    />
-                  </div>
-
-
-                  {/* Add link icon */}
-                  < div className="col-1" onClick={() => handleAddLink("linkUpdate")} style={{ cursor: 'pointer', fontSize: '20px' }}>
-                    <FaPlusCircle style={{ color: 'green' }} />
-                  </div>
-
-                  {/* Remove link icon */}
-                  {index > 0 && (
-                    <div
-                      className="col-1"
-                      onClick={() => handleRemoveLink(index, 'linkUpdate')}
-                      style={{ cursor: 'pointer', fontSize: '20px' }}
-                    >
-                      <FaTimesCircle style={{ color: 'red' }} />
-                    </div>
-                  )}
-                </div>
-              ))}
-
+           
 
               <div className="form-group">
                 {/* Render existing images if no new images are selected */}
@@ -635,10 +622,10 @@ console.log(selectedImages,'abcdef')
       {
         selectedAnnouncement == null &&
         <div className="new-announcements">
-          <h4>New CSR</h4>
+          <h4>New</h4>
           <form onSubmit={handleSubmit}>
             <div className="form-group">
-              <label htmlFor="title">CSR Title</label>
+              <label htmlFor="title">Award Title</label>
               <input
                 type="text"
                 id="title"
@@ -670,16 +657,36 @@ console.log(selectedImages,'abcdef')
                 placeholder="Assistant Manager - Accounts"
               />
             </div>
+            <div className="form-group">
+              <label htmlFor="manager">Whom to Award His/Her full name</label>
+              <input
+                type="text"
+                id="AwardierName"
+                value={formData.AwardierName}
+                onChange={handleChange}
+                placeholder="Kushagra kamal"
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="manager">Person Designation</label>
+              <input
+                type="text"
+                id="PersonDesignation"
+                value={formData.PersonDesignation}
+                onChange={handleChange}
+                placeholder="Assistant Manager - Accounts"
+              />
+            </div>
 
             <div className="form-group">
-              <label htmlFor="date">CSR Date</label>
+              <label htmlFor="date">Award Date</label>
               <input type="date" id="AnnouncementDate" value={formData.AnnouncementDate}
                 onChange={handleChange}
                 placeholder="29 Nov 2024" />
             </div>
 
             <div className="form-group">
-              <label htmlFor="location">For Which Location CSR is for?</label>
+              <label htmlFor="location">For Which Location Award is for?</label>
               <input
                 type="text"
                 id="location"
@@ -734,45 +741,7 @@ console.log(selectedImages,'abcdef')
             </div>
 
 
-            {formData?.links?.map((link, index) => (
-              <div className="form-group d-flex" key={index}>
-                <div className="col-2">
-                  <label htmlFor={`link-title-${index}`}>Link Title</label>
-                  <input
-                    id={`link-title-${index}`}
-                    name="linkTitle" // Use "linkTitle" for the name of the input
-                    value={link.linkTitle} // The value comes from the formData.links[index]
-                    onChange={(e) => handleAddLinkchange(index, e)} // Update the specific field in the links array
-                  />
-                </div>
-
-                <div className="col-8">
-                  <label htmlFor={`Links-${index}`}>Links</label>
-                  <input
-                    id={`Links-${index}`}
-                    name="link" // Use "link" for the name of the input
-                    value={link.link} // The value comes from the formData.links[index]
-                    onChange={(e) => handleAddLinkchange(index, e)} // Update the specific field in the links array
-                  />
-                </div>
-
-                {/* Add link icon */}
-                <div className="col-1" onClick={handleAddLink} style={{ cursor: 'pointer', fontSize: '20px' }}>
-                  <FaPlusCircle style={{ color: 'green' }} />
-                </div>
-
-                {/* Remove link icon */}
-                {index > 0 && (
-                  <div
-                    className="col-1"
-                    onClick={() => handleRemoveLink(index)}
-                    style={{ cursor: 'pointer', fontSize: '20px' }}
-                  >
-                    <FaTimesCircle style={{ color: 'red' }} />
-                  </div>
-                )}
-              </div>
-            ))}
+      
             <div className="form-actions">
               <button type="submit" className="save-btn">
                 Save
