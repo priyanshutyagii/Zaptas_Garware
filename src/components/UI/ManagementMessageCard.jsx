@@ -167,7 +167,6 @@ export default function AnnouncementCard() {
                         : "./csrimg.png"
                     }
                     alt="CSR"
-                    className="banner-image"
                   />
                 </div>
 
@@ -179,7 +178,7 @@ export default function AnnouncementCard() {
 
                   <p
                     className="card-text fs-6">
-                    <PostCard post={announcement.description} size={480} />
+                    <PostCard post={announcement.description} size={280} />
                   </p>
                   <div className="d-flex justify-content-between mt-2">
 

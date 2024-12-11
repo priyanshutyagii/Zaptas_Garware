@@ -165,7 +165,7 @@ export default function AnnouncementCard() {
 
                     {new Date(announcement?.AnnouncementDate)?.getFullYear() || ""}
                   </div>
-                  <span className="date">
+                  <span className="date date-badge">
                     {new Date(announcement?.AnnouncementDate)?.getDate() || ''}
                     &nbsp;
                     {new Date(announcement?.AnnouncementDate)?.toLocaleString("default", {
