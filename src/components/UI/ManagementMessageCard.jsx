@@ -215,7 +215,7 @@ export default function AnnouncementCard() {
       </div>
 
       {/* Popup Modal */}
-      {selectedAnnouncement && (
+      {selectedAnnouncement&& null==false && (
         <Modal show={show} onHide={handleClose} centered>
           <Modal.Header closeButton>
             <Modal.Title>{selectedAnnouncement.title}</Modal.Title>
@@ -280,7 +280,7 @@ export default function AnnouncementCard() {
 
 
 
-            <p className="mt-3">
+            {/* <p className="mt-3">
               Date: <strong>
                 {new Date(selectedAnnouncement.AnnouncementDate).toLocaleDateString("en-US", {
                   year: "numeric",
@@ -288,7 +288,7 @@ export default function AnnouncementCard() {
                   day: "numeric",
                 })}
               </strong>
-            </p>
+            </p> */}
 
 
 
