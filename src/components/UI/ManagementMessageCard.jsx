@@ -179,7 +179,7 @@ export default function AnnouncementCard() {
 
                   <p
                     className="card-text fs-6">
-                    <PostCard post={announcement.description} size={140} />
+                    <PostCard post={announcement.description} size={480} />
                   </p>
                   <div className="d-flex justify-content-between mt-2">
 
