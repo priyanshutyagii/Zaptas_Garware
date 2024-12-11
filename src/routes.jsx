@@ -9,6 +9,7 @@ import GalleryDetails from "./components/UI/GalleryDetails";
 import CsrPage from "./admin/csr";
 import IndustryPage from "./admin/Industry";
 import ManagementMessage from "./admin/managemenetMessage";
+import AwardsPage from "./admin/awards";
 
 const Home = lazy(() => import("./pages/Home"));
 const About = lazy(() => import("./pages/About"));
@@ -57,6 +58,7 @@ export const routes = [
       { path: "csr", element: <CsrPage /> },
       { path: "industry", element: <IndustryPage /> },
       { path: "ManagementMessage", element: <ManagementMessage /> },
+      { path: "awards", element: <AwardsPage /> },
     ],
   },
   { path: "/login", element: <Login /> },

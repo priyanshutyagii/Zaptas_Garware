@@ -60,18 +60,10 @@ export default function Sidebar() {
             <FaUsers /> <span>Management Message</span>
           </Link>
         </li>
-        
         <li>
-          <FaFileInvoice /> <span>PO Create</span>
-        </li>
-        <li>
-          <FaFileInvoice /> <span>Invoice PO Create</span>
-        </li>
-        <li>
-          <FaCog /> <span>Setting</span>
-        </li>
-        <li>
-          <FaQuestionCircle /> <span>Help and Support</span>
+          <Link to="/admin/awards" style={{ textDecoration: 'none', color: 'inherit' }}>
+            <FaUsers /> <span>Awards</span>
+          </Link>
         </li>
         <li>
           <FaSignOutAlt /> <span>Logout</span>
