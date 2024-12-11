@@ -33,3 +33,6 @@ a:hover {
 .csrimg img {
   width: 160px;
 }
+.carousel-control-next-icon, .carousel-control-prev-icon {
+  background-color: #00000066;
+}
