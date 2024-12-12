@@ -32,13 +32,13 @@ const PostCard = ({ post, size = 188 }) => {
     };
 
     return (
-        <div>
+        <div onClick={(e) => {
+            e.stopPropagation(); // Prevent propagation to parent
+            handleTextClick(e); // Call the function
+        }}>
             <p
                 className="card-text fs-6"
-                onClick={(e) => {
-                    e.stopPropagation(); // Prevent propagation to parent
-                    handleTextClick(e); // Call the function
-                }}
+
                 dangerouslySetInnerHTML={{
                     __html: renderText(post),
                 }}

@@ -29,3 +29,19 @@ span.date {
     margin-bottom: 0;
     font-weight: 600;
 }
+.celebrating-text {
+    background: linear-gradient(90deg, red, orange, yellow, red);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shimmer 3s infinite linear;
+  }
+  
+  @keyframes shimmer {
+    0% {
+      background-position: 0%;
+    }
+    100% {
+      background-position: 200%;
+    }
+  }
+  

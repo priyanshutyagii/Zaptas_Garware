@@ -326,7 +326,7 @@ export default function AwardsPage() {
 
   const handleUpdateSubmit = async (e) => {
     e.preventDefault()
-console.log(selectedImages,'abcdef')
+
     try {
       let imageId = null;
 
@@ -344,6 +344,8 @@ console.log(selectedImages,'abcdef')
           title: selectedAnnouncement.title,
           location: selectedAnnouncement.location,
           description: selectedAnnouncement.description,
+          AwardierName:selectedAnnouncement.AwardierName,
+          PersonDesignation:selectedAnnouncement.PersonDesignation,
           Designation: selectedAnnouncement.Designation,
           name: selectedAnnouncement.name,
           links: selectedAnnouncement.links?.filter(
@@ -495,8 +497,9 @@ console.log(selectedImages,'abcdef')
               <input
                 type="text"
                 id="AwardierName"
+                name="AwardierName"
                 value={selectedAnnouncement.AwardierName}
-                onChange={handleChange}
+                onChange={handleInputChange}
                 placeholder="Kushagra kamal"
               />
             </div>
@@ -505,8 +508,9 @@ console.log(selectedImages,'abcdef')
               <input
                 type="text"
                 id="PersonDesignation"
+                name="PersonDesignation"
                 value={selectedAnnouncement.PersonDesignation}
-                onChange={handleChange}
+                onChange={handleInputChange}
                 placeholder="Assistant Manager - Accounts"
               />
             </div>

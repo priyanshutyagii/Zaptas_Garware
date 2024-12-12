@@ -25,11 +25,9 @@ export default function CalendarCard() {
 
         if (response.success) {
           setEvents(response?.data);
-         
         } else {
-          showToast("Failed to load Holiday", 'error')
+          showToast("Failed to load Holiday", "error");
         }
-      
       } catch (error) {
         console.error("Error fetching events:", error.message);
       }
@@ -37,34 +35,42 @@ export default function CalendarCard() {
     fetchEvents();
   }, []);
 
-  const isEventDate = (date) => {
-    return events.some(
-      (event) =>
-        new Date(event.startDate).toDateString() === date.toDateString()
-    );
-  };
-
-  const getEventForDate = (date) => {
-    return events.find(
-      (event) =>
-        new Date(event.startDate).toDateString() === date.toDateString()
+  const getEventsForDate = (date) => {
+    // Filter out all events for the selected date
+    return events.filter(
+      (event) => new Date(event.date).toDateString() === date.toDateString()
     );
   };
 
   const tileContent = ({ date, view }) => {
-    if (view === "month" && isEventDate(date)) {
-      const event = getEventForDate(date);
-      return (
-        <div
-          className="position-relative bg-warning text-white rounded-circle d-flex justify-content-center align-items-center"
-          data-bs-toggle="tooltip"
-          data-bs-placement="top"
-          title={`${event.name}: ${event.description}`}
-          style={{ width: "100%", height: "100%" }}
-        >
-          <small className="text-center">{event.name}</small>
-        </div>
-      );
+    if (view === "month") {
+      const eventsForDate = getEventsForDate(date);
+      if (eventsForDate.length > 0) {
+        return (
+          <div className="position-relative">
+            {eventsForDate.map((event, index) => (
+              <div
+                key={index}
+                className="bg-warning text-white rounded-circle d-flex justify-content-center align-items-center mb-1"
+                data-bs-toggle="tooltip"
+                data-bs-placement="top"
+                title={`${event.title} (${event.type})`}
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <small className="text-center">
+                  {event.title} ({event.type})
+                </small>
+              </div>
+            ))}
+          </div>
+        );
+      }
     }
   };
 
@@ -89,11 +95,7 @@ export default function CalendarCard() {
         </a>
       </div>
       <div className="card-body">
-        <Calendar
-          onChange={setDate}
-          value={date}
-          tileContent={tileContent}
-        />
+        <Calendar onChange={setDate} value={date} tileContent={tileContent} />
       </div>
     </div>
   );

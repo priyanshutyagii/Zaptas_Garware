@@ -254,7 +254,7 @@ export default function AnnouncementCard() {
             >
               <p
                 className="card-text fs-6">
-                <PostCard post={selectedAnnouncement.description} size={200} />
+                <PostCard post={selectedAnnouncement.description} size={400} />
               </p>
             </div>
 
