@@ -36,7 +36,6 @@ export default function CalendarCard() {
   }, []);
 
   const getEventsForDate = (date) => {
-    // Filter out all events for the selected date
     return events.filter(
       (event) => new Date(event.date).toDateString() === date.toDateString()
     );
@@ -47,27 +46,19 @@ export default function CalendarCard() {
       const eventsForDate = getEventsForDate(date);
       if (eventsForDate.length > 0) {
         return (
-          <div className="position-relative">
-            {eventsForDate.map((event, index) => (
-              <div
+          <div className="event-dots">
+            {eventsForDate.slice(0, 2).map((event, index) => (
+              <span
                 key={index}
-                className="bg-warning text-white rounded-circle d-flex justify-content-center align-items-center mb-1"
+                className={`event-dot ${event.type.toLowerCase()}`}
                 data-bs-toggle="tooltip"
                 data-bs-placement="top"
                 title={`${event.title} (${event.type})`}
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <small className="text-center">
-                  {event.title} ({event.type})
-                </small>
-              </div>
+              />
             ))}
+            {eventsForDate.length > 2 && (
+              <span className="more-events">+{eventsForDate.length - 2}</span>
+            )}
           </div>
         );
       }
@@ -84,7 +75,7 @@ export default function CalendarCard() {
   }, [events]);
 
   return (
-    <div className="card mb-3">
+    <div className="card mb-3 calendar-card">
       <div className="card-header d-flex justify-content-between align-items-center">
         <div className="d-flex align-items-center">
           <SlCalender className="me-2" />
