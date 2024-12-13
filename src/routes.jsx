@@ -6,11 +6,12 @@ import ErrorPage from "./pages/ErrorPage";
 import PhotosVideos from "./admin/photosVideo";
 import ITServiceRequestForm from "./components/UI/ITServiceRequestForm";
 import GalleryDetails from "./components/UI/GalleryDetails";
-import CsrPage from "./admin/csr";
-import IndustryPage from "./admin/Industry";
-import ManagementMessage from "./admin/managemenetMessage";
-import AwardsPage from "./admin/awards";
 
+
+const CsrPage = lazy(() => import( "./admin/csr"));
+const IndustryPage = lazy(() => import( "./admin/Industry"));
+const ManagementMessage = lazy(() => import( "./admin/managemenetMessage"));
+const AwardsPage = lazy(() => import( "./admin/awards"));
 const Home = lazy(() => import("./pages/Home"));
 const About = lazy(() => import("./pages/About"));
 const Quicklinks = lazy(() => import("./admin/QuickLinks"));
