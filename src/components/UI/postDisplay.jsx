@@ -36,13 +36,13 @@ const PostCard = ({ post, size = 188 }) => {
             e.stopPropagation(); // Prevent propagation to parent
             handleTextClick(e); // Call the function
         }}>
-            <p
+            <div
                 className="card-text fs-6"
 
                 dangerouslySetInnerHTML={{
                     __html: renderText(post),
                 }}
-            ></p>
+            ></div>
 
         </div>
     );

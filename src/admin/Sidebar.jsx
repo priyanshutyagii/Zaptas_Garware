@@ -21,7 +21,7 @@ export default function Sidebar() {
     <div className="sidebar">
       <ul className="sidebar-menu">
         <li>
-        <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
+          <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
             <FaUsers /> <span>Home</span>
           </Link>
         </li>
@@ -66,7 +66,9 @@ export default function Sidebar() {
           </Link>
         </li>
         <li>
-          <FaSignOutAlt /> <span>Logout</span>
+          <Link to="/admin/CalenderHoliday" style={{ textDecoration: 'none', color: 'inherit' }}>
+            <FaUsers /> <span>CalenderHoliday</span>
+          </Link>
         </li>
       </ul>
     </div>

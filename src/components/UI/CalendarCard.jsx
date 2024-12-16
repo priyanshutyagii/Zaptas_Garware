@@ -12,28 +12,31 @@ export default function CalendarCard() {
   const [date, setDate] = useState(new Date());
   const [events, setEvents] = useState([]);
 
-  useEffect(() => {
-    async function fetchEvents() {
-      try {
-        const token = getTokenFromLocalStorage();
-        const headers = {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        };
-        const url = `${ConnectMe.BASE_URL}/calendar/holidays?active=true`;
-        const response = await apiCall("GET", url, headers);
+  const fetchEvents = async (month, year) => {
+    try {
+      const token = getTokenFromLocalStorage();
+      const headers = {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      };
+      const url = `${ConnectMe.BASE_URL}/calendar/holidays?active=true&month=${month}&year=${year}`;
+      const response = await apiCall("GET", url, headers);
 
-        if (response.success) {
-          setEvents(response?.data);
-        } else {
-          showToast("Failed to load Holiday", "error");
-        }
-      } catch (error) {
-        console.error("Error fetching events:", error.message);
+      if (response.success) {
+        setEvents(response?.data);
+      } else {
+        showToast("Failed to load holidays", "error");
       }
+    } catch (error) {
+      console.error("Error fetching events:", error.message);
     }
-    fetchEvents();
-  }, []);
+  };
+
+  useEffect(() => {
+    const currentMonth = date.getMonth() + 1; // JavaScript months are 0-based
+    const currentYear = date.getFullYear();
+    fetchEvents(currentMonth, currentYear);
+  }, [date]);
 
   const getEventsForDate = (date) => {
     return events.filter(
@@ -74,6 +77,14 @@ export default function CalendarCard() {
     });
   }, [events]);
 
+  const handleActiveStartDateChange = ({ activeStartDate, view }) => {
+    if (view === "month") {
+      const newMonth = activeStartDate.getMonth() + 1;
+      const newYear = activeStartDate.getFullYear();
+      fetchEvents(newMonth, newYear);
+    }
+  };
+
   return (
     <div className="card mb-3 calendar-card">
       <div className="card-header d-flex justify-content-between align-items-center">
@@ -86,7 +97,12 @@ export default function CalendarCard() {
         </a>
       </div>
       <div className="card-body">
-        <Calendar onChange={setDate} value={date} tileContent={tileContent} />
+        <Calendar
+          onChange={setDate}
+          value={date}
+          tileContent={tileContent}
+          onActiveStartDateChange={handleActiveStartDateChange}
+        />
       </div>
     </div>
   );

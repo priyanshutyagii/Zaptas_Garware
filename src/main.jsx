@@ -7,10 +7,10 @@ import store from "./store/index.js"; // Path to your store file
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 createRoot(document.getElementById('root')).render(
-  <StrictMode>
+  <>
      <Provider store={store}>
     <App />
   </Provider>
     <ToastContainer />
-  </StrictMode>,
+  </>,
 )

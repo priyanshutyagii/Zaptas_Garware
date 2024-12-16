@@ -6,6 +6,7 @@ import ErrorPage from "./pages/ErrorPage";
 import PhotosVideos from "./admin/photosVideo";
 import ITServiceRequestForm from "./components/UI/ITServiceRequestForm";
 import GalleryDetails from "./components/UI/GalleryDetails";
+import CalenderHoliday from "./admin/calenderHoliday";
 
 
 const CsrPage = lazy(() => import( "./admin/csr"));
@@ -60,6 +61,7 @@ export const routes = [
       { path: "industry", element: <IndustryPage /> },
       { path: "ManagementMessage", element: <ManagementMessage /> },
       { path: "awards", element: <AwardsPage /> },
+      { path: "CalenderHoliday", element: <CalenderHoliday/> },
     ],
   },
   { path: "/login", element: <Login /> },

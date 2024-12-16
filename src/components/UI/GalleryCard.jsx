@@ -8,40 +8,101 @@ import showToast from "../../utils/toastHelper";
 
 export default function GalleryCard() {
   const navigate = useNavigate();
-  const [data, setData] = useState([]);
+  const [data, setData] = useState({
+    Announcements: [],
+    CsrType: [],
+    Awards: [],
+  });
 
+  useEffect(() => {
+    fetchData("Announcements");
+    fetchData("CsrType");
+    fetchData("Awards");
+  }, []);
 
-  useEffect(() => { fetchData() }, [])
-  const fetchData = async () => {
+  const fetchData = async (type) => {
     try {
-      const url = `${ConnectMe.BASE_URL}/photosVideos/byGroup`;
+      const url = `${ConnectMe.BASE_URL}/photosVideos/${type}?limit=3&page=1`; // Fetch multiple items for carousel
       const token = getTokenFromLocalStorage();
       const headers = { Authorization: `Bearer ${token}` };
 
       const response = await apiCall("GET", url, headers);
       if (response.success) {
-        setData(response.data?.data || []);
-        console.log(response.data,'ddddd')
+        setData((prevData) => ({
+          ...prevData,
+          [type]: response.data?.data || [],
+        }));
       } else {
-        showToast(`Failed to load `, "error");
+        showToast(`Failed to load ${type}`, "error");
       }
     } catch (error) {
-      console.error(`Error fetching :`, error.message);
-      showToast(`Error fetching `, "error");
+      console.error(`Error fetching ${type}:`, error.message);
+      showToast(`Error fetching ${type}`, "error");
     }
   };
 
-  // Sample gallery data
-  const galleryItems = [
-    { id: 1, title: "CSR Activities", image: "public/csrimg.PNG" },
-    { id: 2, title: "Team Outing", image: "public/csrimg.PNG" },
-    { id: 3, title: "Office Events", image: "public/csrimg.PNG" },
-    { id: 4, title: "Annual Celebration", image: "public/csrimg.PNG" },
-  ];
-
-  // Navigate to details page with the selected item data
   const handleTitleClick = (item) => {
     navigate(`/gallery/${item.id}`, { state: item });
+  };
+
+  const renderCarousel = (items, section) => {
+    if (!items || items.length === 0) return <p>No {section} available</p>;
+
+    return (
+      <div
+        id={`${section}-carousel`}
+        className="carousel slide"
+        data-bs-ride="carousel"
+      >
+        <div className="carousel-inner">
+          {items.map((item, index) => (
+            <div
+              key={item.id}
+              className={`carousel-item ${index === 0 ? "active" : ""}`}
+            >
+              <img
+                src={`${ConnectMe.img_URL}${item.imagePath}`}
+                className="d-block w-100 rounded"
+                alt={item.title}
+                style={{ maxHeight: "200px", objectFit: "cover" }}
+              />
+              <div className="carousel-caption d-none d-md-block">
+                <button
+                  className="btn btn-link text-white p-0"
+                  onClick={() => handleTitleClick(item)}
+                >
+                  {item.title}
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+        <button
+          className="carousel-control-prev"
+          type="button"
+          data-bs-target={`#${section}-carousel`}
+          data-bs-slide="prev"
+        >
+          <span
+            className="carousel-control-prev-icon"
+            aria-hidden="true"
+          ></span>
+          <span className="visually-hidden">Previous</span>
+        </button>
+        <button
+          className="carousel-control-next"
+          type="button"
+          data-bs-target={`#${section}-carousel`}
+          data-bs-slide="next"
+        >
+          <span
+            className="carousel-control-next-icon"
+            aria-hidden="true"
+          ></span>
+          <span className="visually-hidden">Next</span>
+        </button>
+      </div>
+    );
   };
 
   return (
@@ -56,27 +117,22 @@ export default function GalleryCard() {
         </a>
       </div>
       <div className="card-body">
-        <div className="gallery d-flex flex-wrap">
-          {galleryItems?.map((item) => (
-            <div
-              key={item.id}
-              className="gallery-item text-center p-2"
-              style={{ maxWidth: "150px" }}
-            >
-              <img
-                src={item.image}
-                alt={item.title}
-                className="img-fluid rounded mb-2"
-                style={{ maxHeight: "100px", objectFit: "cover" }}
-              />
-              <button
-                className="btn btn-link p-0 text-primary"
-                onClick={() => handleTitleClick(item)}
-              >
-                {item.title}
-              </button>
-            </div>
-          ))}
+        <div className="row">
+          {/* Carousel for Announcements */}
+          <div className="col text-center">
+            <h6>Announcements</h6>
+            {renderCarousel(data.Announcements, "Announcements")}
+          </div>
+          {/* Carousel for CSR */}
+          <div className="col text-center">
+            <h6>CSR</h6>
+            {renderCarousel(data.CsrType, "CSR")}
+          </div>
+          {/* Carousel for Awards */}
+          <div className="col text-center">
+            <h6>Awards</h6>
+            {renderCarousel(data.Awards, "Awards")}
+          </div>
         </div>
       </div>
     </div>
