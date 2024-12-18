@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from "react";
+import Cropper from "react-cropper";
+import "cropperjs/dist/cropper.css";
 import "./UploadBanners.css";
 import { apiCall, getTokenFromLocalStorage } from "../utils/apiCall";
 import ConnectMe from "../config/connect";
-import { toast } from 'react-toastify';
 import showToast from "../utils/toastHelper";
 
 export default function UploadBanners() {
   const [banners, setBanners] = useState([]);
   const [activeIndex, setActiveIndex] = useState(null);
-  const [selectedImages, setSelectedImages] = useState([]);
   const [isBannerUpdated, setIsBannerUpdated] = useState(''); // Track banner update
+  const [cropper, setCropper] = useState(null);
+  const [selectedFile, setSelectedFile] = useState(null); // Store the currently selected file for cropping
   const fileInputRef = React.createRef();
 
   useEffect(() => {
@@ -20,7 +22,6 @@ export default function UploadBanners() {
     try {
       const url = `${ConnectMe.BASE_URL}/banner/getFs?type=Banners`;
       const token = getTokenFromLocalStorage();
-
       const headers = {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
@@ -32,20 +33,11 @@ export default function UploadBanners() {
         setBanners(response.data);
       } else {
         setBanners([]);
-        showToast("Failed to load banner", 'error')
+        showToast("Failed to load banners", "error");
       }
-
     } catch (error) {
       setBanners([]);
       console.error("Error fetching banners:", error.message);
-    }
-  };
-
-  const toggleActiveState = async (index) => {
-    try {
-      setActiveIndex(activeIndex === index ? null : index);
-    } catch (error) {
-      console.error("Error toggling banner active state:", error.message);
     }
   };
 
@@ -53,7 +45,6 @@ export default function UploadBanners() {
     try {
       const url = `${ConnectMe.BASE_URL}/banner/uploadAdminImages/${bannerId}`;
       const token = getTokenFromLocalStorage();
-
       const headers = {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
@@ -61,111 +52,63 @@ export default function UploadBanners() {
 
       const response = await apiCall("DELETE", url, headers);
 
-
       if (response.success) {
-        showToast("Deleted", 'success')
-        fetchBanners()
+        showToast("Deleted", "success");
+        fetchBanners();
       } else {
-
-        showToast("Failed to delete banner", 'error')
+        showToast("Failed to delete banner", "error");
       }
-
     } catch (error) {
       console.error("Error deleting banner:", error.message);
     }
   };
 
-  const updateBannerStatus = async (bannerId) => {
-    try {
-      const url = `${ConnectMe.BASE_URL}/banner/banners/${bannerId}/toggle-status`;
-      const token = getTokenFromLocalStorage();
-
-      const headers = {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      };
-
-      const response = await apiCall("PATCH", url, headers);
-      if (response.success) {
-        showToast("Banner status updated:", 'success')
-        setIsBannerUpdated(!isBannerUpdated);  // Trigger banner update state
-      } else {
-
-        showToast("Failed to update banner", 'error')
-      }
-
-
-
-    } catch (error) {
-      console.error("Error updating banner status:", error.message);
-    }
-  };
-
   const uploadBanner = async () => {
-    if (!selectedImages || selectedImages.length === 0) {
-      toast.error('Please select at least one banner image.');
+    if (!cropper) {
+      showToast("Please crop the image before uploading", "error");
       return;
     }
 
     try {
+      const croppedImageBlob = await cropper.getCroppedCanvas().toBlob();
+      const formData = new FormData();
+      formData.append("files", croppedImageBlob, "banner.png");
+      formData.append("name", "Banners");
+
       const url = `${ConnectMe.BASE_URL}/file/upload`;
       const token = getTokenFromLocalStorage();
+      const headers = { Authorization: `Bearer ${token}` };
 
-      const formData = new FormData();
-      for (const image of selectedImages) {
-        if (typeof image === 'string') {
-          const response = await fetch(image);
-          if (!response.ok) {
-            toast.error(`Failed to fetch the image from URL: ${image}`);
-            return;
-          }
-          const blob = await response.blob();
-          // const fileName = image.split('/').pop();  // Extracts the file name from the URL
-          const file = new File([blob], 'banners.png', { type: blob.type });
-          
-          formData.append('files', file);
-        } else {
-          formData.append('files', image);
-        }
-      }
+      const response = await apiCall("POST", url, headers, formData);
 
-      formData.append('name', 'Banners');
-
-      const headers = {
-        'Authorization': `Bearer ${token}`,
-      };
-
-      const response = await apiCall('POST', url, headers, formData);
       if (response.success) {
-        showToast('Banner uploaded successfully!', 'success')
-        setSelectedImages([]); // Clear images after upload
-        setIsBannerUpdated(!isBannerUpdated);  // Trigger banner update state
+        showToast("Banner uploaded successfully!", "success");
+        setSelectedFile(null); // Clear the selected file
+        setIsBannerUpdated(!isBannerUpdated); // Trigger re-fetch
         fileInputRef.current.value = null;
       } else {
-        showToast("Failed to upload banner", 'error')
+        showToast("Failed to upload banner", "error");
       }
-
-
     } catch (error) {
-      console.error('Error uploading banner:', error.message);
-      toast.error(`Error uploading banner: ${error.message || 'An unexpected error occurred'}`);
+      console.error("Error uploading banner:", error.message);
     }
   };
 
   const handleFileChange = (e) => {
-    const files = e.target.files;
-    const fileArray = Array.from(files).map(file => URL.createObjectURL(file));
-    setSelectedImages(fileArray);
+    const file = e.target.files[0];
+    if (file) {
+      const fileURL = URL.createObjectURL(file);
+      setSelectedFile(fileURL); // Pass the file to the cropper
+    }
   };
 
   const handleCancel = () => {
-    setSelectedImages([]);
+    setSelectedFile(null);
     fileInputRef.current.value = null;
   };
 
   return (
     <div className="upload-banners container">
-      {/* Current Banners Section */}
       <div className="banners-section mb-4">
         <h4>Current Banners</h4>
         <div className="row">
@@ -174,21 +117,12 @@ export default function UploadBanners() {
               <div key={banner._id} className="col-6 col-sm-3 mb-4">
                 <div className="banner-card">
                   <img
-                     src={`${ConnectMe.img_URL}${banner.imagePath}`}
+                    src={`${ConnectMe.img_URL}${banner.imagePath}`}
                     alt={`Banner ${index + 1}`}
-                    className={`banner-image ${activeIndex === index ? "active" : ""}`}
-                    onClick={() => toggleActiveState(index, banner._id)}
+                    className="banner-image"
                   />
                 </div>
-
                 <div className="banner-actions text-center">
-                  <button
-                    type="button"
-                    className="btn btn-outline-primary btn-sm me-2"
-                    onClick={() => updateBannerStatus(banner._id)}
-                  >
-                    {banner?.active ? "Mark as Inactive" : "Mark as Active"}
-                  </button>
                   <button
                     type="button"
                     className="btn btn-outline-secondary btn-sm"
@@ -205,48 +139,43 @@ export default function UploadBanners() {
         </div>
       </div>
 
-      {/* Upload New Banners Section */}
       <div className="banners-section">
         <h4>Upload New Banners</h4>
         <input
           type="file"
           className="form-control upload-input mb-3"
-          multiple
           onChange={handleFileChange}
           ref={fileInputRef}
         />
 
-        {selectedImages.length > 0 && (
-          <div className="row">
-            {selectedImages.map((image, index) => (
-              <div key={index} className="col-6 col-sm-3 mb-4">
-                <div className="banner-card">
-                  <img
-                    src={image}
-                    alt={`Selected Banner ${index + 1}`}
-                    className="banner-image"
-                  />
-
-                </div>
-              </div>
-            ))}
+        {selectedFile && (
+          <div className="cropper-container">
+            <Cropper
+              src={selectedFile}
+              style={{ height: 400, width: "100%" }}
+              initialAspectRatio={16 / 9}
+              aspectRatio={16 / 9}
+              guides={false}
+              cropBoxResizable={true}
+              viewMode={1}
+              onInitialized={(instance) => setCropper(instance)}
+            />
+            <div className="d-flex justify-content-between mt-3">
+              <button
+                className="btn btn-success btn-sm"
+                onClick={uploadBanner}
+              >
+                Upload
+              </button>
+              <button
+                className="btn btn-danger btn-sm"
+                onClick={handleCancel}
+              >
+                Cancel
+              </button>
+            </div>
           </div>
         )}
-
-        <div className="d-flex justify-content-between mt-3">
-          <button
-            className="btn btn-danger btn-sm"
-            onClick={uploadBanner}
-          >
-            Upload
-          </button>
-          <button
-            className="btn btn-info btn-sm"
-            onClick={handleCancel}
-          >
-            Cancel
-          </button>
-        </div>
       </div>
     </div>
   );

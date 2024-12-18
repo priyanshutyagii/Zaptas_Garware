@@ -15,6 +15,7 @@ import showToast from "../../utils/toastHelper";
 import { Carousel } from "react-bootstrap"; // Import Carousel
 import "./LinkedInCard.css";
 import PostCard from "./postDisplay";
+import { useNavigate } from "react-router-dom";
 
 export default function LinkedInCard() {
   const [posts, setPosts] = useState([]);
@@ -29,6 +30,8 @@ export default function LinkedInCard() {
   const [newComment, setNewComment] = useState("");
   const [showComments, setShowComments] = useState(false);
   const [loading, setLoading] = useState(false); // Loader state
+
+  const navigate = useNavigate()
 
   const fetchPosts = async () => {
     setLoading(true); // Show loader
@@ -133,9 +136,11 @@ export default function LinkedInCard() {
           <FaLinkedin className="me-2" />
           <h5 className="mb-0">LinkedIn</h5>
         </div>
-        <a href="/view-all" className="text-decoration-none">
+        <button onClick={(()=>{
+          navigate('/view-all')
+        })} className="text-decoration-none">
           View All <HiArrowCircleRight />
-        </a>
+        </button>
       </div>
 
       {loading ? (
@@ -166,9 +171,9 @@ export default function LinkedInCard() {
                     ) : null}
                   </div>
                   <div className="announcement-disc col-sm-12 mt-2">
-                    <p className="card-text fs-6">
+                    <div className="card-text fs-6">
                       <PostCard post={post.text} size={180} />
-                    </p>
+                    </div>
                     <div className="d-flex justify-content-between mt-2">
                       <p className="card-like fs-6">
                         <FaThumbsUp

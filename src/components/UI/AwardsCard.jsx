@@ -57,9 +57,8 @@ export default function AnnouncementCard() {
   const handleLikeDislike = async (announcementId, isLiked) => {
     showToast(isLiked ? "Unlike success" : "Like success", "success");
     const token = getTokenFromLocalStorage();
-    const url = `${ConnectMe.BASE_URL}/awards/${announcementId}/${
-      isLiked ? "unlike" : "like"
-    }`;
+    const url = `${ConnectMe.BASE_URL}/awards/${announcementId}/${isLiked ? "unlike" : "like"
+      }`;
     const headers = {
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
@@ -75,8 +74,8 @@ export default function AnnouncementCard() {
               // Update the likes array and the likesCount locally
               const updatedLikes = isLiked
                 ? announcement.likes.filter(
-                    (userId) => userId !== response.userId
-                  )
+                  (userId) => userId !== response.userId
+                )
                 : [...announcement.likes, response.userId];
 
               return {
@@ -174,29 +173,20 @@ export default function AnnouncementCard() {
                 </div>
                 {/* Announcement Content */}
                 <div className="announcement-disc" onClick={handleCelebration}>
-                  <p className="card-text">
-                    {announcement.AwardierName} (
-                    {announcement.PersonDesignation})
-                  </p>
-                  <p className="card-text text-danger fw-bold celebrating-text">
-                    {announcement.title} 🥳
-                  </p>
-                  <p className="card-text fs-6">
-                    {" "}
-                    <PostCard post={announcement.description} size={70} />
-                  </p>
+                  <p className="card-text">{announcement.AwardierName} ({announcement.PersonDesignation})</p>
+                  <p className="card-text text-danger fw-bold celebrating-text">{announcement.title} 🥳</p>
+                  <div
+                    className="card-text fs-6"
 
-                  <div className="d-flex mt-2 align-items-center">
-                    {" "}
-                    {/* Add `align-items-center` for vertical alignment */}
+                  > <PostCard post={announcement.description} size={70} /></div>
+
+
+                  <div className="d-flex mt-2 align-items-center"> {/* Add `align-items-center` for vertical alignment */}
                     <p
                       className="like-section me-3" // Add `me-3` for spacing
                       onClick={(e) => {
                         e.stopPropagation(); // Prevent triggering `handleShow`
-                        handleLikeDislike(
-                          announcement._id,
-                          announcement.likedByUser
-                        );
+                        handleLikeDislike(announcement._id, announcement.likedByUser);
                       }}
                     >
                       <FaThumbsUp
@@ -207,6 +197,7 @@ export default function AnnouncementCard() {
                       />{" "}
                       {announcement?.likes?.length}
                     </p>
+
                     {/* Add the mail icon */}
                     <p
                       className="mail-section"
@@ -219,6 +210,8 @@ export default function AnnouncementCard() {
                       <FaPaperPlane style={{ color: "gray" }} />
                     </p>
                   </div>
+
+                 
                 </div>
               </div>
             </div>
@@ -262,47 +255,51 @@ export default function AnnouncementCard() {
                 borderRadius: "5px",
               }}
             >
-              <p className="card-text fs-6">
-                <PostCard post={selectedAnnouncement.description} size={180} />
-              </p>
-            </div>
-
-            {selectedAnnouncement.links.map((link) => (
               <div
-                key={link._id}
-                style={{
-                  marginBottom: "16px",
-                  display: "flex",
-                  flexDirection: "column",
-                }}
-              >
-                <a
-                  href={link.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{ textDecoration: "none", color: "#007bff" }}
-                >
-                  <div
-                    style={{
-                      display: "flex",
-                      flexDirection: "row",
-                      alignItems: "center",
-                    }}
-                  >
-                    <strong style={{ fontSize: "16px", marginRight: "8px" }}>
-                      {link.linkTitle}
-                    </strong>
-                    <span style={{ fontStyle: "italic", color: "#555" }}>
-                      {link.link}
-                    </span>
-                  </div>
-                </a>
+                className="card-text fs-6">
+                <PostCard post={selectedAnnouncement.description} size={180} />
               </div>
-            ))}
 
-            <p className="mt-3">
+            </div >
+
+            {
+              selectedAnnouncement.links.map((link) => (
+                <div
+                  key={link._id}
+                  style={{
+                    marginBottom: "16px",
+                    display: "flex",
+                    flexDirection: "column",
+                  }}
+                >
+                  <a
+                    href={link.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ textDecoration: "none", color: "#007bff" }}
+                  >
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "row",
+                        alignItems: "center",
+                      }}
+                    >
+                      <strong style={{ fontSize: "16px", marginRight: "8px" }}>
+                        {link.linkTitle}
+                      </strong>
+                      <span style={{ fontStyle: "italic", color: "#555" }}>
+                        {link.link}
+                      </span>
+                    </div>
+                  </a>
+                </div>
+              ))
+            }
+
+            < p className="mt-3" >
               Location: <strong>{selectedAnnouncement.location} </strong>
-            </p>
+            </p >
 
             <p className="mt-3">
               Date:{" "}
@@ -351,9 +348,10 @@ export default function AnnouncementCard() {
               <span> {selectedAnnouncement?.likes?.length} Likes</span>{" "}
               {/* Display likes count */}
             </div>
-          </Modal.Body>
-        </Modal>
-      )}
-    </div>
+          </Modal.Body >
+        </Modal >
+      )
+      }
+    </div >
   );
 }

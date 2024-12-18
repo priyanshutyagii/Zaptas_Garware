@@ -176,10 +176,10 @@ export default function AnnouncementCard() {
                   <p className="card-text">{announcement.title}</p>
 
 
-                  <p
+                  <div
                     className="card-text fs-6">
                     <PostCard post={announcement.description} size={280} />
-                  </p>
+                  </div>
                   <div className="d-flex justify-content-between mt-2">
 
                     <p
@@ -252,10 +252,10 @@ export default function AnnouncementCard() {
                 borderRadius: "5px",
               }}
             >
-              <p
+              <div
                 className="card-text fs-6">
                 <PostCard post={selectedAnnouncement.description} size={400} />
-              </p>
+              </div>
             </div>
 
             {selectedAnnouncement.links.map((link) => (

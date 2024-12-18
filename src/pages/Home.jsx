@@ -26,14 +26,14 @@ export default function Home() {
             <AnnouncementCard />
           </div>
           <div className="col-md-4">
-       
-          <AwardsCard />
+
+            <AwardsCard />
           </div>
           <div className="col-md-4">
             <CalendarCard />
           </div>
           <div className="col-md-4">
-          <IndustryCard />
+            <IndustryCard />
           </div>
           <div className="col-md-4">
             <CsrActivityCard />
@@ -45,7 +45,7 @@ export default function Home() {
             <ITRequest />
           </div>
           <div className="col-md-4">
-           
+
             <ManagementMessageCard />
           </div>
         </div>

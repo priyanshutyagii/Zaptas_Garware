@@ -171,7 +171,7 @@ export default function AnnouncementCard() {
                     {new Date(announcement?.AnnouncementDate)?.toLocaleString("default", {
                       month: "short",
                     }) || ''}
-                    
+
                   </span>
                   <span className="date">{announcement?.location}</span>
 
@@ -186,10 +186,10 @@ export default function AnnouncementCard() {
 
 
 
-                  <p
-                    className="card-text fs-6"
+                  <div className="card-text fs-6">
+                    <PostCard post={announcement.description} size={70} />
+                  </div>
 
-                  > <PostCard post={announcement.description} size={70} /></p>
                   <div className="d-flex justify-content-between mt-2">
 
                     <p
@@ -262,10 +262,10 @@ export default function AnnouncementCard() {
               }}
 
             >
-              <p
+              <div
                 className="card-text fs-6">
                 <PostCard post={selectedAnnouncement.description} size={180} />
-              </p>
+              </div>
 
             </div>
 

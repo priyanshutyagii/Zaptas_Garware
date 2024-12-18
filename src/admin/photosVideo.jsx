@@ -60,20 +60,20 @@ export default function PhotosVideos() {
 
   const deleteItem = async (itemId) => {
     try {
-      const url = `${ConnectMe.BASE_URL}/${currentType}/uploadAdminImages/${itemId}`;
+      const url = `${ConnectMe.BASE_URL}/photosVideos/${itemId}`;
       const token = getTokenFromLocalStorage();
       const headers = { Authorization: `Bearer ${token}` };
 
       const response = await apiCall("DELETE", url, headers);
       if (response.success) {
-        showToast(`${currentType} deleted successfully`, "success");
+        showToast(` deleted successfully`, "success");
         fetchData(); // Refresh the list
       } else {
-        showToast(`Failed to delete ${currentType}`, "error");
+        showToast(`Failed to delete`, "error");
       }
     } catch (error) {
-      console.error(`Error deleting ${currentType}:`, error.message);
-      showToast(`Error deleting ${currentType}`, "error");
+      console.error(`Error deleting:`, error.message);
+      showToast(`Error deleting`, "error");
     }
   };
 

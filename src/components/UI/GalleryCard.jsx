@@ -57,7 +57,7 @@ export default function GalleryCard() {
         <div className="carousel-inner">
           {items.map((item, index) => (
             <div
-              key={item.id}
+              key={item._id}
               className={`carousel-item ${index === 0 ? "active" : ""}`}
             >
               <img

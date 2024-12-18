@@ -4,7 +4,9 @@ import { apiCall, getTokenFromLocalStorage } from "../../utils/apiCall";
 import showToast from "../../utils/toastHelper";
 import ConnectMe from "../../config/connect";
 import PostCard from "./postDisplay";
+import Loader from "../../components/Loader"; // Import the Loader component
 import "./viewPosts.css";
+
 export default function ViewAllPosts() {
   const [posts, setPosts] = useState([]); // All fetched posts
   const [loading, setLoading] = useState(false); // Loading state for the entire list
@@ -84,10 +86,11 @@ export default function ViewAllPosts() {
                 ...post,
                 fetchUserLikesStatus: method === "likePost" ? true : false,
                 likeCount: {
-                  totalLikes: method === "likePost" 
-                    ? post.likeCount.totalLikes + 1 
-                    : method === "dislike" 
-                      ? post.likeCount.totalLikes - 1 
+                  totalLikes:
+                    method === "likePost"
+                      ? post.likeCount.totalLikes + 1
+                      : method === "dislike"
+                      ? post.likeCount.totalLikes - 1
                       : post.likeCount.totalLikes,
                 },
               }
@@ -105,7 +108,6 @@ export default function ViewAllPosts() {
 
       // Make the API call with the AbortController signal
       await apiCall("POST", url, headers, body, { signal });
-
     } catch (error) {
       if (error.name === "AbortError") {
         console.log("Previous request was cancelled.");
@@ -116,62 +118,61 @@ export default function ViewAllPosts() {
       setLoadingPostIds((prevIds) => prevIds.filter((id) => id !== postId)); // Remove post ID from loading state
     }
   };
-  
-
 
   return (
     <div className="container mt-3">
       <h3 className="mb-4">View All Posts</h3>
+    
       <div className="row">
-        
-      {posts.map((post, index) => (
-        <div className="col-md-6" key={index}>
-        <div key={index} className="card mb-3">
-          <PostCard post={post.text} size={180} />
-          <div className="card-body">
-            {post.multimedia && (
-              <div
-                className="csr-media col-sm-12 text-center"
-                style={{ cursor: "pointer" }}
-              >
-                {post.multimedia.type === "image" ? (
-                  <img
-                    src={post.multimedia.url}
-                    alt="LinkedIn Post"
-                    style={{ width: "100%", height: "250px" }}
+        {posts.map((post, index) => (
+          <div className="col-md-6" key={index}>
+            <div key={index} className="card mb-3">
+              <PostCard post={post.text} size={180} />
+              <div className="card-body">
+                {post.multimedia && (
+                  <div
+                    className="csr-media col-sm-12 text-center"
+                    style={{ cursor: "pointer" }}
+                  >
+                    {post.multimedia.type === "image" ? (
+                      <img
+                        src={post.multimedia.url}
+                        alt="LinkedIn Post"
+                        style={{ width: "100%", height: "250px" }}
+                      />
+                    ) : post.multimedia.type === "video" ? (
+                      <video width="100%" height="250" controls>
+                        <source src={post.multimedia.url} type="video/mp4" />
+                        Your browser does not support the video tag.
+                      </video>
+                    ) : null}
+                  </div>
+                )}
+                <p>
+                  <FaThumbsUp
+                    className={`like-icon ${
+                      loadingPostIds.includes(post.id) ? "loading" : ""
+                    }`}
+                    style={{
+                      color: post?.fetchUserLikesStatus ? "blue" : "gray",
+                      cursor: "pointer",
+                    }}
+                    onClick={() =>
+                      handleLikeToggle(
+                        post.id,
+                        post?.fetchUserLikesStatus ? "dislike" : "likePost"
+                      )
+                    }
                   />
-                ) : post.multimedia.type === "video" ? (
-                  <video width="100%" height="250" controls>
-                    <source src={post.multimedia.url} type="video/mp4" />
-                    Your browser does not support the video tag.
-                  </video>
-                ) : null}
+                  {post.likeCount?.totalLikes || 0} Likes
+                </p>
               </div>
-            )}
-            <p>
-              <FaThumbsUp
-                className={`like-icon ${loadingPostIds.includes(post.id) ? "loading" : ""}`}
-                style={{
-                  color: post?.fetchUserLikesStatus ? "blue" : "gray",
-                  cursor: "pointer",
-                }}
-                onClick={() =>
-                  handleLikeToggle(
-                    post.id,
-                    post?.fetchUserLikesStatus ? "disslike" : "likePost"
-                  )
-                }
-              />
-              {post.likeCount?.totalLikes || 0} Likes
-            </p>
+            </div>
           </div>
-        </div>
-        </div>
-      ))}
-      {loading && <p>Loading...</p>}
-      {!hasMore && <p>No more posts</p>}
+        ))}
+        {loading && <Loader />}
+        {!hasMore && <p>No more posts</p>}
       </div>
-  
     </div>
   );
 }
