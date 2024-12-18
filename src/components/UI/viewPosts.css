@@ -14,10 +14,27 @@
       transform: rotate(360deg);
     }
   }
-
+  body {
+    background-color: #f4f2ee;
+  }
+.ttl {
+  text-align: center;
+}
   .card {
-    box-shadow: rgba(17, 17, 26, 0.1) 0px 0px 16px;
-    border: none;
+    /* box-shadow: rgba(17, 17, 26, 0.1) 0px 0px 16px; */
+    /* border: none; */
     padding: 15px;
+    border-radius: 0.8rem;
+    width: 550px;
+    margin: auto;
+}
+.update-container {
+  height: 48px;
+  vertical-align: top;
+}
+a.update-title {
+  padding-left: 15px;
+  color: black;
+  font-size: 20px;
 }
   
