@@ -149,7 +149,7 @@ export default function LinkedInCard() {
           {/* Carousel for Posts */}
           <Carousel>
             {memoizedPosts.map((post) => (
-              <Carousel.Item key={post.id}>
+              <Carousel.Item key={post.id} className="linkekItem">
                 <div className="row mb-3" onClick={() => openPostPopup(post)}>
                   <div className="csr-media col-sm-12 text-center" style={{ cursor: "pointer" }}>
                     {post.multimedia.type === "image" ? (

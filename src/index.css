@@ -36,3 +36,8 @@ a:hover {
 .carousel-control-next-icon, .carousel-control-prev-icon {
   background-color: #00000066;
 }
+
+.carousel-control-next, .carousel-control-prev {
+  height: 50px;
+  top: 45%;
+}
