@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const PostCard = ({ post, size = 188 }) => {
+const PostCard = ({ post, size = 108 }) => {
     const [showFullText, setShowFullText] = useState(false);
 
     const toggleText = () => {

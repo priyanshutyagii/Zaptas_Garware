@@ -121,8 +121,11 @@ export default function ViewAllPosts() {
 
   return (
     <div className="container mt-3">
-      <h2 className="mb-4">View All Posts</h2>
+      <h3 className="mb-4">View All Posts</h3>
+      <div className="row">
+        
       {posts.map((post, index) => (
+        <div className="col-md-6" key={index}>
         <div key={index} className="card mb-3">
           <PostCard post={post.text} size={180} />
           <div className="card-body">
@@ -163,9 +166,12 @@ export default function ViewAllPosts() {
             </p>
           </div>
         </div>
+        </div>
       ))}
       {loading && <p>Loading...</p>}
       {!hasMore && <p>No more posts</p>}
+      </div>
+  
     </div>
   );
 }

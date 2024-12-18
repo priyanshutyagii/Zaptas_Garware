@@ -6,4 +6,5 @@
 .carousel-item {
     max-height: 500px;
     overflow: auto;
+    padding: 12px;
 }
