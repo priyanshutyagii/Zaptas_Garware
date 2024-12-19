@@ -5,6 +5,7 @@ import showToast from "../../utils/toastHelper";
 import ConnectMe from "../../config/connect";
 import PostCard from "./postDisplay";
 import "./viewPosts.css";
+import Loader from "../Loader";
 export default function ViewAllPosts() {
   const [posts, setPosts] = useState([]); // All fetched posts
   const [loading, setLoading] = useState(false); // Loading state for the entire list
@@ -176,7 +177,7 @@ export default function ViewAllPosts() {
         </div>
      
       ))}
-      {loading && <p>Loading...</p>}
+      {loading && <Loader/>}
       {!hasMore && <p>No more posts</p>}
    
   
