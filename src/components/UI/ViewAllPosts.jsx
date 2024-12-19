@@ -166,7 +166,7 @@ export default function ViewAllPosts() {
                 onClick={() =>
                   handleLikeToggle(
                     post.id,
-                    post?.fetchUserLikesStatus ? "disslike" : "likePost"
+                    post?.fetchUserLikesStatus ? "disslike" : "likepost"
                   )
                 }
               />

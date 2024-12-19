@@ -1,7 +1,22 @@
 /* ViewAllPosts.css */
 
 /* Define the loading state animation for the like button */
-
+.like-icon.loading {
+    animation: spin 1s linear infinite; /* Rotation effect */
+  }
+  
+  /* Keyframes for the spinning animation */
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  body {
+    background-color: #f4f2ee;
+  }
 .ttl {
   text-align: center;
 }
