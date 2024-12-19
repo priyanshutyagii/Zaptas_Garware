@@ -51,7 +51,7 @@ export default function AnnouncementCard() {
   };
 
   // Handle like/unlike
-  const handleLikeDislike = async (announcementId, isLiked) => {
+  const handleLikedisslike = async (announcementId, isLiked) => {
     showToast(isLiked ? "Unlike success" : "Like success", "success");
     const token = getTokenFromLocalStorage();
     const url = `${ConnectMe.BASE_URL}/manage/${announcementId}/${isLiked ? "unlike" : "like"}`;
@@ -186,7 +186,7 @@ export default function AnnouncementCard() {
                       className="like-section"
                       onClick={(e) => {
                         e.stopPropagation(); // Prevent triggering `handleShow`
-                        handleLikeDislike(announcement._id, announcement.likedByUser);
+                        handleLikedisslike(announcement._id, announcement.likedByUser);
                       }}
                     >
                       <FaThumbsUp
@@ -320,7 +320,7 @@ export default function AnnouncementCard() {
             {/* Like Button */}
             <div className="d-flex align-items-center">
               <FaThumbsUp
-                onClick={() => handleLikeDislike(selectedAnnouncement._id, selectedAnnouncement.likedByUser)}
+                onClick={() => handleLikedisslike(selectedAnnouncement._id, selectedAnnouncement.likedByUser)}
                 style={{
                   color: selectedAnnouncement.likedByUser ? "blue" : "gray",
                   cursor: "pointer",

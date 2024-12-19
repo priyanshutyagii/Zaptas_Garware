@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, useRef } from "react";
 import {
   FaLinkedin,
   FaPaperPlane,
@@ -17,7 +17,9 @@ import "./LinkedInCard.css";
 import PostCard from "./postDisplay";
 import { useNavigate } from "react-router-dom";
 
+
 export default function LinkedInCard() {
+  const [loadingPostIds, setLoadingPostIds] = useState([]); // Track which posts are being liked/unliked
   const [posts, setPosts] = useState([]);
   const [loggin, setLoggin] = useState(false);
   const [selectedPost, setSelectedPost] = useState(null);
@@ -30,7 +32,7 @@ export default function LinkedInCard() {
   const [newComment, setNewComment] = useState("");
   const [showComments, setShowComments] = useState(false);
   const [loading, setLoading] = useState(false); // Loader state
-
+  const currentRequest = useRef(null);
   const navigate = useNavigate()
 
   const fetchPosts = async () => {
@@ -68,8 +70,69 @@ export default function LinkedInCard() {
     fetchPosts();
   }, []);
 
-  const handleLikeToggle = async (postId, method) => {
+  const handleLikeToggle = async (postId, method, name = null) => {
     try {
+
+      setLoadingPostIds((prevIds) => [...prevIds, postId]); // Add post ID to loading state
+
+      // Cancel the previous request if it's ongoing
+      if (currentRequest.current) {
+        currentRequest.current.abort();
+      }
+
+      // Create a new AbortController for each request
+      const controller = new AbortController();
+      const signal = controller.signal;
+
+      // Store the controller in the ref to cancel it on future requests
+      currentRequest.current = controller;
+
+      // Update the like status locally before making the API call
+
+
+
+      if (name == 'modelBox') {
+        setSelectedPost((prevPost) => {
+          if (!prevPost) return prevPost; // Ensure prevPost exists
+
+          // Update the single post object
+          return {
+            ...prevPost,
+            fetchUserLikesStatus: method === "likepost" ? true : false,
+            likeCount: {
+              totalLikes:
+                method === "likepost"
+                  ? prevPost.likeCount.totalLikes + 1
+                  : method === "disslike"
+                    ? prevPost.likeCount.totalLikes - 1
+                    : prevPost.likeCount.totalLikes,
+            },
+          };
+        });
+
+      }
+      else {
+        setPosts((prevPosts) =>
+          prevPosts.map((post) =>
+            post.id === postId
+              ? {
+                ...post,
+                fetchUserLikesStatus: method === "likepost" ? true : false,
+                likeCount: {
+                  totalLikes:
+                    method === "likepost"
+                      ? post.likeCount.totalLikes + 1
+                      : method === "disslike"
+                        ? post.likeCount.totalLikes - 1
+                        : post.likeCount.totalLikes,
+                },
+              }
+              : post
+          )
+        );
+      }
+
+
       const token = getTokenFromLocalStorage();
       const url = `${ConnectMe.BASE_URL}/${method}`;
       const headers = {
@@ -78,12 +141,19 @@ export default function LinkedInCard() {
       };
       const body = JSON.stringify({ postId });
 
-      await apiCall("POST", url, headers, body);
-      fetchPosts();
+      // Make the API call with the AbortController signal
+      await apiCall("POST", url, headers, body, { signal });
     } catch (error) {
-      console.error("Error liking/unliking post:", error.message);
+      if (error.name === "AbortError") {
+        console.log("Previous request was cancelled.");
+      } else {
+        console.error("Error liking/unliking post:", error.message);
+      }
+    } finally {
+      setLoadingPostIds((prevIds) => prevIds.filter((id) => id !== postId)); // Remove post ID from loading state
     }
   };
+
 
   const handleLinkedInCallback = async () => {
     try {
@@ -136,7 +206,7 @@ export default function LinkedInCard() {
           <FaLinkedin className="me-2" />
           <h5 className="mb-0">LinkedIn</h5>
         </div>
-        <button onClick={(()=>{
+        <button onClick={(() => {
           navigate('/view-all')
         })} className="text-decoration-none">
           View All <HiArrowCircleRight />
@@ -156,20 +226,49 @@ export default function LinkedInCard() {
             {memoizedPosts.map((post) => (
               <Carousel.Item key={post.id} className="linkekItem">
                 <div className="row mb-3" onClick={() => openPostPopup(post)}>
-                  <div className="csr-media col-sm-12 text-center" style={{ cursor: "pointer" }}>
+                  <div
+                    className="csr-media col-sm-12 text-center"
+                    style={{
+                      cursor: "pointer",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      padding: 0, // Remove padding
+                      margin: 0,  // Remove margin
+                      height: "250px", // Fixed height
+                      overflow: "hidden", // Crop any extra space
+                    }}
+                  >
                     {post.multimedia.type === "image" ? (
                       <img
                         src={post.multimedia.url}
                         alt="LinkedIn Post"
-                        style={{ width: "100%", height: "250px" }}
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          objectFit: "cover", // Ensures the image fills the container
+                        }}
                       />
                     ) : post.multimedia.type === "video" ? (
-                      <video width="100%" height="250" controls autoPlay muted loop>
+                      <video
+                        controls
+                        autoPlay
+                        muted
+                        loop
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          objectFit: "cover", // Ensures the video fills the container
+                          margin: 0, // Ensure no white space
+                          padding: 0, // Ensure no white space
+                        }}
+                      >
                         <source src={post.multimedia.url} type="video/mp4" />
                         Your browser does not support the video tag.
                       </video>
                     ) : null}
                   </div>
+
                   <div className="announcement-disc col-sm-12 mt-2">
                     <div className="card-text fs-6">
                       <PostCard post={post.text} size={180} />
@@ -177,17 +276,20 @@ export default function LinkedInCard() {
                     <div className="d-flex justify-content-between mt-2">
                       <p className="card-like fs-6">
                         <FaThumbsUp
+                          className={`like-icon ${loadingPostIds.includes(post.id) ? "loading" : ""
+                            }`}
                           style={{
                             color: post?.fetchUserLikesStatus ? "blue" : "gray",
                             cursor: "pointer",
                           }}
-                          onClick={() =>
+                          onClick={(event) => {
+                            event.stopPropagation(); // Prevent the modal from opening
                             handleLikeToggle(
                               post.id,
-                              post?.fetchUserLikesStatus ? "disslike" : "likePost"
-                            )
-                          }
-                        />{" "}
+                              post?.fetchUserLikesStatus ? "disslike" : "likepost",
+                            );
+                          }}
+                        />
                         {post?.likeCount?.totalLikes}
                       </p>
                     </div>
@@ -207,22 +309,36 @@ export default function LinkedInCard() {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <div>
+          <div style={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100%", height: "100%" }}>
             {selectedPost?.multimedia?.type === "image" ? (
               <img
                 src={selectedPost.multimedia.url}
                 alt="LinkedIn selectedPost"
+                style={{ width: "100%", height: "auto" }}
               />
             ) : selectedPost?.multimedia?.type === "video" ? (
-              <video controls autoPlay muted loop>
+              <video
+                controls
+                autoPlay
+                muted
+                loop
+                style={{
+                  width: "100%",
+                  height: "60%",
+                  objectFit: "cover", // Ensures the video covers the space without distortion
+                }}
+              >
                 <source src={selectedPost.multimedia.url} type="video/mp4" />
                 Your browser does not support the video tag.
               </video>
             ) : null}
           </div>
+
           <div className="likencmt">
             <div>
               <FaThumbsUp
+                className={`like-icon  ${loadingPostIds.includes(selectedPost?.id) ? "loading" : ""}`
+                }
                 style={{
                   color: selectedPost?.fetchUserLikesStatus ? "blue" : "gray",
                   cursor: "pointer",
@@ -230,9 +346,8 @@ export default function LinkedInCard() {
                 onClick={() =>
                   handleLikeToggle(
                     selectedPost.id,
-                    selectedPost?.fetchUserLikesStatus
-                      ? "disslike"
-                      : "likePost"
+                    selectedPost?.fetchUserLikesStatus ? "disslike" : "likepost",
+                    "modelBox"
                   )
                 }
               />

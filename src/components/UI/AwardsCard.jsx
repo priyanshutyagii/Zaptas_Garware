@@ -54,7 +54,7 @@ export default function AnnouncementCard() {
   };
 
   // Handle like/unlike
-  const handleLikeDislike = async (announcementId, isLiked) => {
+  const handleLikedisslike = async (announcementId, isLiked) => {
     showToast(isLiked ? "Unlike success" : "Like success", "success");
     const token = getTokenFromLocalStorage();
     const url = `${ConnectMe.BASE_URL}/awards/${announcementId}/${isLiked ? "unlike" : "like"
@@ -186,7 +186,7 @@ export default function AnnouncementCard() {
                       className="like-section me-3" // Add `me-3` for spacing
                       onClick={(e) => {
                         e.stopPropagation(); // Prevent triggering `handleShow`
-                        handleLikeDislike(announcement._id, announcement.likedByUser);
+                        handleLikedisslike(announcement._id, announcement.likedByUser);
                       }}
                     >
                       <FaThumbsUp
@@ -334,7 +334,7 @@ export default function AnnouncementCard() {
             <div className="d-flex align-items-center">
               <FaThumbsUp
                 onClick={() =>
-                  handleLikeDislike(
+                  handleLikedisslike(
                     selectedAnnouncement._id,
                     selectedAnnouncement.likedByUser
                   )

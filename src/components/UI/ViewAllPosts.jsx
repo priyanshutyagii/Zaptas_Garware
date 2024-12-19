@@ -82,12 +82,13 @@ export default function ViewAllPosts() {
           post.id === postId
             ? {
                 ...post,
-                fetchUserLikesStatus: method === "likePost" ? true : false,
+                fetchUserLikesStatus: method === "likepost" ? true : false,
                 likeCount: {
-                  totalLikes: method === "likePost" 
-                    ? post.likeCount.totalLikes + 1 
-                    : method === "dislike" 
-                      ? post.likeCount.totalLikes - 1 
+                  totalLikes:
+                    method === "likepost"
+                      ? post.likeCount.totalLikes + 1
+                      : method === "disslike"
+                      ? post.likeCount.totalLikes - 1
                       : post.likeCount.totalLikes,
                 },
               }
@@ -145,10 +146,10 @@ export default function ViewAllPosts() {
                   <img
                     src={post.multimedia.url}
                     alt="LinkedIn Post"
-                    style={{ width: "100%", height: "250px" }}
+                    style={{ width: "100%", height: "70%" }}
                   />
                 ) : post.multimedia.type === "video" ? (
-                  <video width="100%" height="250" controls>
+                  <video width="100%" height="70%" controls autoPlay muted loop>
                     <source src={post.multimedia.url} type="video/mp4" />
                     Your browser does not support the video tag.
                   </video>
