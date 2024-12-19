@@ -122,9 +122,7 @@ export default function ViewAllPosts() {
 
 
   return (
-    <div className="container mt-3">
-      <h3 className="mb-4 ttl">View All Posts</h3>
-   
+    <div className="container mt-3">   
       {posts.map((post, index) => (
       
         <div key={index} className="card mb-2">
@@ -133,7 +131,8 @@ export default function ViewAllPosts() {
             <img width="48" src="public\logo.PNG" />
             </a>
             <a href="" className="update-title">
-              <span>Garware</span>
+              <span>
+              GHFL [Garware Hi-Tech Films Limited]</span>
             </a>
           </div>
           <PostCard post={post.text} size={180} />
