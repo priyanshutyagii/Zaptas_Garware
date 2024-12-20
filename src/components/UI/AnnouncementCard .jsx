@@ -9,6 +9,7 @@ import ConnectMe from "../../config/connect";
 import { apiCall, getTokenFromLocalStorage } from "../../utils/apiCall";
 import showToast from "../../utils/toastHelper";
 import PostCard from "./postDisplay";
+import ViewAllPopup from "./ViewAllPopup";
 
 export default function AnnouncementCard() {
   const [announcements, setAnnouncements] = useState([]);
@@ -16,6 +17,7 @@ export default function AnnouncementCard() {
   const [error, setError] = useState("");
   const [show, setShow] = useState(false);
   const [selectedAnnouncement, setSelectedAnnouncement] = useState(null);
+  const [showPopup, setShowPopup] = useState(false);
 
 
   // Fetch announcements on component mount
@@ -33,9 +35,22 @@ export default function AnnouncementCard() {
       .replace(/#(\w+)/g, '<span style="color:blue;">#$1</span>') // Make hashtags blue
       .replace(/(\r\n|\n|\r)/gm, '<br>'); // Replace line breaks with HTML <br> tags for proper rendering
   };
+//  this is for view all popup elements 
+  const leftContent = {
+    title: "Organization Announcement",
+    description:
+      "This is an example of a description that will be truncated to two lines. This is additional text for demonstration.",
+    facebookLink: "https://facebook.com",
+    location: "New York, USA",
+    date: "2024-12-25",
+  };
 
-
-
+  const rightImages = [
+    "https://placehold.co/300x300",
+    "https://placehold.co/300x300",
+    "https://placehold.co/300x300",
+  ];
+//  End view all popup elements
 
   const fetchAnnouncements = async (page = 1, limit = 3) => {
     try {
@@ -144,7 +159,12 @@ export default function AnnouncementCard() {
             <AiOutlineSound className="me-2" />
             <h5 className="mb-0">Announcements</h5>
           </div>
-          <a href="#" className="text-decoration-none">
+          <a className="text-decoration-none"
+          onClick={(e) => {
+            e.preventDefault();
+            setShowPopup(true);
+          }}
+          >
             View All <HiArrowCircleRight />
           </a>
         </div>
@@ -335,6 +355,16 @@ export default function AnnouncementCard() {
           </Modal.Body>
         </Modal>
       )}
+
+      {/* view all popup code  */}
+
+      <ViewAllPopup
+        title="View All Announcements"
+        leftContent={leftContent}
+        rightImages={rightImages}
+        show={showPopup}
+        onClose={() => setShowPopup(false)}
+      />
     </div>
   );
 }

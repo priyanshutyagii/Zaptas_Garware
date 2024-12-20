@@ -1,0 +1,54 @@
+.description {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* Number of lines to show */
+    -webkit-box-orient: vertical;
+  }
+  
+  .description.full {
+    overflow: visible;
+    -webkit-line-clamp: unset;
+  }
+  
+  .content-box {
+    border: 1px solid #ddd;
+    padding: 16px;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+  }
+  
+  .image-slider {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+  }
+  
+  .slider-image {
+    width: 100%;
+    max-width: 120px;
+    height: auto;
+    cursor: pointer;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+  }
+  
+  .image-preview-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1050;
+  }
+  
+  .full-size-image {
+    max-width: 90%;
+    max-height: 90%;
+    border-radius: 8px;
+  }
+  
