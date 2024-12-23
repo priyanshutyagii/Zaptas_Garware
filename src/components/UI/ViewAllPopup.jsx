@@ -6,6 +6,7 @@ import { apiCall, getTokenFromLocalStorage } from "../../utils/apiCall";
 import showToast from "../../utils/toastHelper";
 import PostCard from "./postDisplay";
 import Loader from "../Loader";
+import { FaThumbsUp } from "react-icons/fa";
 
 export default function ViewAllPage() {
   const { state } = useLocation();
@@ -76,6 +77,52 @@ export default function ViewAllPage() {
     fetchAnnouncements();
   }, []);
 
+
+
+
+  const handleLikedisslike = async (announcementId, isLiked) => {
+    showToast(isLiked ? "Unlike success" : "Like success", "success");
+    const token = getTokenFromLocalStorage();
+    const url = `${ConnectMe.BASE_URL}/${type}/${announcementId}/${isLiked ? "unlike" : "like"}`;
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    };
+
+    try {
+      const response = await apiCall("POST", url, headers);
+      if (response.success) {
+        // Update the local state to reflect the like/unlike action
+        setPosts((prevAnnouncements) =>
+          prevAnnouncements.map((announcement) => {
+            if (announcement._id === announcementId) {
+              // Update the likes array and the likesCount locally
+              const updatedLikes = isLiked
+                ? announcement.likes.filter((userId) => userId !== response.userId)
+                : [...announcement.likes, response.userId];
+
+              return {
+                ...announcement,
+                likes: updatedLikes,
+                likesCount: updatedLikes.length, // Update the likes count directly
+                likedByUser: !isLiked, // Toggle the likedByUser state
+              };
+            }
+            return announcement; // Return the unchanged announcement if not matching
+          })
+        );
+
+
+      } else {
+        showToast("Error loading posts", "error");
+        fetchAnnouncements()
+      }
+    } catch (err) {
+      showToast("Error loading posts", "error");
+      fetchAnnouncements()
+    }
+  };
+
   return (
     <div className="view-all-page">
       <header className="page-header">
@@ -110,11 +157,26 @@ export default function ViewAllPage() {
                       {new Date(post.AnnouncementDate).toLocaleDateString()}
                     </span>
                   </div>
+                  <p
+                    className="like-section"
+                    onClick={(e) => {
+                      e.stopPropagation(); // Prevent triggering `handleShow`
+                      handleLikedisslike(post._id, post.likedByUser);
+                    }}
+                  >
+                    <FaThumbsUp
+                      style={{
+                        color: post.likedByUser ? "blue" : "gray",
+                        cursor: "pointer",
+                      }}
+                    />{" "}
+                    {post?.likes?.length}
+                  </p>
                 </div>
               </div>
 
-             {/* Bootstrap Carousel for Image Slider (4 photos per slide) */}
-             {post.imagePath?.length > 0 && (
+              {/* Bootstrap Carousel for Image Slider (4 photos per slide) */}
+              {post.imagePath?.length > 0 && (
                 <div className="col-md-6">
                   <div
                     id={`carousel-${post._id}`}
@@ -131,9 +193,8 @@ export default function ViewAllPage() {
                         .map((slide, index) => (
                           <div
                             key={index}
-                            className={`carousel-item ${
-                              index === 0 ? "active" : ""
-                            }`}
+                            className={`carousel-item ${index === 0 ? "active" : ""
+                              }`}
                           >
                             <div className="row">
                               {slide.map((image, imgIndex) => (
