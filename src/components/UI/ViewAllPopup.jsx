@@ -137,6 +137,10 @@ export default function ViewAllPage() {
               <div className="col-md-6">
                 <div className="content-box">
                   <h5>{post.title}</h5>
+                  <span>
+                      
+                     {post?.AwardierName} {post?.PersonDesignation}
+                    </span>
                   <div className="card-text fs-6">
                     <PostCard post={post.description} size={70} />
                   </div>
