@@ -9,6 +9,7 @@ import ConnectMe from "../../config/connect";
 import { apiCall, getTokenFromLocalStorage } from "../../utils/apiCall";
 import showToast from "../../utils/toastHelper";
 import PostCard from "./postDisplay";
+import { useNavigate } from "react-router-dom";
 
 export default function AnnouncementCard() {
   const [announcements, setAnnouncements] = useState([]);
@@ -16,7 +17,7 @@ export default function AnnouncementCard() {
   const [error, setError] = useState("");
   const [show, setShow] = useState(false);
   const [selectedAnnouncement, setSelectedAnnouncement] = useState(null);
-
+  const navigate = useNavigate()
 
   // Fetch announcements on component mount
   useEffect(() => {
@@ -145,7 +146,17 @@ export default function AnnouncementCard() {
             <AiOutlineSound className="me-2" />
             <h5 className="mb-0">CSR</h5>
           </div>
-          <a href="#" className="text-decoration-none">
+          <a
+            className="text-decoration-none"
+            onClick={() => {
+              navigate("/view-detail", {
+                state: {
+                  title: "View All Announcements",
+                  type: "csr"
+                },
+              });
+            }}
+          >
             View All <HiArrowCircleRight />
           </a>
         </div>

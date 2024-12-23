@@ -7,6 +7,7 @@ import PhotosVideos from "./admin/photosVideo";
 import ITServiceRequestForm from "./components/UI/ITServiceRequestForm";
 import GalleryDetails from "./components/UI/GalleryDetails";
 import CalenderHoliday from "./admin/calenderHoliday";
+import ViewAllPopup from "./components/UI/ViewAllPopup";
 
 
 const CsrPage = lazy(() => import( "./admin/csr"));
@@ -38,6 +39,7 @@ export const routes = [
       { path: "workplace", element: <Workplace /> },
       { path: "quicklinks", element: <Quicklinks /> },
       { path: "view-all", element: <ViewAllPosts /> },
+      { path: "view-detail", element: <ViewAllPopup /> },
       { path: "ITService", element: <ITServiceRequestForm /> },
       { path: "/gallery/:id", element: <GalleryDetails /> },
     ],

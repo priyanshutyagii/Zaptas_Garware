@@ -10,6 +10,7 @@ import { apiCall, getTokenFromLocalStorage } from "../../utils/apiCall";
 import showToast from "../../utils/toastHelper";
 import PostCard from "./postDisplay";
 import ViewAllPopup from "./ViewAllPopup";
+import { useNavigate } from "react-router-dom";
 
 export default function AnnouncementCard() {
   const [announcements, setAnnouncements] = useState([]);
@@ -17,40 +18,16 @@ export default function AnnouncementCard() {
   const [error, setError] = useState("");
   const [show, setShow] = useState(false);
   const [selectedAnnouncement, setSelectedAnnouncement] = useState(null);
-  const [showPopup, setShowPopup] = useState(false);
-
+  const navigate = useNavigate()
 
   // Fetch announcements on component mount
   useEffect(() => {
     fetchAnnouncements();
   }, []);
 
-  const formatText = (text) => {
-    if (!text) return null;
 
-    // Replace `{hashtag|#|tag}` with `#tag` and style it in blue
-    return text
-      .replace(/{hashtag\|\\#\|/g, '#') // Replace starting hashtag syntax
-      .replace(/}/g, '') // Remove closing syntax
-      .replace(/#(\w+)/g, '<span style="color:blue;">#$1</span>') // Make hashtags blue
-      .replace(/(\r\n|\n|\r)/gm, '<br>'); // Replace line breaks with HTML <br> tags for proper rendering
-  };
-//  this is for view all popup elements 
-  const leftContent = {
-    title: "Organization Announcement",
-    description:
-      "This is an example of a description that will be truncated to two lines. This is additional text for demonstration.",
-    facebookLink: "https://facebook.com",
-    location: "New York, USA",
-    date: "2024-12-25",
-  };
 
-  const rightImages = [
-    "https://placehold.co/300x300",
-    "https://placehold.co/300x300",
-    "https://placehold.co/300x300",
-  ];
-//  End view all popup elements
+  //  End view all popup elements
 
   const fetchAnnouncements = async (page = 1, limit = 3) => {
     try {
@@ -159,14 +136,21 @@ export default function AnnouncementCard() {
             <AiOutlineSound className="me-2" />
             <h5 className="mb-0">Announcements</h5>
           </div>
-          <a className="text-decoration-none"
-          onClick={(e) => {
-            e.preventDefault();
-            setShowPopup(true);
-          }}
+          <a
+            className="text-decoration-none"
+            onClick={() => {
+              navigate("/view-detail", {
+                state: {
+                  title: "View All Announcements",
+                  type:"announcements"
+                },
+              });
+            }}
           >
             View All <HiArrowCircleRight />
           </a>
+
+
         </div>
         <div className="card-body">
           {announcements.map((announcement) => (
@@ -358,13 +342,7 @@ export default function AnnouncementCard() {
 
       {/* view all popup code  */}
 
-      <ViewAllPopup
-        title="View All Announcements"
-        leftContent={leftContent}
-        rightImages={rightImages}
-        show={showPopup}
-        onClose={() => setShowPopup(false)}
-      />
+
     </div>
   );
 }
