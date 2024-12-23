@@ -11,6 +11,7 @@ import { FaThumbsUp } from "react-icons/fa";
 export default function ViewAllPage() {
   const { state } = useLocation();
   const { title, type = "announcement" } = state;
+  const [selectedImage, setSelectedImage] = useState(null); // For full-size image preview
 
   const [posts, setPosts] = useState([]); // All fetched posts
   const [loading, setLoading] = useState(false); // Loading state
@@ -123,6 +124,10 @@ export default function ViewAllPage() {
     }
   };
 
+  const handleClosePreview = () => {
+    setSelectedImage(null);
+  };
+
   return (
     <div className="view-all-page">
       <header className="page-header">
@@ -186,6 +191,7 @@ export default function ViewAllPage() {
                     id={`carousel-${post._id}`}
                     className="carousel slide"
                     data-bs-ride="carousel"
+                    
                   >
                     <div className="carousel-inner">
                       {post.imagePath
@@ -207,6 +213,7 @@ export default function ViewAllPage() {
                                     src={`${ConnectMe.img_URL}${image}`}
                                     alt={`slide-${imgIndex}`}
                                     className="d-block w-100 slider-image"
+                                    onClick={() => setSelectedImage(`${ConnectMe.img_URL}${image}`)} // Set the selected image for preview
                                   />
                                 </div>
                               ))}
@@ -248,6 +255,11 @@ export default function ViewAllPage() {
       )}
 
       {loading && <Loader />} {/* Show loader when fetching data */}
+      {selectedImage && (
+        <div className="image-preview-overlay" onClick={handleClosePreview}>
+          <img src={selectedImage} alt="Full View" className="full-size-image" />
+        </div>
+      )}
     </div>
   );
 }
