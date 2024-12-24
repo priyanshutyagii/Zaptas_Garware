@@ -1,0 +1,45 @@
+.calendar-view-all {
+    padding: 20px;
+}
+
+.calendar-view-all .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.month-dropdown {
+    width: 200px !important;
+}
+
+.event-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.event-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.event-card h5 {
+    margin-bottom: 10px;
+    font-size: 1.25rem;
+}
+
+.event-card .description {
+    margin-bottom: 10px;
+    color: #555;
+    font-size: 0.9rem;
+}
+
+.no-events {
+    color: #888;
+    text-align: center;
+    font-size: 1.2rem;
+}

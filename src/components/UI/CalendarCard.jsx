@@ -7,11 +7,13 @@ import { SlCalender } from "react-icons/sl";
 import { apiCall, getTokenFromLocalStorage } from "../../utils/apiCall";
 import ConnectMe from "../../config/connect";
 import showToast from "../../utils/toastHelper";
+import { useNavigate } from "react-router-dom";
 
 export default function CalendarCard() {
   const [date, setDate] = useState(new Date());
   const [events, setEvents] = useState([]);
   const [hoveredEvents, setHoveredEvents] = useState([]);
+  const navigate = useNavigate();
 
   const fetchEvents = async (month, year) => {
     try {
@@ -50,9 +52,10 @@ export default function CalendarCard() {
       const eventsForDate = getEventsForDate(date);
       if (eventsForDate.length > 0) {
         return (
-          <div className="event-dots"
-          onMouseEnter={() => setHoveredEvents(eventsForDate)}
-          onMouseLeave={() => setHoveredEvents([])}
+          <div
+            className="event-dots"
+            onMouseEnter={() => setHoveredEvents(eventsForDate)}
+            onMouseLeave={() => setHoveredEvents([])}
           >
             {eventsForDate.slice(0, 2).map((event, index) => (
               <span
@@ -65,15 +68,15 @@ export default function CalendarCard() {
             ))}
             {eventsForDate.length > 2 && (
               <span className="more-events">
-              +{eventsForDate.length - 2}
-              <div className="hover-popup">
-                {hoveredEvents.map((event, index) => (
-                  <div key={index} className="hover-event">
-                    <strong>{event.title}</strong> ({event.type})
-                  </div>
-                ))}
-              </div>
-            </span>
+                +{eventsForDate.length - 2}
+                <div className="hover-popup">
+                  {hoveredEvents.map((event, index) => (
+                    <div key={index} className="hover-event">
+                      <strong>{event.title}</strong> ({event.type})
+                    </div>
+                  ))}
+                </div>
+              </span>
             )}
           </div>
         );
@@ -105,7 +108,14 @@ export default function CalendarCard() {
           <SlCalender className="me-2" />
           <h5 className="mb-0">Calendar</h5>
         </div>
-        <a href="#" className="text-decoration-none">
+        <a
+          href="#"
+          className="text-decoration-none"
+          onClick={(e) => {
+            e.preventDefault();
+            navigate("/calendar-view-all", { state: { events } });
+          }}
+        >
           View All <HiArrowCircleRight />
         </a>
       </div>

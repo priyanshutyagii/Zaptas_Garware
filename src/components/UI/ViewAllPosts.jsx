@@ -107,7 +107,6 @@ export default function ViewAllPosts() {
 
       // Make the API call with the AbortController signal
       await apiCall("POST", url, headers, body, { signal });
-
     } catch (error) {
       if (error.name === "AbortError") {
         console.log("Previous request was cancelled.");
@@ -118,21 +117,17 @@ export default function ViewAllPosts() {
       setLoadingPostIds((prevIds) => prevIds.filter((id) => id !== postId)); // Remove post ID from loading state
     }
   };
-  
-
 
   return (
-    <div className="container mt-3">   
+    <div className="container mt-3">
       {posts.map((post, index) => (
-      
-        <div key={index} className="card mb-2">
+        <div key={index} className="card viewall-card mb-2">
           <div className="update-container">
             <a href="" className="update-image">
-            <img width="48" src="public\logo.PNG" />
+              <img width="48" src="public\logo.PNG" />
             </a>
             <a href="" className="update-title">
-              <span>
-              GHFL [Garware Hi-Tech Films Limited]</span>
+              <span>GHFL [Garware Hi-Tech Films Limited]</span>
             </a>
           </div>
           <PostCard post={post.text} size={180} />
@@ -158,7 +153,9 @@ export default function ViewAllPosts() {
             )}
             <p>
               <FaThumbsUp
-                className={`like-icon ${loadingPostIds.includes(post.id) ? "loading" : ""}`}
+                className={`like-icon ${
+                  loadingPostIds.includes(post.id) ? "loading" : ""
+                }`}
                 style={{
                   color: post?.fetchUserLikesStatus ? "blue" : "gray",
                   cursor: "pointer",
@@ -174,12 +171,9 @@ export default function ViewAllPosts() {
             </p>
           </div>
         </div>
-     
       ))}
-      {loading && <Loader/>}
+      {loading && <Loader />}
       {!hasMore && <p>No more posts</p>}
-   
-  
     </div>
   );
 }

@@ -8,12 +8,12 @@ import ITServiceRequestForm from "./components/UI/ITServiceRequestForm";
 import GalleryDetails from "./components/UI/GalleryDetails";
 import CalenderHoliday from "./admin/calenderHoliday";
 import ViewAllPopup from "./components/UI/ViewAllPopup";
+import CalendarViewAll from "./components/UI/CalendarViewAll";
 
-
-const CsrPage = lazy(() => import( "./admin/csr"));
-const IndustryPage = lazy(() => import( "./admin/Industry"));
-const ManagementMessage = lazy(() => import( "./admin/managemenetMessage"));
-const AwardsPage = lazy(() => import( "./admin/awards"));
+const CsrPage = lazy(() => import("./admin/csr"));
+const IndustryPage = lazy(() => import("./admin/Industry"));
+const ManagementMessage = lazy(() => import("./admin/managemenetMessage"));
+const AwardsPage = lazy(() => import("./admin/awards"));
 const Home = lazy(() => import("./pages/Home"));
 const About = lazy(() => import("./pages/About"));
 const Quicklinks = lazy(() => import("./admin/QuickLinks"));
@@ -42,6 +42,7 @@ export const routes = [
       { path: "view-detail", element: <ViewAllPopup /> },
       { path: "ITService", element: <ITServiceRequestForm /> },
       { path: "/gallery/:id", element: <GalleryDetails /> },
+      { path: "/calendar-view-all", element: <CalendarViewAll /> },
     ],
   },
   {
@@ -63,7 +64,7 @@ export const routes = [
       { path: "industry", element: <IndustryPage /> },
       { path: "ManagementMessage", element: <ManagementMessage /> },
       { path: "awards", element: <AwardsPage /> },
-      { path: "CalenderHoliday", element: <CalenderHoliday/> },
+      { path: "CalenderHoliday", element: <CalenderHoliday /> },
     ],
   },
   { path: "/login", element: <Login /> },
