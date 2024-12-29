@@ -17,15 +17,12 @@ export default function AnnouncementCard() {
   const [error, setError] = useState("");
   const [show, setShow] = useState(false);
   const [selectedAnnouncement, setSelectedAnnouncement] = useState(null);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   // Fetch announcements on component mount
   useEffect(() => {
     fetchAnnouncements();
   }, []);
-
-
-
 
   const fetchAnnouncements = async (page = 1, limit = 3) => {
     try {
@@ -40,7 +37,6 @@ export default function AnnouncementCard() {
       const response = await apiCall("GET", url, headers);
       if (response.success) {
         setAnnouncements(response?.data?.announcements);
-
       } else {
         setError("Failed to fetch announcements.");
       }
@@ -55,7 +51,9 @@ export default function AnnouncementCard() {
   const handleLikedisslike = async (announcementId, isLiked) => {
     showToast(isLiked ? "Unlike success" : "Like success", "success");
     const token = getTokenFromLocalStorage();
-    const url = `${ConnectMe.BASE_URL}/csr/${announcementId}/${isLiked ? "unlike" : "like"}`;
+    const url = `${ConnectMe.BASE_URL}/csr/${announcementId}/${
+      isLiked ? "unlike" : "like"
+    }`;
     const headers = {
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
@@ -70,7 +68,9 @@ export default function AnnouncementCard() {
             if (announcement._id === announcementId) {
               // Update the likes array and the likesCount locally
               const updatedLikes = isLiked
-                ? announcement.likes.filter((userId) => userId !== response.userId)
+                ? announcement.likes.filter(
+                    (userId) => userId !== response.userId
+                  )
                 : [...announcement.likes, response.userId];
 
               return {
@@ -85,7 +85,10 @@ export default function AnnouncementCard() {
         );
 
         // Update the modal if the selected announcement matches
-        if (selectedAnnouncement && selectedAnnouncement._id === announcementId) {
+        if (
+          selectedAnnouncement &&
+          selectedAnnouncement._id === announcementId
+        ) {
           setSelectedAnnouncement((prev) => {
             const updatedLikes = isLiked
               ? prev.likes.filter((userId) => userId !== response.userId)
@@ -101,14 +104,13 @@ export default function AnnouncementCard() {
         }
       } else {
         setError("Failed to update like.");
-        fetchAnnouncements()
+        fetchAnnouncements();
       }
     } catch (err) {
       setError("Error updating like.");
-      fetchAnnouncements()
+      fetchAnnouncements();
     }
   };
-
 
   const handleClose = () => setShow(false);
   const handleShow = (announcement) => {
@@ -129,14 +131,11 @@ export default function AnnouncementCard() {
 
     // Replace `{hashtag|#|tag}` with `#tag` and style it in blue
     return text
-      .replace(/{hashtag\|\\#\|/g, '#') // Replace starting hashtag syntax
-      .replace(/}/g, '') // Remove closing syntax
+      .replace(/{hashtag\|\\#\|/g, "#") // Replace starting hashtag syntax
+      .replace(/}/g, "") // Remove closing syntax
       .replace(/#(\w+)/g, '<span style="color:blue;">#$1</span>') // Make hashtags blue
-      .replace(/(\r\n|\n|\r)/gm, '<br>'); // Replace line breaks with HTML <br> tags for proper rendering
+      .replace(/(\r\n|\n|\r)/gm, "<br>"); // Replace line breaks with HTML <br> tags for proper rendering
   };
-
-
-
 
   return (
     <div>
@@ -152,7 +151,7 @@ export default function AnnouncementCard() {
               navigate("/view-detail", {
                 state: {
                   title: "View All Announcements",
-                  type: "csr"
+                  type: "csr",
                 },
               });
             }}
@@ -183,21 +182,21 @@ export default function AnnouncementCard() {
                   />
                 </div>
 
-
                 {/* Announcement Content */}
                 <div className="announcement-disc">
                   <p className="card-text">{announcement.title}</p>
-                  <div
-                    className="card-text fs-6">
-                    <PostCard post={announcement.description} size={140} />
+                  <div className="card-text fs-6">
+                    <PostCard post={announcement.description} size={80} />
                   </div>
                   <div className="d-flex justify-content-between mt-2">
-
                     <p
                       className="like-section"
                       onClick={(e) => {
                         e.stopPropagation(); // Prevent triggering `handleShow`
-                        handleLikedisslike(announcement._id, announcement.likedByUser);
+                        handleLikedisslike(
+                          announcement._id,
+                          announcement.likedByUser
+                        );
                       }}
                     >
                       <FaThumbsUp
@@ -216,14 +215,11 @@ export default function AnnouncementCard() {
                       Read More +
                     </a> */}
                   </div>
-
-
                 </div>
               </div>
             </div>
           ))}
         </div>
-
       </div>
 
       {/* Popup Modal */}
@@ -244,14 +240,11 @@ export default function AnnouncementCard() {
               {/* Right Div */}
               <div>
                 <img
-                  src={
-                    "./user.png"
-                  }
+                  src={"./user.png"}
                   alt="User"
                   className="rounded-circle"
                   style={{ width: "50px", height: "50px" }}
                 />
-
               </div>
             </div>
 
@@ -265,45 +258,61 @@ export default function AnnouncementCard() {
                 borderRadius: "5px",
               }}
             >
-              <div
-                className="card-text fs-6">
+              <div className="card-text fs-6">
                 <PostCard post={selectedAnnouncement.description} size={200} />
               </div>
             </div>
 
             {selectedAnnouncement.links.map((link) => (
-              <div key={link._id} style={{ marginBottom: "16px", display: "flex", flexDirection: "column" }}>
+              <div
+                key={link._id}
+                style={{
+                  marginBottom: "16px",
+                  display: "flex",
+                  flexDirection: "column",
+                }}
+              >
                 <a
                   href={link.link}
                   target="_blank"
                   rel="noopener noreferrer"
                   style={{ textDecoration: "none", color: "#007bff" }}
                 >
-                  <div style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
-                    <strong style={{ fontSize: "16px", marginRight: "8px" }}>{link.linkTitle}</strong>
-                    <span style={{ fontStyle: "italic", color: "#555" }}>{link.link}</span>
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
+                    }}
+                  >
+                    <strong style={{ fontSize: "16px", marginRight: "8px" }}>
+                      {link.linkTitle}
+                    </strong>
+                    <span style={{ fontStyle: "italic", color: "#555" }}>
+                      {link.link}
+                    </span>
                   </div>
                 </a>
               </div>
             ))}
-            {selectedAnnouncement.location && <p className="mt-3">
-              Location:  <strong>{selectedAnnouncement.location}  </strong>
-            </p>}
-
-
+            {selectedAnnouncement.location && (
+              <p className="mt-3">
+                Location: <strong>{selectedAnnouncement.location} </strong>
+              </p>
+            )}
 
             <p className="mt-3">
-              Date: <strong>
-                {new Date(selectedAnnouncement.AnnouncementDate).toLocaleDateString("en-US", {
+              Date:{" "}
+              <strong>
+                {new Date(
+                  selectedAnnouncement.AnnouncementDate
+                ).toLocaleDateString("en-US", {
                   year: "numeric",
                   month: "long",
                   day: "numeric",
                 })}
               </strong>
             </p>
-
-
-
 
             <div className="row">
               {selectedAnnouncement?.imagePath?.length > 0 &&
@@ -316,7 +325,6 @@ export default function AnnouncementCard() {
                         className="modelcard-image"
                       />
                       {/* Cross icon in the top-right corner */}
-
                     </div>
                   </div>
                 ))}
@@ -325,14 +333,20 @@ export default function AnnouncementCard() {
             {/* Like Button */}
             <div className="d-flex align-items-center">
               <FaThumbsUp
-                onClick={() => handleLikedisslike(selectedAnnouncement._id, selectedAnnouncement.likedByUser)}
+                onClick={() =>
+                  handleLikedisslike(
+                    selectedAnnouncement._id,
+                    selectedAnnouncement.likedByUser
+                  )
+                }
                 style={{
                   color: selectedAnnouncement.likedByUser ? "blue" : "gray",
                   cursor: "pointer",
                   marginRight: "8px",
                 }}
               />
-              <span>  {selectedAnnouncement?.likes?.length} Likes</span> {/* Display likes count */}
+              <span> {selectedAnnouncement?.likes?.length} Likes</span>{" "}
+              {/* Display likes count */}
             </div>
           </Modal.Body>
         </Modal>

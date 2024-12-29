@@ -41,5 +41,106 @@
 .no-events {
     color: #888;
     text-align: center;
+    font-style: italic;
+    margin-top: 20px;
+}
+
+
+
+
+.calendar-details-page {
+    padding: 20px;
+}
+
+
+.event-details-card {
+    margin-bottom: 20px;
+    display: flex;
+    background: #f9f9f9;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.date-line {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.month-title {
     font-size: 1.2rem;
+}
+
+.date-line hr {
+    flex-grow: 1;
+    border: none;
+    height: 1px;
+    background-color: #d5d5d5;
+}
+
+.event-row {
+    display: flex;
+    align-items: center;
+}
+
+.event-date {
+    display: flex;
+    justify-content: start;
+    margin-top: 10px;
+}
+
+.event-date-box {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding-top: 4px;
+    text-align: center;
+    padding: 0 15px;
+}
+
+.event-day {
+    font-size: 12px;
+    font-weight: bold;
+    color: #5d5d5d;
+}
+
+.event-border {
+    width: 2px;
+    height: 100%;
+    background-color: #007bff;
+    margin-right: 20px;
+}
+
+.event-day-number {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+}
+
+.event-info {
+    padding-top: 10px;
+    border-left: 4px solid #334aff;
+    padding-left: 20px;
+}
+
+.event-date-time {
+    font-size: 1rem;
+    font-style: italic;
+    color: #666;
+}
+
+.event-title {
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: #333;
+    margin: 10px 0;
+}
+
+.event-location {
+    font-size: 1rem;
+}
+
+.event-description {
+    font-size: 15px;
+    margin-top: 10px;
 }

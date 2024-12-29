@@ -129,7 +129,24 @@ export default function ViewAllPage() {
 
   return (
     <div className="view-all-page">
-      <header className="page-header">{/* <h1>{title}</h1> */}</header>
+      {/* <header className="page-header"><h1>{title}</h1></header> */}
+      <div className="banner-img d-flex justify-content-between align-items-center">
+        <div className="box-img">
+          <img
+            src="https://intranet.zaptas.in/uploads/Banners/523069ee-e1c8-4da9-82ea-168c38213d43.png"
+            alt={title}
+            width={"100%"}
+          />
+        </div>
+        <div className="box-img">
+          <img
+            className="img2"
+            src="https://intranet.zaptas.in/uploads/Banners/523069ee-e1c8-4da9-82ea-168c38213d43.png"
+            alt={title}
+            width={"100%"}
+          />
+        </div>
+      </div>
       {posts.length === 0 && !loading && <p>No posts available</p>}
       {posts.length > 0 && (
         <div className="container-fluid">

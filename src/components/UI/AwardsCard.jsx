@@ -16,7 +16,7 @@ export default function AnnouncementCard() {
   const [error, setError] = useState("");
   const [show, setShow] = useState(false);
   const [selectedAnnouncement, setSelectedAnnouncement] = useState(null);
-const navigate =useNavigate()
+  const navigate = useNavigate();
   // Fetch announcements on component mount
   useEffect(() => {
     fetchAnnouncements();
@@ -58,8 +58,9 @@ const navigate =useNavigate()
   const handleLikedisslike = async (announcementId, isLiked) => {
     showToast(isLiked ? "Unlike success" : "Like success", "success");
     const token = getTokenFromLocalStorage();
-    const url = `${ConnectMe.BASE_URL}/awards/${announcementId}/${isLiked ? "unlike" : "like"
-      }`;
+    const url = `${ConnectMe.BASE_URL}/awards/${announcementId}/${
+      isLiked ? "unlike" : "like"
+    }`;
     const headers = {
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
@@ -75,8 +76,8 @@ const navigate =useNavigate()
               // Update the likes array and the likesCount locally
               const updatedLikes = isLiked
                 ? announcement.likes.filter(
-                  (userId) => userId !== response.userId
-                )
+                    (userId) => userId !== response.userId
+                  )
                 : [...announcement.likes, response.userId];
 
               return {
@@ -146,7 +147,7 @@ const navigate =useNavigate()
               navigate("/view-detail", {
                 state: {
                   title: "View All Announcements",
-                  type: "awards"
+                  type: "awards",
                 },
               });
             }}
@@ -184,20 +185,29 @@ const navigate =useNavigate()
                 </div>
                 {/* Announcement Content */}
                 <div className="announcement-disc" onClick={handleCelebration}>
-                  <p className="card-text">{announcement.AwardierName} ({announcement.PersonDesignation})</p>
-                  <p className="card-text text-danger fw-bold celebrating-text">{announcement.title} 🥳</p>
-                  <div
-                    className="card-text fs-6"
+                  <p className="card-text">
+                    {announcement.AwardierName} (
+                    {announcement.PersonDesignation})
+                  </p>
+                  <p className="card-text text-danger fw-bold celebrating-text">
+                    {announcement.title} 🥳
+                  </p>
+                  <div className="card-text fs-6">
+                    {" "}
+                    <PostCard post={announcement.description} size={60} />
+                  </div>
 
-                  > <PostCard post={announcement.description} size={70} /></div>
-
-
-                  <div className="d-flex mt-2 align-items-center"> {/* Add `align-items-center` for vertical alignment */}
+                  <div className="d-flex mt-2 align-items-center">
+                    {" "}
+                    {/* Add `align-items-center` for vertical alignment */}
                     <p
                       className="like-section me-3" // Add `me-3` for spacing
                       onClick={(e) => {
                         e.stopPropagation(); // Prevent triggering `handleShow`
-                        handleLikedisslike(announcement._id, announcement.likedByUser);
+                        handleLikedisslike(
+                          announcement._id,
+                          announcement.likedByUser
+                        );
                       }}
                     >
                       <FaThumbsUp
@@ -208,7 +218,6 @@ const navigate =useNavigate()
                       />{" "}
                       {announcement?.likes?.length}
                     </p>
-
                     {/* Add the mail icon */}
                     <p
                       className="mail-section"
@@ -221,8 +230,6 @@ const navigate =useNavigate()
                       <FaPaperPlane style={{ color: "gray" }} />
                     </p>
                   </div>
-
-                 
                 </div>
               </div>
             </div>
@@ -266,51 +273,47 @@ const navigate =useNavigate()
                 borderRadius: "5px",
               }}
             >
-              <div
-                className="card-text fs-6">
+              <div className="card-text fs-6">
                 <PostCard post={selectedAnnouncement.description} size={180} />
               </div>
+            </div>
 
-            </div >
-
-            {
-              selectedAnnouncement.links.map((link) => (
-                <div
-                  key={link._id}
-                  style={{
-                    marginBottom: "16px",
-                    display: "flex",
-                    flexDirection: "column",
-                  }}
+            {selectedAnnouncement.links.map((link) => (
+              <div
+                key={link._id}
+                style={{
+                  marginBottom: "16px",
+                  display: "flex",
+                  flexDirection: "column",
+                }}
+              >
+                <a
+                  href={link.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ textDecoration: "none", color: "#007bff" }}
                 >
-                  <a
-                    href={link.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{ textDecoration: "none", color: "#007bff" }}
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
+                    }}
                   >
-                    <div
-                      style={{
-                        display: "flex",
-                        flexDirection: "row",
-                        alignItems: "center",
-                      }}
-                    >
-                      <strong style={{ fontSize: "16px", marginRight: "8px" }}>
-                        {link.linkTitle}
-                      </strong>
-                      <span style={{ fontStyle: "italic", color: "#555" }}>
-                        {link.link}
-                      </span>
-                    </div>
-                  </a>
-                </div>
-              ))
-            }
+                    <strong style={{ fontSize: "16px", marginRight: "8px" }}>
+                      {link.linkTitle}
+                    </strong>
+                    <span style={{ fontStyle: "italic", color: "#555" }}>
+                      {link.link}
+                    </span>
+                  </div>
+                </a>
+              </div>
+            ))}
 
-            < p className="mt-3" >
+            <p className="mt-3">
               Location: <strong>{selectedAnnouncement.location} </strong>
-            </p >
+            </p>
 
             <p className="mt-3">
               Date:{" "}
@@ -359,10 +362,9 @@ const navigate =useNavigate()
               <span> {selectedAnnouncement?.likes?.length} Likes</span>{" "}
               {/* Display likes count */}
             </div>
-          </Modal.Body >
-        </Modal >
-      )
-      }
-    </div >
+          </Modal.Body>
+        </Modal>
+      )}
+    </div>
   );
 }

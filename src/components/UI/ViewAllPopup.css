@@ -69,3 +69,12 @@
 p.like-section {
   margin-bottom: 0;
 }
+
+.banner-img {
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.box-img {
+  background-color: #fdeec3;
+}
