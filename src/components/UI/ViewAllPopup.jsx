@@ -132,7 +132,7 @@ export default function ViewAllPage() {
       <div className="banner-img d-flex justify-content-between align-items-center">
         <div className="box-img">
           <img
-            src="https://intranet.zaptas.in/uploads/Banners/523069ee-e1c8-4da9-82ea-168c38213d43.png"
+            src={`${ConnectMe.img_URL}${posts[0]?.imagePath[0]}`}
             alt={title}
             width={"100%"}
           />
@@ -140,7 +140,7 @@ export default function ViewAllPage() {
         <div className="box-img">
           <img
             className="img2"
-            src="https://intranet.zaptas.in/uploads/Banners/523069ee-e1c8-4da9-82ea-168c38213d43.png"
+            src={`${ConnectMe.img_URL}${posts[0]?.imagePath[0]}`}
             alt={title}
             width={"100%"}
           />
