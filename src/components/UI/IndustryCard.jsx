@@ -159,7 +159,7 @@ export default function AnnouncementCard() {
             View All <HiArrowCircleRight />
           </a>
         </div>
-        <div className="card-body">
+        <div className="card-body card-scroll">
           {announcements.map((announcement) => (
             <div
               className="mb-3 announcement-card"

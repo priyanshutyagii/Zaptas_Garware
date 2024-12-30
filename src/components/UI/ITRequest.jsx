@@ -6,12 +6,15 @@ import { MdAttachEmail } from "react-icons/md";
 import { TiUserAdd } from "react-icons/ti";
 import { useNavigate } from "react-router-dom";
 export default function ITRequest() {
-const navigate = useNavigate();
+  const navigate = useNavigate();
 
   return (
-    <div className="card mb-3" onClick={(()=>{
-      navigate("/ITService")
-    })}>
+    <div
+      className="card mb-3"
+      onClick={() => {
+        navigate("/ITService");
+      }}
+    >
       <div className="card-header d-flex justify-content-between align-items-center">
         <div className="d-flex align-items-center">
           <FaUsersGear className="me-2" />
@@ -21,7 +24,7 @@ const navigate = useNavigate();
           View All <HiArrowCircleRight />
         </a>
       </div>
-      <div className="card-body">
+      <div className="card-body card-scroll">
         <div className="d-flex align-items-center mb-4">
           <div className="user-icon me-3">
             <TiUserAdd />

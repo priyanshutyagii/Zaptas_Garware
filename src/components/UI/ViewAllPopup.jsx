@@ -81,8 +81,9 @@ export default function ViewAllPage() {
   const handleLikedisslike = async (announcementId, isLiked) => {
     showToast(isLiked ? "Unlike success" : "Like success", "success");
     const token = getTokenFromLocalStorage();
-    const url = `${ConnectMe.BASE_URL}/${type}/${announcementId}/${isLiked ? "unlike" : "like"
-      }`;
+    const url = `${ConnectMe.BASE_URL}/${type}/${announcementId}/${
+      isLiked ? "unlike" : "like"
+    }`;
     const headers = {
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
@@ -98,8 +99,8 @@ export default function ViewAllPage() {
               // Update the likes array and the likesCount locally
               const updatedLikes = isLiked
                 ? announcement.likes.filter(
-                  (userId) => userId !== response.userId
-                )
+                    (userId) => userId !== response.userId
+                  )
                 : [...announcement.likes, response.userId];
 
               return {
@@ -197,8 +198,8 @@ export default function ViewAllPage() {
                 </div>
 
                 {/* Bootstrap Carousel for Image Slider (4 photos per slide) */}
-                {post.imagePath?.length > 0 ?
-                  <div className="col-md-2 mt-2">
+                {post.imagePath?.length > 0 ? (
+                  <div className="col-md-3 mt-2">
                     <div
                       id={`carousel-${post._id}`}
                       className="carousel slide"
@@ -214,8 +215,9 @@ export default function ViewAllPage() {
                           .map((slide, index) => (
                             <div
                               key={index}
-                              className={`carousel-item view-all-images ${index === 0 ? "active" : ""
-                                }`}
+                              className={`carousel-item view-all-images ${
+                                index === 0 ? "active" : ""
+                              }`}
                             >
                               <div className="row">
                                 {slide.map((image, imgIndex) => (
@@ -262,17 +264,15 @@ export default function ViewAllPage() {
                         <span className="visually-hidden">Next</span>
                       </button>
                     </div>
-                  </div> : <img
+                  </div>
+                ) : (
+                  <img
                     src={`./logo.png`}
                     alt={`slie`}
                     className="d-block w-100 slider-image"
-                    onClick={() =>
-                      setSelectedImage(
-                     './logo.png'
-                      )
-                    } // Set the selected image for preview
+                    onClick={() => setSelectedImage("./logo.png")} // Set the selected image for preview
                   />
-                }
+                )}
               </React.Fragment>
             ))}
           </div>

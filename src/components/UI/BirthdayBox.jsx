@@ -60,7 +60,7 @@ export default function BirthdayBox() {
           <div className="card-header">
             <FaBirthdayCake /> &nbsp; Birthday Wishes
           </div>
-          <div className="card-body d-flex align-items-center justify-content-center">
+          <div className="card-body card-scroll d-flex align-items-center justify-content-center">
             <button className="btn btn-primary cartbtn">Birthday</button>
           </div>
         </div>

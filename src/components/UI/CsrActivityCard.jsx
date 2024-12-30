@@ -18,13 +18,12 @@ export default function AnnouncementCard() {
   const [show, setShow] = useState(false);
   const [selectedAnnouncement, setSelectedAnnouncement] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null); // For full-size image preview
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   // Fetch announcements on component mount
   useEffect(() => {
     fetchAnnouncements();
   }, []);
-
 
   const handleClosePreview = () => {
     setSelectedImage(null);
@@ -165,7 +164,7 @@ export default function AnnouncementCard() {
             View All <HiArrowCircleRight />
           </a>
         </div>
-        <div className="card-body">
+        <div className="card-body card-scroll">
           {announcements.map((announcement) => (
             <div
               className="mb-3 announcement-card"
@@ -191,8 +190,7 @@ export default function AnnouncementCard() {
                 {/* Announcement Content */}
                 <div className="announcement-disc">
                   <p className="card-text">{announcement.title}</p>
-                  <div
-                    className="card-text fs-6">
+                  <div className="card-text fs-6">
                     <PostCard post={announcement.description} size={70} />
                   </div>
                   <div className="d-flex justify-content-between mt-2">
@@ -362,7 +360,7 @@ export default function AnnouncementCard() {
           </Modal.Body>
         </Modal>
       )}
-       {selectedImage && (
+      {selectedImage && (
         <div className="image-preview-overlay" onClick={handleClosePreview}>
           <img
             src={selectedImage}
@@ -372,6 +370,5 @@ export default function AnnouncementCard() {
         </div>
       )}
     </div>
-    
   );
 }

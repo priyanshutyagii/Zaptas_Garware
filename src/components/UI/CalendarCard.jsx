@@ -119,7 +119,7 @@ export default function CalendarCard() {
           View All <HiArrowCircleRight />
         </a>
       </div>
-      <div className="card-body">
+      <div className="card-body card-scroll">
         <Calendar
           onChange={setDate}
           value={date}

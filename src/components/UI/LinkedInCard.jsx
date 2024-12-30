@@ -17,7 +17,6 @@ import "./LinkedInCard.css";
 import PostCard from "./postDisplay";
 import { useNavigate } from "react-router-dom";
 
-
 export default function LinkedInCard() {
   const [loadingPostIds, setLoadingPostIds] = useState([]); // Track which posts are being liked/unliked
   const [posts, setPosts] = useState([]);
@@ -33,7 +32,7 @@ export default function LinkedInCard() {
   const [showComments, setShowComments] = useState(false);
   const [loading, setLoading] = useState(false); // Loader state
   const currentRequest = useRef(null);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const fetchPosts = async () => {
     setLoading(true); // Show loader
@@ -72,7 +71,6 @@ export default function LinkedInCard() {
 
   const handleLikeToggle = async (postId, method, name = null) => {
     try {
-
       setLoadingPostIds((prevIds) => [...prevIds, postId]); // Add post ID to loading state
 
       // Cancel the previous request if it's ongoing
@@ -89,9 +87,7 @@ export default function LinkedInCard() {
 
       // Update the like status locally before making the API call
 
-
-
-      if (name == 'modelBox') {
+      if (name == "modelBox") {
         setSelectedPost((prevPost) => {
           if (!prevPost) return prevPost; // Ensure prevPost exists
 
@@ -104,34 +100,31 @@ export default function LinkedInCard() {
                 method === "likepost"
                   ? prevPost.likeCount.totalLikes + 1
                   : method === "disslike"
-                    ? prevPost.likeCount.totalLikes - 1
-                    : prevPost.likeCount.totalLikes,
+                  ? prevPost.likeCount.totalLikes - 1
+                  : prevPost.likeCount.totalLikes,
             },
           };
         });
-
-      }
-      else {
+      } else {
         setPosts((prevPosts) =>
           prevPosts.map((post) =>
             post.id === postId
               ? {
-                ...post,
-                fetchUserLikesStatus: method === "likepost" ? true : false,
-                likeCount: {
-                  totalLikes:
-                    method === "likepost"
-                      ? post.likeCount.totalLikes + 1
-                      : method === "disslike"
+                  ...post,
+                  fetchUserLikesStatus: method === "likepost" ? true : false,
+                  likeCount: {
+                    totalLikes:
+                      method === "likepost"
+                        ? post.likeCount.totalLikes + 1
+                        : method === "disslike"
                         ? post.likeCount.totalLikes - 1
                         : post.likeCount.totalLikes,
-                },
-              }
+                  },
+                }
               : post
           )
         );
       }
-
 
       const token = getTokenFromLocalStorage();
       const url = `${ConnectMe.BASE_URL}/${method}`;
@@ -153,7 +146,6 @@ export default function LinkedInCard() {
       setLoadingPostIds((prevIds) => prevIds.filter((id) => id !== postId)); // Remove post ID from loading state
     }
   };
-
 
   const handleLinkedInCallback = async () => {
     try {
@@ -206,9 +198,12 @@ export default function LinkedInCard() {
           <FaLinkedin className="me-2" />
           <h5 className="mb-0">LinkedIn</h5>
         </div>
-        <button onClick={(() => {
-          navigate('/view-all')
-        })} className="text-decoration-none">
+        <button
+          onClick={() => {
+            navigate("/view-all");
+          }}
+          className="text-decoration-none"
+        >
           View All <HiArrowCircleRight />
         </button>
       </div>
@@ -220,7 +215,7 @@ export default function LinkedInCard() {
       ) : loggin ? (
         <button onClick={handleLinkedInCallback}>Login with LinkedIn</button>
       ) : (
-        <div className="card-body">
+        <div className="card-body card-scroll">
           {/* Carousel for Posts */}
           <Carousel>
             {memoizedPosts.map((post) => (
@@ -234,7 +229,7 @@ export default function LinkedInCard() {
                       justifyContent: "center",
                       alignItems: "center",
                       padding: 0, // Remove padding
-                      margin: 0,  // Remove margin
+                      margin: 0, // Remove margin
                       height: "250px", // Fixed height
                       overflow: "hidden", // Crop any extra space
                     }}
@@ -276,8 +271,9 @@ export default function LinkedInCard() {
                     <div className="d-flex justify-content-between mt-2">
                       <p className="card-like fs-6">
                         <FaThumbsUp
-                          className={`like-icon ${loadingPostIds.includes(post.id) ? "loading" : ""
-                            }`}
+                          className={`like-icon ${
+                            loadingPostIds.includes(post.id) ? "loading" : ""
+                          }`}
                           style={{
                             color: post?.fetchUserLikesStatus ? "blue" : "gray",
                             cursor: "pointer",
@@ -286,7 +282,9 @@ export default function LinkedInCard() {
                             event.stopPropagation(); // Prevent the modal from opening
                             handleLikeToggle(
                               post.id,
-                              post?.fetchUserLikesStatus ? "disslike" : "likepost",
+                              post?.fetchUserLikesStatus
+                                ? "disslike"
+                                : "likepost"
                             );
                           }}
                         />
@@ -309,7 +307,15 @@ export default function LinkedInCard() {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <div style={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100%", height: "100%" }}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              width: "100%",
+              height: "100%",
+            }}
+          >
             {selectedPost?.multimedia?.type === "image" ? (
               <img
                 src={selectedPost.multimedia.url}
@@ -337,8 +343,9 @@ export default function LinkedInCard() {
           <div className="likencmt">
             <div>
               <FaThumbsUp
-                className={`like-icon  ${loadingPostIds.includes(selectedPost?.id) ? "loading" : ""}`
-                }
+                className={`like-icon  ${
+                  loadingPostIds.includes(selectedPost?.id) ? "loading" : ""
+                }`}
                 style={{
                   color: selectedPost?.fetchUserLikesStatus ? "blue" : "gray",
                   cursor: "pointer",
@@ -346,7 +353,9 @@ export default function LinkedInCard() {
                 onClick={() =>
                   handleLikeToggle(
                     selectedPost.id,
-                    selectedPost?.fetchUserLikesStatus ? "disslike" : "likepost",
+                    selectedPost?.fetchUserLikesStatus
+                      ? "disslike"
+                      : "likepost",
                     "modelBox"
                   )
                 }

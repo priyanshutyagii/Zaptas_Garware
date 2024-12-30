@@ -18,35 +18,34 @@ export default function Home() {
       <Banner />
 
       <div className="container-fluid p-4">
-        <div className="row">
-          <div className="col-md-4">
+        <div className="row d-flex">
+          <div className="col-md-4 d-flex">
             <LinkedInCard />
           </div>
-          <div className="col-md-4">
+          <div className="col-md-4 d-flex ">
             <AnnouncementCard />
           </div>
-          <div className="col-md-4">
+          <div className="col-md-4 d-flex">
             <ManagementMessageCard />
             {/* <AwardsCard /> */}
           </div>
-          <div className="col-md-4">
+          <div className="col-md-4 d-flex">
             <CalendarCard />
           </div>
-          <div className="col-md-4">
+          <div className="col-md-4 d-flex">
             <IndustryCard />
           </div>
-          <div className="col-md-4">
+          <div className="col-md-4 d-flex">
             <CsrActivityCard />
           </div>
-          <div className="col-md-4">
+          <div className="col-md-4 d-flex">
             <GalleryCard />
           </div>
-          <div className="col-md-4">
+          <div className="col-md-4 d-flex">
             <ITRequest />
           </div>
-          <div className="col-md-4">
+          <div className="col-md-4 d-flex">
             <AwardsCard />
-
           </div>
         </div>
         <div className="birthday-wish">

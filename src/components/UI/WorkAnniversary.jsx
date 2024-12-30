@@ -64,7 +64,7 @@ export default function WorkAnniversary() {
           <div className="card-header">
             <FaBirthdayCake /> &nbsp;Work Anniversary
           </div>
-          <div className="card-body d-flex align-items-center justify-content-center">
+          <div className="card-body card-scroll d-flex align-items-center justify-content-center">
             <button className="btn btn-primary cartbtn">
               Work Anniversary
             </button>
@@ -111,11 +111,14 @@ export default function WorkAnniversary() {
                               </span> */}
                               <span className="date">
                                 <FaBirthdayCake className="icon" />{" "}
-                                {new Date(wish.JoinDate).toLocaleDateString("en-GB", {
-                                  day: "2-digit",
-                                  month: "short",
-                                  year: "numeric",
-                                })}
+                                {new Date(wish.JoinDate).toLocaleDateString(
+                                  "en-GB",
+                                  {
+                                    day: "2-digit",
+                                    month: "short",
+                                    year: "numeric",
+                                  }
+                                )}
                               </span>
                             </div>
                             <button className="send-wish-btn">Send Wish</button>
@@ -137,7 +140,10 @@ export default function WorkAnniversary() {
           type="button"
           onClick={handlePrev}
         >
-          <span className="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span
+            className="carousel-control-prev-icon"
+            aria-hidden="true"
+          ></span>
           <span className="visually-hidden">Previous</span>
         </button>
         <button
@@ -145,7 +151,10 @@ export default function WorkAnniversary() {
           type="button"
           onClick={handleNext}
         >
-          <span className="carousel-control-next-icon" aria-hidden="true"></span>
+          <span
+            className="carousel-control-next-icon"
+            aria-hidden="true"
+          ></span>
           <span className="visually-hidden">Next</span>
         </button>
       </div>

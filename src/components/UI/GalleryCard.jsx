@@ -116,7 +116,7 @@ export default function GalleryCard() {
           View All <HiArrowCircleRight />
         </a>
       </div>
-      <div className="card-body">
+      <div className="card-body card-scroll">
         <div className="row">
           {/* Carousel for Announcements */}
           <div className="col text-center">
