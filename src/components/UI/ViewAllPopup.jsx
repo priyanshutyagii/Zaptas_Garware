@@ -81,9 +81,8 @@ export default function ViewAllPage() {
   const handleLikedisslike = async (announcementId, isLiked) => {
     showToast(isLiked ? "Unlike success" : "Like success", "success");
     const token = getTokenFromLocalStorage();
-    const url = `${ConnectMe.BASE_URL}/${type}/${announcementId}/${
-      isLiked ? "unlike" : "like"
-    }`;
+    const url = `${ConnectMe.BASE_URL}/${type}/${announcementId}/${isLiked ? "unlike" : "like"
+      }`;
     const headers = {
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
@@ -99,8 +98,8 @@ export default function ViewAllPage() {
               // Update the likes array and the likesCount locally
               const updatedLikes = isLiked
                 ? announcement.likes.filter(
-                    (userId) => userId !== response.userId
-                  )
+                  (userId) => userId !== response.userId
+                )
                 : [...announcement.likes, response.userId];
 
               return {
@@ -153,14 +152,14 @@ export default function ViewAllPage() {
           <div className="row">
             {posts.map((post) => (
               <React.Fragment key={post._id}>
-                <div className="col-md-6 mt-2">
+                <div className="col-md-9 mt-2">
                   <div className="content-box">
                     <h5>{post.title}</h5>
                     <span>
                       {post?.AwardierName} {post?.PersonDesignation}
                     </span>
                     <div className="card-text fs-6">
-                      <PostCard post={post.description} size={70} />
+                      <PostCard post={post.description} size={270} />
                     </div>
                     <div className="additional-info mt-1">
                       {post.links[0]?.link && (
@@ -198,8 +197,8 @@ export default function ViewAllPage() {
                 </div>
 
                 {/* Bootstrap Carousel for Image Slider (4 photos per slide) */}
-                {post.imagePath?.length > 0 && (
-                  <div className="col-md-6 mt-2">
+                {post.imagePath?.length > 0 ?
+                  <div className="col-md-2 mt-2">
                     <div
                       id={`carousel-${post._id}`}
                       className="carousel slide"
@@ -208,20 +207,19 @@ export default function ViewAllPage() {
                       <div className="carousel-inner">
                         {post.imagePath
                           .reduce((acc, img, index) => {
-                            if (index % 4 === 0) acc.push([]); // Create a new slide every 4 images
+                            if (index % 1 === 0) acc.push([]); // Create a new slide every 4 images
                             acc[acc.length - 1].push(img); // Push the image to the current slide
                             return acc;
                           }, [])
                           .map((slide, index) => (
                             <div
                               key={index}
-                              className={`carousel-item view-all-images ${
-                                index === 0 ? "active" : ""
-                              }`}
+                              className={`carousel-item view-all-images ${index === 0 ? "active" : ""
+                                }`}
                             >
                               <div className="row">
                                 {slide.map((image, imgIndex) => (
-                                  <div key={imgIndex} className="col-md-4">
+                                  <div key={imgIndex} className="col-md-12">
                                     <img
                                       src={`${ConnectMe.img_URL}${image}`}
                                       alt={`slide-${imgIndex}`}
@@ -264,8 +262,17 @@ export default function ViewAllPage() {
                         <span className="visually-hidden">Next</span>
                       </button>
                     </div>
-                  </div>
-                )}
+                  </div> : <img
+                    src={`./logo.png`}
+                    alt={`slie`}
+                    className="d-block w-100 slider-image"
+                    onClick={() =>
+                      setSelectedImage(
+                     './logo.png'
+                      )
+                    } // Set the selected image for preview
+                  />
+                }
               </React.Fragment>
             ))}
           </div>

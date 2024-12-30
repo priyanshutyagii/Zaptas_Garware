@@ -26,8 +26,8 @@ export default function Home() {
             <AnnouncementCard />
           </div>
           <div className="col-md-4">
-
-            <AwardsCard />
+            <ManagementMessageCard />
+            {/* <AwardsCard /> */}
           </div>
           <div className="col-md-4">
             <CalendarCard />
@@ -45,8 +45,8 @@ export default function Home() {
             <ITRequest />
           </div>
           <div className="col-md-4">
+            <AwardsCard />
 
-            <ManagementMessageCard />
           </div>
         </div>
         <div className="birthday-wish">

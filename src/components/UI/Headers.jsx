@@ -5,10 +5,12 @@ import { RiLink } from "react-icons/ri";
 import "./Header.css";
 import { apiCall, getTokenFromLocalStorage } from "../../utils/apiCall";
 import ConnectMe from "../../config/connect";
+import { useNavigate } from "react-router-dom";
 
 
 
 export default function Headers() {
+  const navigate =useNavigate()
   const [formData, setFormData] = useState({
     links: [{ title: '', link: '', id: '' }],
   });
@@ -67,29 +69,14 @@ export default function Headers() {
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
             <li className="nav-item">
-              <a className="nav-link" href="/">
-                <div className="d-flex flex-column align-items-center">
+              <a className="nav-link" >
+                <div className="d-flex flex-column align-items-center" onClick={(()=>{navigate('/')})} >
                   <FaHome className="navbar-icon" />
                   <span>Home</span>
                 </div>
               </a>
             </li>
-            <li className="nav-item">
-              <a className="nav-link" href="/about">
-                <div className="d-flex flex-column align-items-center">
-                  <FaInfoCircle className="navbar-icon" />
-                  <span>About</span>
-                </div>
-              </a>
-            </li>
-            <li className="nav-item">
-              <a className="nav-link" href="/workplace">
-                <div className="d-flex flex-column align-items-center">
-                  <FaBuilding className="navbar-icon " />
-                  <span>Workplace</span>
-                </div>
-              </a>
-            </li>
+         
             <li className="nav-item dropdown">
               <a
                 className="nav-link dropdown-toggle d-flex align-items-center"

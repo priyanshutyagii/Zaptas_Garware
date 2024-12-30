@@ -17,12 +17,18 @@ export default function AnnouncementCard() {
   const [error, setError] = useState("");
   const [show, setShow] = useState(false);
   const [selectedAnnouncement, setSelectedAnnouncement] = useState(null);
-  const navigate = useNavigate();
+  const [selectedImage, setSelectedImage] = useState(null); // For full-size image preview
+  const navigate = useNavigate()
 
   // Fetch announcements on component mount
   useEffect(() => {
     fetchAnnouncements();
   }, []);
+
+
+  const handleClosePreview = () => {
+    setSelectedImage(null);
+  };
 
   const fetchAnnouncements = async (page = 1, limit = 3) => {
     try {
@@ -185,8 +191,9 @@ export default function AnnouncementCard() {
                 {/* Announcement Content */}
                 <div className="announcement-disc">
                   <p className="card-text">{announcement.title}</p>
-                  <div className="card-text fs-6">
-                    <PostCard post={announcement.description} size={80} />
+                  <div
+                    className="card-text fs-6">
+                    <PostCard post={announcement.description} size={70} />
                   </div>
                   <div className="d-flex justify-content-between mt-2">
                     <p
@@ -323,6 +330,10 @@ export default function AnnouncementCard() {
                         src={`${ConnectMe.img_URL}${image}`} // Display the existing image
                         alt={`Selected Banner ${index + 1}`}
                         className="modelcard-image"
+                        onClick={() => {
+                          handleClose(); // Close the modal or menu
+                          setSelectedImage(`${ConnectMe.img_URL}${image}`); // Set the selected image for preview
+                        }}
                       />
                       {/* Cross icon in the top-right corner */}
                     </div>
@@ -351,6 +362,16 @@ export default function AnnouncementCard() {
           </Modal.Body>
         </Modal>
       )}
+       {selectedImage && (
+        <div className="image-preview-overlay" onClick={handleClosePreview}>
+          <img
+            src={selectedImage}
+            alt="Full View"
+            className="full-size-image"
+          />
+        </div>
+      )}
     </div>
+    
   );
 }

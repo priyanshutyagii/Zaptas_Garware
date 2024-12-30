@@ -175,7 +175,7 @@ export default function AnnouncementCard() {
                     src={
                       announcement?.imagePath[0]
                         ? `${ConnectMe.img_URL}${announcement.imagePath[0]}`
-                        : "./csrimg.png"
+                        : "./logo.png"
                     }
                     alt="CSR"
                     className="banner-image"
