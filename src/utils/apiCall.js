@@ -1,23 +1,44 @@
-import axios from 'axios';
+import axios from "axios";
+
+const cache = {};
+const cacheExpiry = {};
+
 const apiCall = async (method, url, headers = {}, data = null) => {
-    try {
-        const config = {
-            method,
-            url,
-            headers,
-            withCredentials: true,
-            ...(data && { data }), // Include data only if it exists
-        };
+  const cacheKey = `${method}_${url}_${JSON.stringify(data)}`;
 
-        const response = await axios(config);
-        return response?.data
-    } catch (error) {
+  // Check if cached data is valid
+  if (
+    method === "GET" &&
+    cache[cacheKey] &&
+    Date.now() < cacheExpiry[cacheKey]
+  ) {
+    return cache[cacheKey];
+  }
 
-        return {
-            status: false,
-            message: error
-        }
+  try {
+    const config = {
+      method,
+      url,
+      headers,
+      withCredentials: true,
+      ...(data && { data }),
+    };
+
+    const response = await axios(config);
+
+    // Cache the response with a 5-minute expiry
+    if (method === "GET") {
+      cache[cacheKey] = response?.data;
+      cacheExpiry[cacheKey] = Date.now() + 5 * 60 * 1000; // 5 minutes
     }
+
+    return response?.data;
+  } catch (error) {
+    return {
+      status: false,
+      message: error.message || "An error occurred",
+    };
+  }
 };
 
 
