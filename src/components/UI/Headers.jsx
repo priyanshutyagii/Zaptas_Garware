@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 export default function Headers() {
   const navigate = useNavigate();
 
-  // Hardcoded data with submenus
+  // Hardcoded data with third-level submenus
   const [formData, setFormData] = useState({
     links: [
       {
@@ -15,8 +15,14 @@ export default function Headers() {
         title: "Google",
         link: "https://www.google.com",
         subMenu: [
-          { title: "Google Maps", link: "https://maps.google.com" },
-          { title: "Google Drive", link: "https://drive.google.com" },
+          {
+            title: "Google Maps",
+            link: "https://maps.google.com",
+          },
+          {
+            title: "Google Drive",
+            link: "https://drive.google.com",
+          },
         ],
       },
       {
@@ -33,7 +39,10 @@ export default function Headers() {
         title: "LinkedIn",
         link: "https://www.linkedin.com",
         subMenu: [
-          { title: "LinkedIn Learning", link: "https://www.linkedin.com/learning" },
+          {
+            title: "LinkedIn Learning",
+            link: "https://www.linkedin.com/learning",
+          },
           { title: "LinkedIn Jobs", link: "https://www.linkedin.com/jobs" },
         ],
       },
@@ -44,7 +53,14 @@ export default function Headers() {
         title: "Home",
         link: "/",
         subMenu: [
-          { title: "Sub Home 1", link: "/home1" },
+          {
+            title: "Sub Home 1",
+            link: "/home1",
+            thirdLevelSubMenu: [
+              { title: "Details 1", link: "/home1/details1" },
+              { title: "Details 2", link: "/home1/details2" },
+            ],
+          },
           { title: "Sub Home 2", link: "/home2" },
         ],
       },
@@ -69,6 +85,25 @@ export default function Headers() {
     ],
   });
 
+  const renderThirdLevelSubMenu = (thirdLevelSubMenu) => {
+    return (
+      <ul className="dropdown-menu">
+        {thirdLevelSubMenu.map((item, index) => (
+          <li key={index}>
+            <a
+              className="dropdown-item"
+              href={item.link}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {item.title}
+            </a>
+          </li>
+        ))}
+      </ul>
+    );
+  };
+
   return (
     <header className="navbar navbar-expand-lg navbar-light bg-light">
       <div className="container-fluid">
@@ -90,8 +125,9 @@ export default function Headers() {
 
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+            {/* Home Link */}
             <li className="nav-item">
-              <a className="nav-link" onClick={() => { navigate('/') }}>
+              <a className="nav-link" onClick={() => navigate("/")}>
                 <div className="d-flex flex-column align-items-center">
                   <FaHome className="navbar-icon" />
                   <span>Home</span>
@@ -114,9 +150,12 @@ export default function Headers() {
                   <span>Quicklinks</span>
                 </span>
               </a>
-              <ul className="dropdown-menu" aria-labelledby="quicklinksDropdown">
+              <ul
+                className="dropdown-menu"
+                aria-labelledby="quicklinksDropdown"
+              >
                 {formData.links.map((link) => (
-                  <li key={link.id}>
+                  <li key={link.id} className="dropdown-submenu">
                     <a
                       className="dropdown-item"
                       href={link.link}
@@ -125,11 +164,10 @@ export default function Headers() {
                     >
                       {link.title}
                     </a>
-                    {/* Render sub-menu if it exists */}
                     {link.subMenu && (
-                      <ul className="submenu">
+                      <ul className="dropdown-menu">
                         {link.subMenu.map((subLink, index) => (
-                          <li key={index}>
+                          <li key={index} className="dropdown-submenu">
                             <a
                               className="dropdown-item"
                               href={subLink.link}
@@ -138,6 +176,10 @@ export default function Headers() {
                             >
                               {subLink.title}
                             </a>
+                            {subLink.thirdLevelSubMenu &&
+                              renderThirdLevelSubMenu(
+                                subLink.thirdLevelSubMenu
+                              )}
                           </li>
                         ))}
                       </ul>
@@ -164,7 +206,7 @@ export default function Headers() {
               </a>
               <ul className="dropdown-menu" aria-labelledby="menuDropdown">
                 {formData.menuItems.map((item) => (
-                  <li key={item.id}>
+                  <li key={item.id} className="dropdown-submenu">
                     <a
                       className="dropdown-item"
                       href={item.link}
@@ -173,11 +215,10 @@ export default function Headers() {
                     >
                       {item.title}
                     </a>
-                    {/* Render sub-menu if it exists */}
                     {item.subMenu && (
-                      <ul className="submenu">
+                      <ul className="dropdown-menu">
                         {item.subMenu.map((subItem, index) => (
-                          <li key={index}>
+                          <li key={index} className="dropdown-submenu">
                             <a
                               className="dropdown-item"
                               href={subItem.link}
@@ -186,6 +227,10 @@ export default function Headers() {
                             >
                               {subItem.title}
                             </a>
+                            {subItem.thirdLevelSubMenu &&
+                              renderThirdLevelSubMenu(
+                                subItem.thirdLevelSubMenu
+                              )}
                           </li>
                         ))}
                       </ul>

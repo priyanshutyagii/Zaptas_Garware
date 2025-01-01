@@ -26,3 +26,13 @@ ul.navbar-nav li.nav-item {
     border-bottom-left-radius: 0;
 }
 
+.dropdown-submenu .dropdown-menu {
+    left: 100%;
+    top: 0;
+    margin-left: 0.1rem;
+    display: none;
+}
+
+.dropdown-submenu:hover .dropdown-menu {
+    display: block;
+}
