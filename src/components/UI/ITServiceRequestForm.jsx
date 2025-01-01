@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Form, Button, Row, Col } from "react-bootstrap";
+import { Form, Button, Row, Col, Spinner } from "react-bootstrap";
 import { apiCall, getTokenFromLocalStorage } from "../../utils/apiCall";
 import ConnectMe from "../../config/connect";
 
@@ -68,13 +68,13 @@ const ITServiceRequestForm = () => {
   };
 
   return (
-    <div className="container mt-4">
-      <h3 className="mb-4">IT Service Request Form</h3>
-      
+    <div className="container mt-5">
+      <h3 className="mb-4 text-center">IT Service Request Form</h3>
+
       <Form onSubmit={handleSubmit}>
         {/* Requester Details Section */}
         <div className="mb-4">
-          <h4>Requester Details</h4>
+          <h4 className="text-primary mb-3">Requester Details</h4>
           <Row>
             <Col md={6}>
               <Form.Group className="mb-3">
@@ -117,7 +117,7 @@ const ITServiceRequestForm = () => {
 
         {/* Service Request Details Section */}
         <div className="mb-4">
-          <h4>Service Request Details</h4>
+          <h4 className="text-primary mb-3">Service Request Details</h4>
           <Row>
             <Col md={12}>
               <Form.Group className="mb-3">
@@ -179,7 +179,14 @@ const ITServiceRequestForm = () => {
         {/* Submit Button */}
         <div className="text-center mt-4">
           <Button variant="primary" type="submit" disabled={isLoading}>
-            {isLoading ? "Submitting..." : "Submit Request"}
+            {isLoading ? (
+              <>
+                <Spinner animation="border" size="sm" />
+                <span className="ml-2">Submitting...</span>
+              </>
+            ) : (
+              "Submit Request"
+            )}
           </Button>
         </div>
       </Form>

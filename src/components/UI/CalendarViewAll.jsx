@@ -4,11 +4,34 @@ import { Form } from "react-bootstrap";
 import "./CalendarViewAll.css";
 import { MdOutlineDateRange } from "react-icons/md";
 import { CiLocationOn } from "react-icons/ci";
+import { apiCall, getTokenFromLocalStorage } from "../../utils/apiCall";
+import ConnectMe from "../../config/connect";
+import showToast from "../../utils/toastHelper";
 
 export default function CalendarViewAll() {
   const location = useLocation();
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
   const events = location.state?.events || []; // Get events from state
+
+  const fetchEvents = async (month, year) => {
+    try {
+      const token = getTokenFromLocalStorage();
+      const headers = {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      };
+      const url = `${ConnectMe.BASE_URL}/calendar/holidays?active=true&month=${month}&year=${year}`;
+      const response = await apiCall("GET", url, headers);
+
+      if (response.success) {
+        setEvents(response?.data);
+      } else {
+        showToast("Failed to load holidays", "error");
+      }
+    } catch (error) {
+      console.error("Error fetching events:", error.message);
+    }
+  };
 
   const handleMonthChange = (e) => {
     setSelectedMonth(parseInt(e.target.value, 10));
