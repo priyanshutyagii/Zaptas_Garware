@@ -48,9 +48,9 @@ input, select {
     cursor: pointer;
   } */
 
-button:hover {
+/* button:hover {
   background-color: #45a049;
-}
+} */
 
 ul {
   padding-left: 20px;
