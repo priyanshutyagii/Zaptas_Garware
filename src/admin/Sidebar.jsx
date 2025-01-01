@@ -70,6 +70,11 @@ export default function Sidebar() {
             <FaUsers /> <span>CalenderHoliday</span>
           </Link>
         </li>
+        <li>
+          <Link to="/admin/it" style={{ textDecoration: 'none', color: 'inherit' }}>
+            <FaUsers /> <span>IT</span>
+          </Link>
+        </li>
       </ul>
     </div>
   );

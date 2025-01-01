@@ -9,6 +9,7 @@ import GalleryDetails from "./components/UI/GalleryDetails";
 import CalenderHoliday from "./admin/calenderHoliday";
 import ViewAllPopup from "./components/UI/ViewAllPopup";
 import CalendarViewAll from "./components/UI/CalendarViewAll";
+import ServiceTypePage from "./admin/ItReqedit";
 
 const CsrPage = lazy(() => import("./admin/csr"));
 const IndustryPage = lazy(() => import("./admin/Industry"));
@@ -65,6 +66,7 @@ export const routes = [
       { path: "ManagementMessage", element: <ManagementMessage /> },
       { path: "awards", element: <AwardsPage /> },
       { path: "CalenderHoliday", element: <CalenderHoliday /> },
+      { path: "it", element: <ServiceTypePage /> },
     ],
   },
   { path: "/login", element: <Login /> },

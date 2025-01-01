@@ -1,51 +1,73 @@
-import { useEffect, useState } from "react";
-import { FaSearch, FaHome, FaInfoCircle, FaBuilding } from "react-icons/fa";
+import { useState } from "react";
+import { FaSearch, FaHome } from "react-icons/fa";
 import { RiLink } from "react-icons/ri";
-
 import "./Header.css";
-import { apiCall, getTokenFromLocalStorage } from "../../utils/apiCall";
-import ConnectMe from "../../config/connect";
 import { useNavigate } from "react-router-dom";
 
-
-
 export default function Headers() {
-  const navigate =useNavigate()
+  const navigate = useNavigate();
+
+  // Hardcoded data with submenus
   const [formData, setFormData] = useState({
-    links: [{ title: '', link: '', id: '' }],
+    links: [
+      {
+        id: "1",
+        title: "Google",
+        link: "https://www.google.com",
+        subMenu: [
+          { title: "Google Maps", link: "https://maps.google.com" },
+          { title: "Google Drive", link: "https://drive.google.com" },
+        ],
+      },
+      {
+        id: "2",
+        title: "Facebook",
+        link: "https://www.facebook.com",
+        subMenu: [
+          { title: "Facebook Ads", link: "https://www.facebook.com/ads" },
+          { title: "Facebook Messenger", link: "https://www.messenger.com" },
+        ],
+      },
+      {
+        id: "3",
+        title: "LinkedIn",
+        link: "https://www.linkedin.com",
+        subMenu: [
+          { title: "LinkedIn Learning", link: "https://www.linkedin.com/learning" },
+          { title: "LinkedIn Jobs", link: "https://www.linkedin.com/jobs" },
+        ],
+      },
+    ],
+    menuItems: [
+      {
+        id: "1",
+        title: "Home",
+        link: "/",
+        subMenu: [
+          { title: "Sub Home 1", link: "/home1" },
+          { title: "Sub Home 2", link: "/home2" },
+        ],
+      },
+      {
+        id: "2",
+        title: "About Us",
+        link: "/about",
+        subMenu: [
+          { title: "Our Story", link: "/about/our-story" },
+          { title: "Team", link: "/about/team" },
+        ],
+      },
+      {
+        id: "3",
+        title: "Contact",
+        link: "/contact",
+        subMenu: [
+          { title: "Contact Form", link: "/contact/form" },
+          { title: "Support", link: "/contact/support" },
+        ],
+      },
+    ],
   });
-
-  // Fetch quick links when the component mounts
-  useEffect(() => {
-    fetchQuickLinks();
-  }, []);
-
-  
-
-  const fetchQuickLinks = async () => {
-    try {
-      const token = getTokenFromLocalStorage();
-      const headers = {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      };
-
-      const response = await apiCall('GET', `${ConnectMe.BASE_URL}/qlink/quick-links`, headers);
-      if (response.success) {
-        const fetchedLinks = response?.data?.map((link) => ({
-          id: link._id,  // Make sure to store the ID for each link
-          title: link.title,
-          link: link.url,
-        }));
-        setFormData({ links: fetchedLinks });
-      } else {
-        console.error('Error fetching quick links.');
-      }
-    } catch (error) {
-      console.error('Error fetching quick links:', error);
-      alert('Error fetching quick links');
-    }
-  };
 
   return (
     <header className="navbar navbar-expand-lg navbar-light bg-light">
@@ -69,14 +91,15 @@ export default function Headers() {
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
             <li className="nav-item">
-              <a className="nav-link" >
-                <div className="d-flex flex-column align-items-center" onClick={(()=>{navigate('/')})} >
+              <a className="nav-link" onClick={() => { navigate('/') }}>
+                <div className="d-flex flex-column align-items-center">
                   <FaHome className="navbar-icon" />
                   <span>Home</span>
                 </div>
               </a>
             </li>
-         
+
+            {/* Quick Links Dropdown */}
             <li className="nav-item dropdown">
               <a
                 className="nav-link dropdown-toggle d-flex align-items-center"
@@ -88,11 +111,10 @@ export default function Headers() {
               >
                 <span className="d-flex flex-column align-items-center">
                   <RiLink className="navbar-icon me-1" />
-                  <span>Quicklinks </span>
+                  <span>Quicklinks</span>
                 </span>
               </a>
               <ul className="dropdown-menu" aria-labelledby="quicklinksDropdown">
-                {/* Dynamically render quick links from state */}
                 {formData.links.map((link) => (
                   <li key={link.id}>
                     <a
@@ -103,6 +125,71 @@ export default function Headers() {
                     >
                       {link.title}
                     </a>
+                    {/* Render sub-menu if it exists */}
+                    {link.subMenu && (
+                      <ul className="submenu">
+                        {link.subMenu.map((subLink, index) => (
+                          <li key={index}>
+                            <a
+                              className="dropdown-item"
+                              href={subLink.link}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              {subLink.title}
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </li>
+
+            {/* Menu Dropdown */}
+            <li className="nav-item dropdown">
+              <a
+                className="nav-link dropdown-toggle d-flex align-items-center"
+                href="#"
+                id="menuDropdown"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                <span className="d-flex flex-column align-items-center">
+                  <RiLink className="navbar-icon me-1" />
+                  <span>Menu</span>
+                </span>
+              </a>
+              <ul className="dropdown-menu" aria-labelledby="menuDropdown">
+                {formData.menuItems.map((item) => (
+                  <li key={item.id}>
+                    <a
+                      className="dropdown-item"
+                      href={item.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {item.title}
+                    </a>
+                    {/* Render sub-menu if it exists */}
+                    {item.subMenu && (
+                      <ul className="submenu">
+                        {item.subMenu.map((subItem, index) => (
+                          <li key={index}>
+                            <a
+                              className="dropdown-item"
+                              href={subItem.link}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              {subItem.title}
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
                   </li>
                 ))}
               </ul>
@@ -111,7 +198,7 @@ export default function Headers() {
 
           <form className="d-flex search-form">
             <input
-              className="form-control "
+              className="form-control"
               type="search"
               placeholder="Search"
               aria-label="Search"

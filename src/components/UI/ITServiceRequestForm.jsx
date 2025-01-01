@@ -1,46 +1,64 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Form, Button, Row, Col } from "react-bootstrap";
+import { apiCall, getTokenFromLocalStorage } from "../../utils/apiCall";
+import ConnectMe from "../../config/connect";
 
 const ITServiceRequestForm = () => {
   const [formData, setFormData] = useState({
-    requestId: "REQ-" + Date.now(), // Auto-generated Request ID
+    requestId: "REQ-" + Date.now(),
     requestDate: new Date().toISOString().split("T")[0],
     requesterName: "John Doe",
     requesterDept: "IT Department",
     requesterDesignation: "Manager",
     requesterLocation: "New York",
-    typeOfService: "Email ID Requirement", // dropdown or text
-    periodFrom: "",
-    periodTo: "",
-    purpose: "",
-    emailId: "",
-    displayName: "",
-    communicationType: "",
-    internetAccess: "",
-    cameraDetails: "",
-    emailIdToBeForward: "",
-    emailIdForwardTo: "",
-    emailIdForDataRequired: "",
-    emailIdDataToBeCopied: "",
-    userIdForDataRequired: "",
-    userIdDataToBeCopied: "",
-    domainUser: "",
-    nameOfShareFolder: "",
-    accessRightsForShareFolder: "",
-    sapUserId: "",
-    sapServer: "",
-    oldSapUserId: "",
-    newSapUserId: "",
-    authorizationRequired: "",
-    commentFromHoD: "",
-    commentFromITHead: "",
+    typeOfService: "",
+    fieldsData: {}, // Dynamically populated fields based on service type
   });
+
+  const [serviceTypes, setServiceTypes] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Fetch service types on component mount
+  useEffect(() => {
+    const fetchServiceTypes = async () => {
+      setIsLoading(true);
+      try {
+        const url = `${ConnectMe.BASE_URL}/it/api/service-types`;
+        const token = getTokenFromLocalStorage();
+        const headers = { Authorization: `Bearer ${token}` };
+        const response = await apiCall("GET", url, headers);
+
+        if (response && response.data) {
+          setServiceTypes(response.data); // Populate the service types dynamically
+        } else {
+          console.error("Failed to fetch service types");
+        }
+      } catch (error) {
+        console.error("Error fetching service types:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchServiceTypes();
+  }, []);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
+    }));
+  };
+
+  const handleFieldChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      fieldsData: {
+        ...prevData.fieldsData,
+        [name]: value,
+      },
     }));
   };
 
@@ -52,166 +70,118 @@ const ITServiceRequestForm = () => {
   return (
     <div className="container mt-4">
       <h3 className="mb-4">IT Service Request Form</h3>
+      
       <Form onSubmit={handleSubmit}>
         {/* Requester Details Section */}
-        <Row>
-          <Col md={6}>
-            <Form.Group className="mb-3">
-              <Form.Label>Request ID</Form.Label>
-              <Form.Control type="text" value={formData.requestId} readOnly />
-            </Form.Group>
-          </Col>
-          <Col md={6}>
-            <Form.Group className="mb-3">
-              <Form.Label>Request Date</Form.Label>
-              <Form.Control type="date" value={formData.requestDate} readOnly />
-            </Form.Group>
-          </Col>
-          <Col md={6}>
-            <Form.Group className="mb-3">
-              <Form.Label>Requester Name</Form.Label>
-              <Form.Control
-                type="text"
-                value={formData.requesterName}
-                readOnly
-              />
-            </Form.Group>
-          </Col>
-          <Col md={6}>
-            <Form.Group className="mb-3">
-              <Form.Label>Requester Dept</Form.Label>
-              <Form.Control
-                type="text"
-                value={formData.requesterDept}
-                readOnly
-              />
-            </Form.Group>
-          </Col>
-          <Col md={6}>
-            <Form.Group className="mb-3">
-              <Form.Label>Requester Designation</Form.Label>
-              <Form.Control
-                type="text"
-                value={formData.requesterDesignation}
-                readOnly
-              />
-            </Form.Group>
-          </Col>
-          <Col md={6}>
-            <Form.Group className="mb-3">
-              <Form.Label>Requester Location</Form.Label>
-              <Form.Control
-                type="text"
-                value={formData.requesterLocation}
-                readOnly
-              />
-            </Form.Group>
-          </Col>
-        </Row>
+        <div className="mb-4">
+          <h4>Requester Details</h4>
+          <Row>
+            <Col md={6}>
+              <Form.Group className="mb-3">
+                <Form.Label>Request ID</Form.Label>
+                <Form.Control type="text" value={formData.requestId} readOnly />
+              </Form.Group>
+            </Col>
+            <Col md={6}>
+              <Form.Group className="mb-3">
+                <Form.Label>Request Date</Form.Label>
+                <Form.Control type="date" value={formData.requestDate} readOnly />
+              </Form.Group>
+            </Col>
+            <Col md={6}>
+              <Form.Group className="mb-3">
+                <Form.Label>Requester Name</Form.Label>
+                <Form.Control type="text" value={formData.requesterName} readOnly />
+              </Form.Group>
+            </Col>
+            <Col md={6}>
+              <Form.Group className="mb-3">
+                <Form.Label>Requester Dept</Form.Label>
+                <Form.Control type="text" value={formData.requesterDept} readOnly />
+              </Form.Group>
+            </Col>
+            <Col md={6}>
+              <Form.Group className="mb-3">
+                <Form.Label>Requester Designation</Form.Label>
+                <Form.Control type="text" value={formData.requesterDesignation} readOnly />
+              </Form.Group>
+            </Col>
+            <Col md={6}>
+              <Form.Group className="mb-3">
+                <Form.Label>Requester Location</Form.Label>
+                <Form.Control type="text" value={formData.requesterLocation} readOnly />
+              </Form.Group>
+            </Col>
+          </Row>
+        </div>
 
-        {/* Service Request Details */}
-        <h4 className="mb-3">Service Request Details</h4>
-        <Row>
-          <Col md={12}>
-            <Form.Group className="mb-3">
-              <Form.Label>Type of Service</Form.Label>
-              <Form.Control
-                as="select"
-                name="typeOfService"
-                value={formData.typeOfService}
-                onChange={handleInputChange}
-              >
-                <option>Email ID Requirement</option>
-                <option>New User Setup</option>
-                <option>Access Rights</option>
-              </Form.Control>
-            </Form.Group>
-          </Col>
-          <Col md={6}>
-            <Form.Group className="mb-3">
-              <Form.Label>Period From</Form.Label>
-              <Form.Control
-                type="date"
-                name="periodFrom"
-                value={formData.periodFrom}
-                onChange={handleInputChange}
-              />
-            </Form.Group>
-          </Col>
-          <Col md={6}>
-            <Form.Group className="mb-3">
-              <Form.Label>Period To</Form.Label>
-              <Form.Control
-                type="date"
-                name="periodTo"
-                value={formData.periodTo}
-                onChange={handleInputChange}
-              />
-            </Form.Group>
-          </Col>
-          <Col md={12}>
-            <Form.Group className="mb-3">
-              <Form.Label>Purpose</Form.Label>
-              <Form.Control
-                as="textarea"
-                name="purpose"
-                value={formData.purpose}
-                onChange={handleInputChange}
-              />
-            </Form.Group>
-          </Col>
-        </Row>
+        {/* Service Request Details Section */}
+        <div className="mb-4">
+          <h4>Service Request Details</h4>
+          <Row>
+            <Col md={12}>
+              <Form.Group className="mb-3">
+                <Form.Label>Type of Service</Form.Label>
+                <Form.Control
+                  as="select"
+                  name="typeOfService"
+                  value={formData.typeOfService}
+                  onChange={handleInputChange}
+                  disabled={isLoading}
+                >
+                  <option value="" disabled>
+                    {isLoading ? "Loading..." : "Select a service"}
+                  </option>
+                  {serviceTypes.map((type, index) => (
+                    <option key={index} value={type.name}>
+                      {type.name}
+                    </option>
+                  ))}
+                </Form.Control>
+              </Form.Group>
+            </Col>
+          </Row>
+        </div>
 
-        {/* Additional Fields */}
-        <h4 className="mb-3">Additional Details</h4>
-        {[
-          { label: "Email ID", name: "emailId" },
-          { label: "Display Name", name: "displayName" },
-          { label: "Communication Type", name: "communicationType" },
-          { label: "Internet Access", name: "internetAccess" },
-          // Add more fields here as needed
-        ].map((field, index) => (
-          <Form.Group className="mb-3" key={index}>
-            <Form.Label>{field.label}</Form.Label>
-            <Form.Control
-              type="text"
-              name={field.name}
-              value={formData[field.name]}
-              onChange={handleInputChange}
-            />
-          </Form.Group>
-        ))}
+        {/* Dynamically Render Service Fields */}
+        {serviceTypes
+          .filter((type) => type.name === formData.typeOfService)
+          .map((type, index) => (
+            <div key={index}>
+              {type.fields.map((field, fieldIndex) => (
+                <Row key={fieldIndex} className="mb-3">
+                  <Col md={12}>
+                    <Form.Group className="mb-3">
+                      <Form.Label>{field.fieldName}</Form.Label>
+                      {field.fieldType === "Boolean" ? (
+                        <Form.Check
+                          type="checkbox"
+                          name={field.fieldName}
+                          checked={formData.fieldsData[field.fieldName] || false}
+                          onChange={(e) => handleFieldChange(e)}
+                        />
+                      ) : (
+                        <Form.Control
+                          type={field.fieldType === "String" || field.fieldType === "text" ? "text" : "date"}
+                          name={field.fieldName}
+                          value={formData.fieldsData[field.fieldName] || ""}
+                          onChange={(e) => handleFieldChange(e)}
+                          required={field?.isRequired}
+                        />
+                      )}
+                    </Form.Group>
+                  </Col>
+                </Row>
+              ))}
+            </div>
+          ))}
 
-        {/* Comments */}
-        <h4 className="mb-3">Comments</h4>
-        <Row>
-          <Col md={6}>
-            <Form.Group className="mb-3">
-              <Form.Label>Comment from HoD</Form.Label>
-              <Form.Control
-                as="textarea"
-                name="commentFromHoD"
-                value={formData.commentFromHoD}
-                onChange={handleInputChange}
-              />
-            </Form.Group>
-          </Col>
-          <Col md={6}>
-            <Form.Group className="mb-3">
-              <Form.Label>Comment from IT Head</Form.Label>
-              <Form.Control
-                as="textarea"
-                name="commentFromITHead"
-                value={formData.commentFromITHead}
-                onChange={handleInputChange}
-              />
-            </Form.Group>
-          </Col>
-        </Row>
-
-        <Button variant="primary" type="submit">
-          Submit Request
-        </Button>
+        {/* Submit Button */}
+        <div className="text-center mt-4">
+          <Button variant="primary" type="submit" disabled={isLoading}>
+            {isLoading ? "Submitting..." : "Submit Request"}
+          </Button>
+        </div>
       </Form>
     </div>
   );
