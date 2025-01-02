@@ -3,6 +3,7 @@ import { FaSearch, FaHome } from "react-icons/fa";
 import { RiLink } from "react-icons/ri";
 import "./Header.css";
 import { useNavigate } from "react-router-dom";
+import { FiChevronDown } from "react-icons/fi";
 
 export default function Headers() {
   const navigate = useNavigate();
@@ -163,6 +164,9 @@ export default function Headers() {
                       rel="noopener noreferrer"
                     >
                       {link.title}
+                      {link.subMenu && (
+                        <FiChevronDown className="submenu-arrow" />
+                      )}
                     </a>
                     {link.subMenu && (
                       <ul className="dropdown-menu">
@@ -214,6 +218,9 @@ export default function Headers() {
                       rel="noopener noreferrer"
                     >
                       {item.title}
+                      {item.subMenu && (
+                        <FiChevronDown className="submenu-arrow" />
+                      )}
                     </a>
                     {item.subMenu && (
                       <ul className="dropdown-menu">
@@ -225,7 +232,10 @@ export default function Headers() {
                               target="_blank"
                               rel="noopener noreferrer"
                             >
-                              {subItem.title}
+                              {subItem.title}{" "}
+                              {subItem.thirdLevelSubMenu && (
+                                <FiChevronDown className="submenu-arrow" />
+                              )}
                             </a>
                             {subItem.thirdLevelSubMenu &&
                               renderThirdLevelSubMenu(

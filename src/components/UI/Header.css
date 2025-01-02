@@ -26,13 +26,42 @@ ul.navbar-nav li.nav-item {
     border-bottom-left-radius: 0;
 }
 
-.dropdown-submenu .dropdown-menu {
-    left: 100%;
-    top: 0;
-    margin-left: 0.1rem;
-    display: none;
+.dropdown-submenu {
+    position: relative;
 }
 
-.dropdown-submenu:hover .dropdown-menu {
+.dropdown-submenu>.dropdown-menu {
+    top: 0;
+    left: 100%;
+    /* Aligns the submenu to the right */
+    margin-top: -1px;
+    display: none;
+    /* Initially hidden */
+}
+
+.dropdown-submenu:hover>.dropdown-menu {
     display: block;
+    /* Show on hover */
+}
+
+.third-level-menu {
+    top: 0;
+    left: 100%;
+    margin-top: -1px;
+}
+
+a.dropdown-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.submenu-arrow {
+    transition: transform 0.3s ease;
+    transform: rotate(270deg);
+}
+
+/* Rotate the arrow on hover */
+.dropdown-item:hover .submenu-arrow {
+    transform: rotate(90deg);
 }
