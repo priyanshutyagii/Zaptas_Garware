@@ -11,6 +11,30 @@ export default function BirthdayBox() {
 
   const [currentIndex, setCurrentIndex] = useState(0);
 
+  const sampleData = [
+    {
+      FirstName: "John",
+      LastName: "Doe",
+      EmployeeCode: "EMP001",
+      BirthDate: "1990-01-10",
+      CustomField6: "Software Engineer",
+    },
+    {
+      FirstName: "Jane",
+      LastName: "Smith",
+      EmployeeCode: "EMP002",
+      BirthDate: "1992-02-15",
+      CustomField6: "Project Manager",
+    },
+    {
+      FirstName: "Sam",
+      LastName: "Wilson",
+      EmployeeCode: "EMP003",
+      BirthDate: "1988-03-20",
+      CustomField6: "HR Manager",
+    },
+  ];
+
   const handleNext = () => {
     if ((currentIndex + 1) * 3 < birthdayWishes.length) {
       setCurrentIndex(currentIndex + 1);
@@ -39,11 +63,11 @@ export default function BirthdayBox() {
         setBirthdayWishes(response?.data?.birthdayWishes);
       } else {
         setError("Failed to fetch birthday wishes.");
-        setBirthdayWishes([]); // Ensure no data is shown if there's an error
+        setBirthdayWishes(sampleData); // Use sample data in case of error
       }
     } catch (err) {
       setError("Error fetching birthday wishes.");
-      setBirthdayWishes([]); // Ensure no data is shown if there's an error
+      setBirthdayWishes(sampleData); // Use sample data in case of error
     } finally {
       setLoading(false); // Hide loader after fetching
     }

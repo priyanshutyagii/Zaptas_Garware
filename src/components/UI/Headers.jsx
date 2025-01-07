@@ -1,27 +1,33 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaSearch, FaHome } from "react-icons/fa";
 import { RiLink } from "react-icons/ri";
 import "./Header.css";
 import { useNavigate } from "react-router-dom";
 import { FiChevronDown } from "react-icons/fi";
+import { apiCall, getTokenFromLocalStorage } from "../../utils/apiCall";
+import ConnectMe from "../../config/connect";
 
 export default function Headers() {
   const navigate = useNavigate();
+
+  useEffect(()=>{
+    fetchQuickLinks()
+  },[])
 
   // Hardcoded data with third-level submenus
   const [formData, setFormData] = useState({
     links: [
       {
         id: "1",
-        title: "Google",
-        link: "https://www.google.com",
+        title: "IT",
+        // link: "https://www.google.com",
         subMenu: [
           {
-            title: "Google Maps",
+            title: "Policy",
             link: "https://maps.google.com",
           },
           {
-            title: "Google Drive",
+            title: "HelpDesk",
             link: "https://drive.google.com",
           },
         ],
@@ -48,43 +54,48 @@ export default function Headers() {
         ],
       },
     ],
-    menuItems: [
-      {
-        id: "1",
-        title: "Home",
-        link: "/",
-        subMenu: [
-          {
-            title: "Sub Home 1",
-            link: "/home1",
-            thirdLevelSubMenu: [
-              { title: "Details 1", link: "/home1/details1" },
-              { title: "Details 2", link: "/home1/details2" },
-            ],
-          },
-          { title: "Sub Home 2", link: "/home2" },
-        ],
-      },
-      {
-        id: "2",
-        title: "About Us",
-        link: "/about",
-        subMenu: [
-          { title: "Our Story", link: "/about/our-story" },
-          { title: "Team", link: "/about/team" },
-        ],
-      },
-      {
-        id: "3",
-        title: "Contact",
-        link: "/contact",
-        subMenu: [
-          { title: "Contact Form", link: "/contact/form" },
-          { title: "Support", link: "/contact/support" },
-        ],
-      },
-    ],
   });
+
+
+  const fetchQuickLinks = async () => {
+    try {
+      const token = getTokenFromLocalStorage();
+      const headers = {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      };
+  
+      const response = await apiCall(
+        "GET",
+        `${ConnectMe.BASE_URL}/qlink/quick-links`,
+        headers
+      );
+  
+      if (response.success) {
+        const fetchedLinks = response?.data?.map((link) => ({
+          id: link._id, // Ensure unique ID for each link
+          title: link.title,
+          link: link.url,
+        }));
+        let dataSet =  {
+          title: "Quick Links",
+          subMenu: fetchedLinks
+        }
+     
+        // Combine fetched links with the existing hardcoded links
+        setFormData((prevState) => ({
+          ...prevState,
+          links: [...prevState.links, dataSet],
+        }));
+      } else {
+        console.error("Error fetching quick links.");
+      }
+    } catch (error) {
+      console.error("Error fetching quick links:", error);
+      alert("Error fetching quick links");
+    }
+  };
+  
 
   const renderThirdLevelSubMenu = (thirdLevelSubMenu) => {
     return (
@@ -148,7 +159,7 @@ export default function Headers() {
               >
                 <span className="d-flex flex-column align-items-center">
                   <RiLink className="navbar-icon me-1" />
-                  <span>Quicklinks</span>
+                  <span>Menu</span>
                 </span>
               </a>
               <ul
@@ -192,13 +203,11 @@ export default function Headers() {
                 ))}
               </ul>
             </li>
-
-            {/* Menu Dropdown */}
             <li className="nav-item dropdown">
               <a
                 className="nav-link dropdown-toggle d-flex align-items-center"
                 href="#"
-                id="menuDropdown"
+                id="quicklinksDropdown"
                 role="button"
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
@@ -208,38 +217,38 @@ export default function Headers() {
                   <span>Menu</span>
                 </span>
               </a>
-              <ul className="dropdown-menu" aria-labelledby="menuDropdown">
-                {formData.menuItems.map((item) => (
-                  <li key={item.id} className="dropdown-submenu">
+              <ul
+                className="dropdown-menu"
+                aria-labelledby="quicklinksDropdown"
+              >
+                {formData.links.map((link) => (
+                  <li key={link.id} className="dropdown-submenu">
                     <a
                       className="dropdown-item"
-                      href={item.link}
+                      href={link.link}
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      {item.title}
-                      {item.subMenu && (
+                      {link.title}
+                      {link.subMenu && (
                         <FiChevronDown className="submenu-arrow" />
                       )}
                     </a>
-                    {item.subMenu && (
+                    {link.subMenu && (
                       <ul className="dropdown-menu">
-                        {item.subMenu.map((subItem, index) => (
+                        {link.subMenu.map((subLink, index) => (
                           <li key={index} className="dropdown-submenu">
                             <a
                               className="dropdown-item"
-                              href={subItem.link}
+                              href={subLink.link}
                               target="_blank"
                               rel="noopener noreferrer"
                             >
-                              {subItem.title}{" "}
-                              {subItem.thirdLevelSubMenu && (
-                                <FiChevronDown className="submenu-arrow" />
-                              )}
+                              {subLink.title}
                             </a>
-                            {subItem.thirdLevelSubMenu &&
+                            {subLink.thirdLevelSubMenu &&
                               renderThirdLevelSubMenu(
-                                subItem.thirdLevelSubMenu
+                                subLink.thirdLevelSubMenu
                               )}
                           </li>
                         ))}
@@ -249,6 +258,62 @@ export default function Headers() {
                 ))}
               </ul>
             </li>
+            <li className="nav-item dropdown">
+              <a
+                className="nav-link dropdown-toggle d-flex align-items-center"
+                href="#"
+                id="quicklinksDropdown"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                <span className="d-flex flex-column align-items-center">
+                  <RiLink className="navbar-icon me-1" />
+                  <span>Menu</span>
+                </span>
+              </a>
+              <ul
+                className="dropdown-menu"
+                aria-labelledby="quicklinksDropdown"
+              >
+                {formData.links.map((link) => (
+                  <li key={link.id} className="dropdown-submenu">
+                    <a
+                      className="dropdown-item"
+                      href={link.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {link.title}
+                      {link.subMenu && (
+                        <FiChevronDown className="submenu-arrow" />
+                      )}
+                    </a>
+                    {link.subMenu && (
+                      <ul className="dropdown-menu">
+                        {link.subMenu.map((subLink, index) => (
+                          <li key={index} className="dropdown-submenu">
+                            <a
+                              className="dropdown-item"
+                              href={subLink.link}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              {subLink.title}
+                            </a>
+                            {subLink.thirdLevelSubMenu &&
+                              renderThirdLevelSubMenu(
+                                subLink.thirdLevelSubMenu
+                              )}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </li>
+        
           </ul>
 
           <form className="d-flex search-form">

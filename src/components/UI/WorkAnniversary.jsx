@@ -10,6 +10,33 @@ export default function WorkAnniversary() {
   const [error, setError] = useState("");
   const [currentIndex, setCurrentIndex] = useState(0);
 
+  const sampleData = [
+    {
+      FirstName: "John",
+      MiddleName: "",
+      LastName: "Doe",
+      EmployeeCode: "E12345",
+      JoinDate: "2015-05-20",
+      CustomField6: "5 Years of Excellence",
+    },
+    {
+      FirstName: "Jane",
+      MiddleName: "Ann",
+      LastName: "Smith",
+      EmployeeCode: "E67890",
+      JoinDate: "2018-03-15",
+      CustomField6: "3 Years of Excellence",
+    },
+    {
+      FirstName: "Emily",
+      MiddleName: "",
+      LastName: "Davis",
+      EmployeeCode: "E11223",
+      JoinDate: "2020-07-10",
+      CustomField6: "2 Years of Excellence",
+    },
+  ];
+
   const handleNext = () => {
     if ((currentIndex + 1) * 3 < workAnniversaries.length) {
       setCurrentIndex(currentIndex + 1);
@@ -33,12 +60,13 @@ export default function WorkAnniversary() {
       };
 
       const response = await apiCall("GET", url, headers);
-      if (response.success) {
-        setWorkAnniversaries(response?.data?.workAnniversaries);
+      if (response.success && response?.data?.workAnniversaries.length > 0) {
+        setWorkAnniversaries(response.data.workAnniversaries);
       } else {
-        setError("Failed to fetch work anniversaries.");
+        setWorkAnniversaries(sampleData); // Use sample data if no data is returned
       }
     } catch (err) {
+      setWorkAnniversaries(sampleData); // Use sample data if an error occurs
       setError("Error fetching work anniversaries.");
     } finally {
       setLoading(false); // Hide loader after fetching
@@ -80,8 +108,6 @@ export default function WorkAnniversary() {
       >
         {/* Carousel Items */}
         <div className="carousel-inner">
-          {loading && <div>Loading...</div>}
-          {error && <div>{error}</div>}
           {workAnniversaries.length > 0 ? (
             <>
               {/* Display the current slide */}
@@ -106,9 +132,6 @@ export default function WorkAnniversary() {
                             <p className="message">{wish.CustomField6}</p>
                             <p className="message">{`Employee Code: ${wish.EmployeeCode}`}</p>
                             <div className="info">
-                              {/* <span className="location">
-                                <FaMapMarkerAlt className="icon" /> Chaubepur, Kanpur
-                              </span> */}
                               <span className="date">
                                 <FaBirthdayCake className="icon" />{" "}
                                 {new Date(wish.JoinDate).toLocaleDateString(
@@ -130,7 +153,7 @@ export default function WorkAnniversary() {
               </div>
             </>
           ) : (
-            <div>No birthday wishes found.</div>
+            <div>No work anniversaries found.</div>
           )}
         </div>
 

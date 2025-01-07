@@ -23,10 +23,11 @@ export default function Home() {
             <LinkedInCard />
           </div>
           <div className="col-md-4 d-flex ">
-            <AnnouncementCard />
+          <ManagementMessageCard />
+           
           </div>
           <div className="col-md-4 d-flex">
-            <ManagementMessageCard />
+          <AnnouncementCard />
             {/* <AwardsCard /> */}
           </div>
           <div className="col-md-4 d-flex">

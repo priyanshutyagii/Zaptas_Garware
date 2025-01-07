@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./BirthdayBox.css";
 import { FaBirthdayCake, FaMapMarkerAlt } from "react-icons/fa";
-import { apiCall, getTokenFromLocalStorage } from "../../utils/apiCall";
+import { apiCall } from "../../utils/apiCall";
 import ConnectMe from "../../config/connect";
 
 export default function NewJoiners() {
@@ -20,7 +20,9 @@ export default function NewJoiners() {
     if (currentIndex > 0) {
       setCurrentIndex(currentIndex - 1);
     }
-  }; const fetchWorkAnniversaries = async () => {
+  };
+
+  const fetchWorkAnniversaries = async () => {
     try {
       setLoading(true); // Show loader while fetching
       const url = `${ConnectMe.BASE_URL}/hrms/joined-today`; // Replace with actual URL
@@ -31,13 +33,66 @@ export default function NewJoiners() {
       };
 
       const response = await apiCall("GET", url, headers);
-      if (response.success) {
+      if (response.success && response?.data?.joinedToday?.length > 0) {
         setWorkAnniversaries(response?.data?.joinedToday);
       } else {
-        setError("Failed to fetch work anniversaries.");
+        // Set sample data if no data is fetched
+        setWorkAnniversaries([
+          {
+            FirstName: "John",
+            MiddleName: "",
+            LastName: "Doe",
+            CustomField6: "Software Engineer",
+            EmployeeCode: "EMP001",
+            JoinDate: "2023-12-01",
+          },
+          {
+            FirstName: "Jane",
+            MiddleName: "A.",
+            LastName: "Smith",
+            CustomField6: "HR Manager",
+            EmployeeCode: "EMP002",
+            JoinDate: "2023-11-25",
+          },
+          {
+            FirstName: "Sam",
+            MiddleName: "",
+            LastName: "Brown",
+            CustomField6: "Marketing Specialist",
+            EmployeeCode: "EMP003",
+            JoinDate: "2023-11-20",
+          },
+        ]);
       }
     } catch (err) {
-      setError("Error fetching work anniversaries.");
+      setError("Error fetching work anniversaries. Showing sample data.");
+      // Set sample data in case of error
+      setWorkAnniversaries([
+        {
+          FirstName: "John",
+          MiddleName: "",
+          LastName: "Doe",
+          CustomField6: "Software Engineer",
+          EmployeeCode: "EMP001",
+          JoinDate: "2023-12-01",
+        },
+        {
+          FirstName: "Jane",
+          MiddleName: "A.",
+          LastName: "Smith",
+          CustomField6: "HR Manager",
+          EmployeeCode: "EMP002",
+          JoinDate: "2023-11-25",
+        },
+        {
+          FirstName: "Sam",
+          MiddleName: "",
+          LastName: "Brown",
+          CustomField6: "Marketing Specialist",
+          EmployeeCode: "EMP003",
+          JoinDate: "2023-11-20",
+        },
+      ]);
     } finally {
       setLoading(false); // Hide loader after fetching
     }
@@ -55,17 +110,15 @@ export default function NewJoiners() {
     return <div className="error">{error}</div>;
   }
 
-
   return (
     <div className="row">
       <div className="col-md-3">
         <div className="card text-center wish">
           <div className="card-header">
-          <FaBirthdayCake /> &nbsp;New Joiners
-
+            <FaBirthdayCake /> &nbsp;New Joiners
           </div>
           <div className="card-body d-flex align-items-center justify-content-center">
-          <button className="btn btn-primary cartbtn">New Joiners</button>
+            <button className="btn btn-primary cartbtn">New Joiners</button>
           </div>
         </div>
       </div>
@@ -78,11 +131,8 @@ export default function NewJoiners() {
       >
         {/* Carousel Items */}
         <div className="carousel-inner">
-          {loading && <div>Loading...</div>}
-          {error && <div>{error}</div>}
           {workAnniversaries.length > 0 ? (
             <>
-              {/* Display the current slide */}
               <div className="carousel-item active">
                 <div className="row">
                   {workAnniversaries
@@ -104,9 +154,6 @@ export default function NewJoiners() {
                             <p className="message">{wish.CustomField6}</p>
                             <p className="message">{`Employee Code: ${wish.EmployeeCode}`}</p>
                             <div className="info">
-                              {/* <span className="location">
-                                <FaMapMarkerAlt className="icon" /> Chaubepur, Kanpur
-                              </span> */}
                               <span className="date">
                                 <FaBirthdayCake className="icon" />{" "}
                                 {new Date(wish.JoinDate).toLocaleDateString("en-GB", {
@@ -125,7 +172,7 @@ export default function NewJoiners() {
               </div>
             </>
           ) : (
-            <div>No birthday wishes found.</div>
+            <div>No new joiners found.</div>
           )}
         </div>
 

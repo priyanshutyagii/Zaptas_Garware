@@ -17,7 +17,7 @@ const ServiceTypePage = () => {
     const fetchServiceTypes = async () => {
       const token = getTokenFromLocalStorage();
       const headers = { Authorization: `Bearer ${token}` };
-      const response = await apiCall('GET', `${ConnectMe.BASE_URL}/it/api/service-types`, headers);
+      const response = await apiCall('GET', `${ConnectMe.BASE_URL}/it/api/service-types?show=fields`, headers);
       if (response && response.data) {
         setServiceTypes(response.data);
       } else {

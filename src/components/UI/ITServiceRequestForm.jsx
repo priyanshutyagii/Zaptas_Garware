@@ -23,7 +23,7 @@ const ITServiceRequestForm = () => {
     const fetchServiceTypes = async () => {
       setIsLoading(true);
       try {
-        const url = `${ConnectMe.BASE_URL}/it/api/service-types`;
+        const url = `${ConnectMe.BASE_URL}/it/api/service-types?show=fields`;
         const token = getTokenFromLocalStorage();
         const headers = { Authorization: `Bearer ${token}` };
         const response = await apiCall("GET", url, headers);
