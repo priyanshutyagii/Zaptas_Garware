@@ -104,7 +104,7 @@ export default function BirthdayBox() {
               <span>Loading...</span>
             </div>
           )}
-          {error && !loading && <div>{error}</div>}
+          {/* {error && !loading && <div>{error}</div>} */}
           {!loading && birthdayWishes.length > 0 && (
             <div className="carousel-item active">
               <div className="row">
