@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { FaSearch, FaHome } from "react-icons/fa";
 import { RiLink } from "react-icons/ri";
+import { FaHome, FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn } from "react-icons/fa"
 import "./Header.css";
 import { useNavigate } from "react-router-dom";
 import { FiChevronDown } from "react-icons/fi";
@@ -10,9 +10,9 @@ import ConnectMe from "../../config/connect";
 export default function Headers() {
   const navigate = useNavigate();
 
-  useEffect(()=>{
-    fetchQuickLinks()
-  },[])
+  useEffect(() => {
+    fetchQuickLinks();
+  }, []);
 
   // Hardcoded data with third-level submenus
   const [formData, setFormData] = useState({
@@ -56,7 +56,6 @@ export default function Headers() {
     ],
   });
 
-
   const fetchQuickLinks = async () => {
     try {
       const token = getTokenFromLocalStorage();
@@ -64,24 +63,24 @@ export default function Headers() {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       };
-  
+
       const response = await apiCall(
         "GET",
         `${ConnectMe.BASE_URL}/qlink/quick-links`,
         headers
       );
-  
+
       if (response.success) {
         const fetchedLinks = response?.data?.map((link) => ({
           id: link._id, // Ensure unique ID for each link
           title: link.title,
           link: link.url,
         }));
-        let dataSet =  {
+        let dataSet = {
           title: "Quick Links",
-          subMenu: fetchedLinks
-        }
-     
+          subMenu: fetchedLinks,
+        };
+
         // Combine fetched links with the existing hardcoded links
         setFormData((prevState) => ({
           ...prevState,
@@ -95,7 +94,6 @@ export default function Headers() {
       alert("Error fetching quick links");
     }
   };
-  
 
   const renderThirdLevelSubMenu = (thirdLevelSubMenu) => {
     return (
@@ -313,20 +311,42 @@ export default function Headers() {
                 ))}
               </ul>
             </li>
-        
           </ul>
 
-          <form className="d-flex search-form">
-            <input
-              className="form-control"
-              type="search"
-              placeholder="Search"
-              aria-label="Search"
-            />
-            <button className="btn btn-success" type="submit">
-              <FaSearch />
-            </button>
-          </form>
+          <div className="d-flex social-icons">
+            <a
+              href="https://facebook.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-dark mx-2"
+            >
+              <FaFacebookF size={20} />
+            </a>
+            <a
+              href="https://twitter.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-dark mx-2"
+            >
+              <FaTwitter size={20} />
+            </a>
+            <a
+              href="https://instagram.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-dark mx-2"
+            >
+              <FaInstagram size={20} />
+            </a>
+            <a
+              href="https://linkedin.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-dark mx-2"
+            >
+              <FaLinkedinIn size={20} />
+            </a>
+          </div>
         </div>
       </div>
     </header>

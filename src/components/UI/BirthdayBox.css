@@ -24,6 +24,7 @@
     text-align: center;
     transition: transform 0.2s, box-shadow 0.2s;
     background-color: #a29f9f;
+    padding-bottom: 0;
 }
 
 .wish-card:hover {
@@ -72,7 +73,7 @@
 /* Send Wish Button - Positioned partially outside the bottom */
 .send-wish-btn {
     position: relative;
-    top: 35px;
+    top: 16px;
     background-color: #f0231f;
     color: white;
     border: none;
@@ -80,4 +81,7 @@
     padding: 8px 15px;
     transition: transform 0.2s;
     bottom: 0;
+}
+.birthday-wish .carousel-inner {
+    overflow: visible;
 }

@@ -120,7 +120,7 @@ export default function WorkAnniversary() {
                         <div className="wish-card">
                           <div className="user-image">
                             <img
-                              src="./user.png"
+                              src="public\user.PNG"
                               alt="User"
                               className="rounded-circle"
                             />
