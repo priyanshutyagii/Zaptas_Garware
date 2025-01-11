@@ -1,65 +1,39 @@
-import React from "react";
-import { FaInternetExplorer } from "react-icons/fa";
+import React, { useState } from "react";
 import { FaUsersGear } from "react-icons/fa6";
-import { HiArrowCircleRight, HiUserRemove } from "react-icons/hi";
-import { MdAttachEmail } from "react-icons/md";
-import { TiUserAdd } from "react-icons/ti";
+import { HiArrowCircleRight } from "react-icons/hi";
 import { useNavigate } from "react-router-dom";
+import "./ITRequest.css"; // Import custom CSS file for animations
+
 export default function ITRequest() {
   const navigate = useNavigate();
+  const [isHovered, setIsHovered] = useState(false); // State to handle hover effect
 
   return (
     <div
-      className="card mb-3"
+      className="card mb-3 shadow-sm"
       onClick={() => {
         navigate("/ITService");
       }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      style={{ cursor: "pointer", borderRadius: "10px" }}
     >
-      <div className="card-header d-flex justify-content-between align-items-center">
+      <div className="card-header d-flex justify-content-between align-items-center text-black">
         <div className="d-flex align-items-center">
-          <FaUsersGear className="me-2" />
+          <FaUsersGear className="me-2" size={24} />
           <h5 className="mb-0">IT Request</h5>
         </div>
-        <a href="#" className="text-decoration-none">
+        <a href="#" className="text-white text-decoration-none">
           View All <HiArrowCircleRight />
         </a>
       </div>
-      <div className="card-body card-scroll">
-        <div className="d-flex align-items-center mb-4">
-          <div className="user-icon me-3">
-            <TiUserAdd />
-          </div>
-          <div className="text-primary">
-            <h5 className="mb-0">New User Addition.</h5>
-          </div>
-        </div>
-        <div className="d-flex align-items-center mb-4">
-          <div className="user-icon me-3">
-            <HiUserRemove />
-          </div>
-          <div className="text-primary">
-            <h5 className="mb-0"> User Deletion.</h5>
-          </div>
-        </div>
-        <div className="d-flex align-items-center mb-4">
-          <div className="user-icon me-3">
-            <MdAttachEmail />
-          </div>
-          <div className="text-primary">
-            <h5 className="mb-0">New Email Creation.</h5>
-          </div>
-        </div>
-        <div className="d-flex align-items-center mb-5">
-          <div className="user-icon me-3">
-            <FaInternetExplorer />
-          </div>
-          <div className="text-primary">
-            <h5 className="mb-0"> Internet / VPN for Employee.</h5>
-          </div>
-        </div>
-        <a href="#" className="text-decoration-none">
-          Read More +
-        </a>
+      <div
+        className={`card-body d-flex justify-content-center align-items-center ${
+          isHovered ? "hovered" : ""
+        }`}
+        style={{ height: "200px" }}
+      >
+        <h4 className="text-muted coming-soon">Coming Soon...</h4>
       </div>
     </div>
   );

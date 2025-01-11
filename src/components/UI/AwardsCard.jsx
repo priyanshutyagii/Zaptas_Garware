@@ -148,6 +148,7 @@ export default function AnnouncementCard() {
                 state: {
                   title: "View All Announcements",
                   type: "awards",
+                    bannerImg:"./bannerforCSR.jpg"
                 },
               });
             }}

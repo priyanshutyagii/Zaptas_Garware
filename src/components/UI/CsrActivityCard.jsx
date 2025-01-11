@@ -56,9 +56,8 @@ export default function AnnouncementCard() {
   const handleLikedisslike = async (announcementId, isLiked) => {
     showToast(isLiked ? "Unlike success" : "Like success", "success");
     const token = getTokenFromLocalStorage();
-    const url = `${ConnectMe.BASE_URL}/csr/${announcementId}/${
-      isLiked ? "unlike" : "like"
-    }`;
+    const url = `${ConnectMe.BASE_URL}/csr/${announcementId}/${isLiked ? "unlike" : "like"
+      }`;
     const headers = {
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
@@ -74,8 +73,8 @@ export default function AnnouncementCard() {
               // Update the likes array and the likesCount locally
               const updatedLikes = isLiked
                 ? announcement.likes.filter(
-                    (userId) => userId !== response.userId
-                  )
+                  (userId) => userId !== response.userId
+                )
                 : [...announcement.likes, response.userId];
 
               return {
@@ -157,6 +156,7 @@ export default function AnnouncementCard() {
                 state: {
                   title: "View All Announcements",
                   type: "csr",
+                  bannerImg: "./bannerforusercsr.jpg"
                 },
               });
             }}

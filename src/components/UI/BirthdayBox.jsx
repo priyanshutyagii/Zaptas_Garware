@@ -35,6 +35,11 @@ export default function BirthdayBox() {
     },
   ];
 
+  const sampleData2 = [
+    "./Group10.png", "./Group11.png", "./Group12.png"
+  ];
+
+
   const handleNext = () => {
     if ((currentIndex + 1) * 3 < birthdayWishes.length) {
       setCurrentIndex(currentIndex + 1);
@@ -63,11 +68,11 @@ export default function BirthdayBox() {
         setBirthdayWishes(response?.data?.birthdayWishes);
       } else {
         setError("Failed to fetch birthday wishes.");
-        setBirthdayWishes(sampleData); // Use sample data in case of error
+        setBirthdayWishes(sampleData2); // Use sample data in case of error
       }
     } catch (err) {
       setError("Error fetching birthday wishes.");
-      setBirthdayWishes(sampleData); // Use sample data in case of error
+      setBirthdayWishes(sampleData2); // Use sample data in case of error
     } finally {
       setLoading(false); // Hide loader after fetching
     }
@@ -92,7 +97,7 @@ export default function BirthdayBox() {
 
       <div
         id="birthdayCarousel"
-        className="carousel slide col-md-8"
+        className="carousel slide col-md-9"
         data-bs-ride="carousel"
         data-bs-interval="false"
       >
@@ -106,45 +111,22 @@ export default function BirthdayBox() {
           )}
           {/* {error && !loading && <div>{error}</div>} */}
           {!loading && birthdayWishes.length > 0 && (
-            <div className="carousel-item active">
-              <div className="row">
-                {birthdayWishes
-                  .slice(currentIndex * 3, currentIndex * 3 + 3)
-                  .map((wish, index) => (
-                    <div className="col-md-4" key={index}>
-                      <div className="wish-card">
-                        <div className="user-image">
-                          <img
-                            src="public\user.PNG"
-                            alt="User"
-                            className="rounded-circle"
-                          />
-                        </div>
-                        <div className="wish-content">
-                          <h5 className="title">
-                            {wish.FirstName} {wish.LastName}
-                          </h5>
-                          <p className="message">{`Employee Code: ${wish.EmployeeCode}`}</p>
-                          <p className="message">{wish.CustomField6}</p>
-                          <div className="info">
-                            <span className="date">
-                              <FaBirthdayCake className="icon" />{" "}
-                              {new Date(wish.BirthDate).toLocaleDateString(
-                                "en-GB",
-                                {
-                                  day: "numeric",
-                                  month: "short",
-                                }
-                              )}
-                            </span>
-                          </div>
-                          <button className="send-wish-btn">Send Wish</button>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-              </div>
-            </div>
+            // <div className="carousel-item active">
+            <div className="row g-3"> {/* Bootstrap gap class for spacing */}
+            {birthdayWishes
+              .slice(currentIndex * 3, currentIndex * 3 + 3)
+              .map((wish, index) => (
+                <div className="col-md-4" key={index}>
+                  <div className="card">
+                    <img src={wish} className="card-img-top img-fluid" alt={`Wish ${index + 1}`} />
+                  </div>
+                </div>
+              ))}
+          </div>
+          
+
+            // </div>
+
           )}
           {!loading && birthdayWishes.length === 0 && !error && (
             <div>No birthday wishes found.</div>

@@ -144,6 +144,7 @@ export default function AnnouncementCard() {
                 state: {
                   title: "View All Announcements",
                   type: "announcements",
+                     bannerImg: "./bannerforusercsr.jpg"
                 },
               });
             }}
