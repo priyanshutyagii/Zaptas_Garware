@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { FaThumbsUp, FaPaperPlane } from "react-icons/fa"; // Import the mail icon
+import { FaThumbsUp, FaPaperPlane, FaMapMarkerAlt } from "react-icons/fa"; // Import the mail icon
 import { HiArrowCircleRight } from "react-icons/hi";
 import { AiOutlineSound } from "react-icons/ai";
 import { Modal, Spinner } from "react-bootstrap";
@@ -148,7 +148,7 @@ export default function AnnouncementCard() {
                 state: {
                   title: "View All Announcements",
                   type: "awards",
-                    bannerImg:"./bannerforCSR.jpg"
+                  bannerImg: "./bannerforCSR.jpg",
                 },
               });
             }}
@@ -164,7 +164,7 @@ export default function AnnouncementCard() {
               onClick={() => handleShow(announcement)} // Open modal when clicking the card
               style={{ cursor: "pointer" }}
             >
-              <div className="d-flex align-items-start mb-4">
+              <div className="d-flex align-items-start mb-4 flex-column">
                 {/* Date Badge */}
 
                 <div className="date-badge-container">
@@ -172,7 +172,7 @@ export default function AnnouncementCard() {
                     {new Date(announcement?.AnnouncementDate)?.getFullYear() ||
                       ""}
                   </div>
-                  <span className="date date-badge">
+                  <span className="date">
                     {new Date(announcement?.AnnouncementDate)?.getDate() || ""}
                     &nbsp;
                     {new Date(announcement?.AnnouncementDate)?.toLocaleString(
@@ -182,10 +182,16 @@ export default function AnnouncementCard() {
                       }
                     ) || ""}
                   </span>
-                  <span className="date">{announcement?.location}</span>
+                  <span className="location">
+                    <FaMapMarkerAlt className="location-icon" />
+                    {announcement?.location}
+                  </span>
                 </div>
                 {/* Announcement Content */}
-                <div className="announcement-disc" onClick={handleCelebration}>
+                <div
+                  className="announcement-disc pb-2"
+                  onClick={handleCelebration}
+                >
                   <p className="card-text">
                     {announcement.AwardierName} (
                     {announcement.PersonDesignation})

@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { HiArrowCircleRight } from "react-icons/hi";
 import { AiOutlineSound } from "react-icons/ai";
 import { Modal, Spinner } from "react-bootstrap";
-import { FaThumbsUp } from "react-icons/fa";
+import { FaMapMarkerAlt, FaThumbsUp } from "react-icons/fa";
 import "./AnnouncementCard.css";
 import ConnectMe from "../../config/connect";
 import { apiCall, getTokenFromLocalStorage } from "../../utils/apiCall";
@@ -144,7 +144,7 @@ export default function AnnouncementCard() {
                 state: {
                   title: "View All Announcements",
                   type: "announcements",
-                     bannerImg: "./bannerforusercsr.jpg"
+                  bannerImg: "./bannerforusercsr.jpg",
                 },
               });
             }}
@@ -160,15 +160,14 @@ export default function AnnouncementCard() {
               onClick={() => handleShow(announcement)} // Open modal when clicking the card
               style={{ cursor: "pointer" }}
             >
-              <div className="d-flex align-items-start mb-4">
+              <div className="d-flex align-items-start mb-4 flex-column">
                 {/* Date Badge */}
-
                 <div className="date-badge-container">
-                  <div className="date-badge">
+                  <span className="date-badge">
                     {new Date(announcement?.AnnouncementDate)?.getFullYear() ||
                       ""}
-                  </div>
-                  <span className="date date-badge">
+                  </span>
+                  <span className="date">
                     {new Date(announcement?.AnnouncementDate)?.getDate() || ""}
                     &nbsp;
                     {new Date(announcement?.AnnouncementDate)?.toLocaleString(
@@ -178,15 +177,18 @@ export default function AnnouncementCard() {
                       }
                     ) || ""}
                   </span>
-                  <span className="date">{announcement?.location}</span>
+                  <span className="location">
+                    <FaMapMarkerAlt className="location-icon" />
+                    {announcement?.location}
+                  </span>
                 </div>
 
                 {/* Announcement Content */}
-                <div className="announcement-disc">
+                <div className="announcement-disc pb-2">
                   <p className="card-text">{announcement.title}</p>
 
                   <div className="card-text fs-6">
-                    <PostCard post={announcement.description} size={70} />
+                    <PostCard post={announcement.description} size={80} />
                   </div>
 
                   <div className="d-flex justify-content-between mt-2">

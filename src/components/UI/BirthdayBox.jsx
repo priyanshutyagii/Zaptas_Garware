@@ -35,10 +35,7 @@ export default function BirthdayBox() {
     },
   ];
 
-  const sampleData2 = [
-    "./Group10.png", "./Group11.png", "./Group12.png"
-  ];
-
+  const sampleData2 = ["./Group10.png", "./Group11.png", "./Group12.png"];
 
   const handleNext = () => {
     if ((currentIndex + 1) * 3 < birthdayWishes.length) {
@@ -84,20 +81,17 @@ export default function BirthdayBox() {
 
   return (
     <div className="row">
-      <div className="col-md-3">
-        <div className="card text-center wish">
+      <div className="col-md-12">
+        <div className=" wish mb-5">
           <div className="card-header">
-            <FaBirthdayCake /> &nbsp; Birthday Wishes
-          </div>
-          <div className="card-body card-scroll d-flex align-items-center justify-content-center">
-            <button className="btn btn-primary cartbtn">Birthday</button>
+            <FaBirthdayCake /> &nbsp;Birthday Wishes
           </div>
         </div>
       </div>
 
       <div
         id="birthdayCarousel"
-        className="carousel slide col-md-9"
+        className="carousel slide col-md-12"
         data-bs-ride="carousel"
         data-bs-interval="false"
       >
@@ -112,21 +106,25 @@ export default function BirthdayBox() {
           {/* {error && !loading && <div>{error}</div>} */}
           {!loading && birthdayWishes.length > 0 && (
             // <div className="carousel-item active">
-            <div className="row g-3"> {/* Bootstrap gap class for spacing */}
-            {birthdayWishes
-              .slice(currentIndex * 3, currentIndex * 3 + 3)
-              .map((wish, index) => (
-                <div className="col-md-4" key={index}>
-                  <div className="card">
-                    <img src={wish} className="card-img-top img-fluid" alt={`Wish ${index + 1}`} />
+            <div className="row g-3">
+              {" "}
+              {/* Bootstrap gap class for spacing */}
+              {birthdayWishes
+                .slice(currentIndex * 3, currentIndex * 3 + 3)
+                .map((wish, index) => (
+                  <div className="col-md-3" key={index}>
+                    <div className="card">
+                      <img
+                        src={wish}
+                        className="card-img-top img-fluid"
+                        alt={`Wish ${index + 1}`}
+                      />
+                    </div>
                   </div>
-                </div>
-              ))}
-          </div>
-          
+                ))}
+            </div>
 
             // </div>
-
           )}
           {!loading && birthdayWishes.length === 0 && !error && (
             <div>No birthday wishes found.</div>

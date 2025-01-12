@@ -3,34 +3,43 @@
     padding-bottom: 20px;
 }
 
-.birthday-wish .wish {
+/* .birthday-wish .wish {
     background: #3d3c3c;
     height: 198px;
     margin: 0;
-}
+} */
 
 .birthday-wish .card-header {
     background: transparent;
-    border-color: #fff;
-    color: #fff;
+    /* border-color: #fff !important; */
+    color: #000021;
     font-size: 22px;
     padding: 8px;
+    font-weight: bold;
 }
 
 .wish-card {
     position: relative;
     border-radius: 5px;
     padding: 20px;
-    text-align: center;
     transition: transform 0.2s, box-shadow 0.2s;
-    background-color: #a29f9f;
+    background-color: #000021;
     padding-bottom: 0;
+    background-image: url(public/wish.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: 100%;
 }
 
 .wish-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 }
+
+.wish-content {
+    color: white;
+}
+
 
 /* User Image - Positioned partially outside the box */
 .user-image {
@@ -52,6 +61,8 @@
 .title {
     font-weight: bold;
     margin-top: 23px;
+    font-family: "Croissant One", serif;
+    color: #f0231f;
 }
 
 .message {
@@ -60,7 +71,6 @@
 
 .info {
     display: flex;
-    justify-content: center;
     gap: 20px;
     align-items: center;
 }
@@ -82,6 +92,7 @@
     transition: transform 0.2s;
     bottom: 0;
 }
+
 .birthday-wish .carousel-inner {
     overflow: visible;
 }

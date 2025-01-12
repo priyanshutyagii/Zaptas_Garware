@@ -112,20 +112,22 @@ export default function NewJoiners() {
 
   return (
     <div className="row">
-      <div className="col-md-3">
-        <div className="card text-center wish">
+      <div className="col-md-12">
+        <div className=" wish mb-5">
           <div className="card-header">
             <FaBirthdayCake /> &nbsp;New Joiners
           </div>
-          <div className="card-body d-flex align-items-center justify-content-center">
-            <button className="btn btn-primary cartbtn">New Joiners</button>
-          </div>
+          {/* <div className="card-body card-scroll d-flex align-items-center justify-content-center">
+                  <button className="btn btn-primary cartbtn">
+                    Work Anniversary
+                  </button>
+                </div> */}
         </div>
       </div>
 
       <div
         id="birthdayCarousel"
-        className="carousel slide col-md-9"
+        className="carousel slide col-md-12"
         data-bs-ride="carousel"
         data-bs-interval="false"
       >
@@ -138,7 +140,7 @@ export default function NewJoiners() {
                   {workAnniversaries
                     .slice(currentIndex * 3, currentIndex * 3 + 3)
                     .map((wish, index) => (
-                      <div className="col-md-4" key={index}>
+                      <div className="col-md-3" key={index}>
                         <div className="wish-card">
                           <div className="user-image">
                             <img
@@ -156,14 +158,22 @@ export default function NewJoiners() {
                             <div className="info">
                               <span className="date">
                                 <FaBirthdayCake className="icon" />{" "}
-                                {new Date(wish.JoinDate).toLocaleDateString("en-GB", {
-                                  day: "2-digit",
-                                  month: "short",
-                                  year: "numeric",
-                                })}
+                                {new Date(wish.JoinDate).toLocaleDateString(
+                                  "en-GB",
+                                  {
+                                    day: "2-digit",
+                                    month: "short",
+                                    year: "numeric",
+                                  }
+                                )}
                               </span>
                             </div>
-                            <button className="send-wish-btn">Send Wish</button>
+                            <div className="d-flex justify-content-center">
+                              {" "}
+                              <button className="send-wish-btn">
+                                Send Wish
+                              </button>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -182,7 +192,10 @@ export default function NewJoiners() {
           type="button"
           onClick={handlePrev}
         >
-          <span className="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span
+            className="carousel-control-prev-icon"
+            aria-hidden="true"
+          ></span>
           <span className="visually-hidden">Previous</span>
         </button>
         <button
@@ -190,7 +203,10 @@ export default function NewJoiners() {
           type="button"
           onClick={handleNext}
         >
-          <span className="carousel-control-next-icon" aria-hidden="true"></span>
+          <span
+            className="carousel-control-next-icon"
+            aria-hidden="true"
+          ></span>
           <span className="visually-hidden">Next</span>
         </button>
       </div>

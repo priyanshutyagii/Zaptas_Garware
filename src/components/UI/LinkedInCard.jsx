@@ -198,14 +198,14 @@ export default function LinkedInCard() {
           <FaLinkedin className="me-2" />
           <h5 className="mb-0">LinkedIn</h5>
         </div>
-        <button
+        <a
           onClick={() => {
             navigate("/view-all");
           }}
           className="text-decoration-none"
         >
           View All <HiArrowCircleRight />
-        </button>
+        </a>
       </div>
 
       {loading ? (

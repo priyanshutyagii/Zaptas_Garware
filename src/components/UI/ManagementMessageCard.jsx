@@ -155,10 +155,10 @@ export default function AnnouncementCard() {
               onClick={() => handleShow(announcement)} // Open modal when clicking the card
               style={{ cursor: "pointer" }}
             >
-              <div className="d-flex align-items-start">
+              <div className="d-flex align-items-start flex-column">
                 {/* Date Badge */}
 
-                <div className="csrimg">
+                <div className="csrimg mmcsrimg">
                   <img
                     src={
                       announcement?.imagePath[0]

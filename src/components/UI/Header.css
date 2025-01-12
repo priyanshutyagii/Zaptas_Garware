@@ -3,8 +3,12 @@
     background-color: #fff !important;
 }
 
+.bg-main {
+    background-color: #000021;
+}
+
 .nav-link {
-    color: #000;
+    color: #fff !important;
 }
 
 .navbar-icon {
@@ -65,13 +69,13 @@ a.dropdown-item {
 .dropdown-item:hover .submenu-arrow {
     transform: rotate(90deg);
 }
+
 /* .social-icons a {
     font-size: 1.5rem;
     color: #000;
     transition: color 0.3s ease;
   } */
-  
-  .social-icons a:hover svg {
-    color: green; 
-  }
-  
+
+.social-icons a:hover svg {
+    color: green;
+}
