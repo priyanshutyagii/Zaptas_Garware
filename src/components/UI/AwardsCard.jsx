@@ -167,26 +167,6 @@ export default function AnnouncementCard() {
               <div className="d-flex align-items-start mb-4 flex-column">
                 {/* Date Badge */}
 
-                <div className="date-badge-container">
-                  <div className="date-badge">
-                    {new Date(announcement?.AnnouncementDate)?.getFullYear() ||
-                      ""}
-                  </div>
-                  <span className="date">
-                    {new Date(announcement?.AnnouncementDate)?.getDate() || ""}
-                    &nbsp;
-                    {new Date(announcement?.AnnouncementDate)?.toLocaleString(
-                      "default",
-                      {
-                        month: "short",
-                      }
-                    ) || ""}
-                  </span>
-                  <span className="location">
-                    <FaMapMarkerAlt className="location-icon" />
-                    {announcement?.location}
-                  </span>
-                </div>
                 {/* Announcement Content */}
                 <div
                   className="announcement-disc pb-2"
@@ -204,38 +184,63 @@ export default function AnnouncementCard() {
                     <PostCard post={announcement.description} size={60} />
                   </div>
 
-                  <div className="d-flex mt-2 align-items-center">
+                  <div className="d-flex mt-2 align-items-center justify-content-between">
                     {" "}
                     {/* Add `align-items-center` for vertical alignment */}
-                    <p
-                      className="like-section me-3" // Add `me-3` for spacing
-                      onClick={(e) => {
-                        e.stopPropagation(); // Prevent triggering `handleShow`
-                        handleLikedisslike(
-                          announcement._id,
-                          announcement.likedByUser
-                        );
-                      }}
-                    >
-                      <FaThumbsUp
-                        style={{
-                          color: announcement.likedByUser ? "blue" : "gray",
-                          cursor: "pointer",
+                    <div className="d-flex align-items-center">
+                      <p
+                        className="like-section me-3" // Add `me-3` for spacing
+                        onClick={(e) => {
+                          e.stopPropagation(); // Prevent triggering `handleShow`
+                          handleLikedisslike(
+                            announcement._id,
+                            announcement.likedByUser
+                          );
                         }}
-                      />{" "}
-                      {announcement?.likes?.length}
-                    </p>
-                    {/* Add the mail icon */}
-                    <p
-                      className="mail-section"
-                      onClick={(e) => {
-                        e.stopPropagation(); // Prevent triggering `handleShow`
-                        // Handle mail click logic here
-                      }}
-                      style={{ cursor: "pointer", margin: 0 }}
-                    >
-                      <FaPaperPlane style={{ color: "gray" }} />
-                    </p>
+                      >
+                        <FaThumbsUp
+                          style={{
+                            color: announcement.likedByUser
+                              ? "#00659b"
+                              : "gray",
+                            cursor: "pointer",
+                          }}
+                        />{" "}
+                        {announcement?.likes?.length}
+                      </p>
+                      {/* Add the mail icon */}
+                      <p
+                        className="mail-section"
+                        onClick={(e) => {
+                          e.stopPropagation(); // Prevent triggering `handleShow`
+                          // Handle mail click logic here
+                        }}
+                        style={{ cursor: "pointer", margin: 0 }}
+                      >
+                        <FaPaperPlane style={{ color: "gray" }} />
+                      </p>
+                    </div>
+                    <div className="date-badge-container">
+                      <div className="date-badge">
+                        {new Date(
+                          announcement?.AnnouncementDate
+                        )?.getFullYear() || ""}
+                      </div>
+                      <span className="date">
+                        {new Date(announcement?.AnnouncementDate)?.getDate() ||
+                          ""}
+                        &nbsp;
+                        {new Date(
+                          announcement?.AnnouncementDate
+                        )?.toLocaleString("default", {
+                          month: "short",
+                        }) || ""}
+                      </span>
+                      <span className="location">
+                        <FaMapMarkerAlt className="location-icon" />
+                        {announcement?.location}
+                      </span>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -298,7 +303,7 @@ export default function AnnouncementCard() {
                   href={link.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  style={{ textDecoration: "none", color: "#007bff" }}
+                  style={{ textDecoration: "none", color: "#00659b" }}
                 >
                   <div
                     style={{
@@ -361,7 +366,7 @@ export default function AnnouncementCard() {
                   )
                 }
                 style={{
-                  color: selectedAnnouncement.likedByUser ? "blue" : "gray",
+                  color: selectedAnnouncement.likedByUser ? "#00659b" : "gray",
                   cursor: "pointer",
                   marginRight: "8px",
                 }}

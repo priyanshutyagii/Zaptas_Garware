@@ -127,11 +127,11 @@ export default function AnnouncementCard() {
   const formatText = (text) => {
     if (!text) return null;
 
-    // Replace `{hashtag|#|tag}` with `#tag` and style it in blue
+    // Replace `{hashtag|#|tag}` with `#tag` and style it in #00659b
     return text
       .replace(/{hashtag\|\\#\|/g, "#") // Replace starting hashtag syntax
       .replace(/}/g, "") // Remove closing syntax
-      .replace(/#(\w+)/g, '<span style="color:blue;">#$1</span>') // Make hashtags blue
+      .replace(/#(\w+)/g, '<span style="color:#00659b;">#$1</span>') // Make hashtags #00659b
       .replace(/(\r\n|\n|\r)/gm, "<br>"); // Replace line breaks with HTML <br> tags for proper rendering
   };
 
@@ -189,7 +189,7 @@ export default function AnnouncementCard() {
                     >
                       <FaThumbsUp
                         style={{
-                          color: announcement.likedByUser ? "blue" : "gray",
+                          color: announcement.likedByUser ? "#00659b" : "gray",
                           cursor: "pointer",
                         }}
                       />{" "}
@@ -264,7 +264,7 @@ export default function AnnouncementCard() {
                   href={link.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  style={{ textDecoration: "none", color: "#007bff" }}
+                  style={{ textDecoration: "none", color: "#00659b" }}
                 >
                   <div
                     style={{
@@ -328,7 +328,7 @@ export default function AnnouncementCard() {
                   )
                 }
                 style={{
-                  color: selectedAnnouncement.likedByUser ? "blue" : "gray",
+                  color: selectedAnnouncement.likedByUser ? "#00659b" : "gray",
                   cursor: "pointer",
                   marginRight: "8px",
                 }}

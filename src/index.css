@@ -18,14 +18,35 @@ body {
   font-size: 14px;
 }
 
+.card {
+  border: none;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 0px 10px rgba(0, 0, 0, 0.2);
+  margin: 8px;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
 .card-header {
-  background: #000021;
+  background: #00659b;
   color: white;
+  padding: 12px;
+}
+
+.card-header a {
+  color: #fff !important;
+}
+
+.card-header svg {
+  font-size: 1.2rem;
 }
 
 a {
   text-decoration: none;
-  color: #fff;
+  color: #00659b;
   cursor: pointer;
 }
 

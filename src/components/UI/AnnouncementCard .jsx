@@ -161,28 +161,6 @@ export default function AnnouncementCard() {
               style={{ cursor: "pointer" }}
             >
               <div className="d-flex align-items-start mb-4 flex-column">
-                {/* Date Badge */}
-                <div className="date-badge-container">
-                  <span className="date-badge">
-                    {new Date(announcement?.AnnouncementDate)?.getFullYear() ||
-                      ""}
-                  </span>
-                  <span className="date">
-                    {new Date(announcement?.AnnouncementDate)?.getDate() || ""}
-                    &nbsp;
-                    {new Date(announcement?.AnnouncementDate)?.toLocaleString(
-                      "default",
-                      {
-                        month: "short",
-                      }
-                    ) || ""}
-                  </span>
-                  <span className="location">
-                    <FaMapMarkerAlt className="location-icon" />
-                    {announcement?.location}
-                  </span>
-                </div>
-
                 {/* Announcement Content */}
                 <div className="announcement-disc pb-2">
                   <p className="card-text">{announcement.title}</p>
@@ -204,12 +182,34 @@ export default function AnnouncementCard() {
                     >
                       <FaThumbsUp
                         style={{
-                          color: announcement.likedByUser ? "blue" : "gray",
+                          color: announcement.likedByUser ? "#00659b" : "gray",
                           cursor: "pointer",
                         }}
                       />{" "}
                       {announcement?.likes?.length}
                     </p>
+                    {/* Date Badge */}
+                    <div className="date-badge-container">
+                      <span className="date-badge">
+                        {new Date(
+                          announcement?.AnnouncementDate
+                        )?.getFullYear() || ""}
+                      </span>
+                      <span className="date">
+                        {new Date(announcement?.AnnouncementDate)?.getDate() ||
+                          ""}
+                        &nbsp;
+                        {new Date(
+                          announcement?.AnnouncementDate
+                        )?.toLocaleString("default", {
+                          month: "short",
+                        }) || ""}
+                      </span>
+                      <span className="location">
+                        <FaMapMarkerAlt className="location-icon" />
+                        {announcement?.location}
+                      </span>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -272,7 +272,7 @@ export default function AnnouncementCard() {
                   href={link.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  style={{ textDecoration: "none", color: "#007bff" }}
+                  style={{ textDecoration: "none", color: "#00659b" }}
                 >
                   <div
                     style={{
@@ -335,7 +335,7 @@ export default function AnnouncementCard() {
                   )
                 }
                 style={{
-                  color: selectedAnnouncement.likedByUser ? "blue" : "gray",
+                  color: selectedAnnouncement.likedByUser ? "#00659b" : "gray",
                   cursor: "pointer",
                   marginRight: "8px",
                 }}

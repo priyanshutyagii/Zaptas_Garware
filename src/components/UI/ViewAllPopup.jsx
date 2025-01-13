@@ -10,7 +10,7 @@ import { FaThumbsUp } from "react-icons/fa";
 
 export default function ViewAllPage() {
   const { state } = useLocation();
-  const { title, type = "announcement",bannerImg } = state;
+  const { title, type = "announcement", bannerImg } = state;
   const [selectedImage, setSelectedImage] = useState(null); // For full-size image preview
 
   const [posts, setPosts] = useState([]); // All fetched posts
@@ -25,7 +25,6 @@ export default function ViewAllPage() {
       setLoading(true);
       const url = `${ConnectMe.BASE_URL}/${type}/latest?page=${startRef.current}&limit=${limit}`;
       const token = getTokenFromLocalStorage();
-
 
       const headers = {
         Authorization: `Bearer ${token}`,
@@ -134,12 +133,8 @@ export default function ViewAllPage() {
       {/* <header className="page-header"><h1>{title}</h1></header> */}
       <div className="banner-img ">
         <div className="bodx-img">
-          <img
-            src={bannerImg}
-            alt={title}
-            width={"100%"}
-          />
-        {/* </div>
+          <img src={bannerImg} alt={title} width={"100%"} />
+          {/* </div>
         <div className="box-img">
           <img
             className="img2"
@@ -148,7 +143,7 @@ export default function ViewAllPage() {
             width={"100%"}
           />
         </div> */}
-      </div>
+        </div>
       </div>
       {posts.length === 0 && !loading && <p>No posts available</p>}
       {posts.length > 0 && (
@@ -191,7 +186,7 @@ export default function ViewAllPage() {
                     >
                       <FaThumbsUp
                         style={{
-                          color: post.likedByUser ? "blue" : "gray",
+                          color: post.likedByUser ? "#00659b" : "gray",
                           cursor: "pointer",
                         }}
                       />{" "}

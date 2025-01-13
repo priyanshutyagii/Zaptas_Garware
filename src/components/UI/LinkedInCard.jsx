@@ -275,7 +275,9 @@ export default function LinkedInCard() {
                             loadingPostIds.includes(post.id) ? "loading" : ""
                           }`}
                           style={{
-                            color: post?.fetchUserLikesStatus ? "blue" : "gray",
+                            color: post?.fetchUserLikesStatus
+                              ? "#00659b"
+                              : "gray",
                             cursor: "pointer",
                           }}
                           onClick={(event) => {
@@ -347,7 +349,9 @@ export default function LinkedInCard() {
                   loadingPostIds.includes(selectedPost?.id) ? "loading" : ""
                 }`}
                 style={{
-                  color: selectedPost?.fetchUserLikesStatus ? "blue" : "gray",
+                  color: selectedPost?.fetchUserLikesStatus
+                    ? "#00659b"
+                    : "gray",
                   cursor: "pointer",
                 }}
                 onClick={() =>
