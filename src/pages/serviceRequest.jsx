@@ -16,15 +16,15 @@ const ServiceRequestPage = () => {
         const url = `${ConnectMe.BASE_URL}/it/api/getrequests?status=Pending&count=true&data=true`;
         const token = getTokenFromLocalStorage();
         const headers = { Authorization: `Bearer ${token}` };
-        const response = await apiCall("GET", url, headers);
+        const response = await apiCall('GET', url, headers);
 
-        if (response && response.data) {
-          setServiceRequests(response?.data?.data);
+        if (response?.data?.data) {
+          setServiceRequests(response.data.data);
         } else {
-          console.error("Failed to fetch service requests");
+          console.error('Failed to fetch service requests');
         }
       } catch (error) {
-        console.error("Error fetching service requests:", error);
+        console.error('Error fetching service requests:', error);
       } finally {
         setLoading(false);
       }
@@ -33,54 +33,37 @@ const ServiceRequestPage = () => {
     fetchServiceRequests();
   }, []);
 
-  const handleApprove = async (requestId) => {
+  const handleAction = async (action, requestId) => {
     if (!comment.trim()) {
-      alert('Comment is required before approving.');
+      alert('Comment is required before taking action.');
       return;
     }
 
     try {
-      const response = await axios.put(`/api/service-requests/${requestId}/approve`, { comment });
+      const endpoint = `/api/service-requests/${requestId}/${action}`;
+      const response = await axios.put(endpoint, { comment });
 
       if (response.data.success) {
-        alert('Service request approved successfully!');
-        setServiceRequests(prevState =>
-          prevState.map(request =>
-            request._id === requestId ? { ...request, status: 'Approved' } : request
+        alert(`Service request ${action}ed successfully!`);
+        setServiceRequests((prevState) =>
+          prevState.map((request) =>
+            request._id === requestId ? { ...request, status: action === 'approve' ? 'Approved' : 'Rejected' } : request
           )
         );
       } else {
-        alert('Failed to approve the request.');
+        alert(`Failed to ${action} the request.`);
       }
     } catch (error) {
-      console.error('Error approving request:', error);
-      alert('An error occurred while approving the request.');
+      console.error(`Error ${action}ing request:`, error);
+      alert(`An error occurred while ${action}ing the request.`);
     }
   };
 
-  const handleReject = async (requestId) => {
-    if (!comment.trim()) {
-      alert('Comment is required before rejecting.');
-      return;
-    }
-
-    try {
-      const response = await axios.put(`/api/service-requests/${requestId}/reject`, { comment });
-
-      if (response.data.success) {
-        alert('Service request rejected successfully!');
-        setServiceRequests(prevState =>
-          prevState.map(request =>
-            request._id === requestId ? { ...request, status: 'Rejected' } : request
-          )
-        );
-      } else {
-        alert('Failed to reject the request.');
-      }
-    } catch (error) {
-      console.error('Error rejecting request:', error);
-      alert('An error occurred while rejecting the request.');
-    }
+  const openCommentModal = (requestId) => {
+    setSelectedRequest(requestId);
+    setComment('');
+    const modal = new bootstrap.Modal(document.getElementById('commentModal'));
+    modal.show();
   };
 
   return (
@@ -101,7 +84,7 @@ const ServiceRequestPage = () => {
                 <th>Request ID</th>
                 <th>Employee Code</th>
                 <th>Service Type</th>
-                <th>Field Value</th>
+                <th>Fields</th>
                 <th>Status</th>
                 <th>Action</th>
               </tr>
@@ -113,9 +96,9 @@ const ServiceRequestPage = () => {
                   <td>{request?.EmployeeCode}</td>
                   <td>{request?.serviceType}</td>
                   <td>
-                    {request?.serviceFields
-                      ?.map((field) => field?.fieldValue)
-                      .join(', ')}
+                    {request?.serviceFields?.map(
+                      (field) => `${field.fieldConfig}: ${field.fieldValue}`
+                    ).join(', ')}
                   </td>
                   <td>{request?.status}</td>
                   <td>
@@ -123,21 +106,13 @@ const ServiceRequestPage = () => {
                       <>
                         <button
                           className="btn btn-success btn-sm me-2"
-                          onClick={() => {
-                            setSelectedRequest(request._id);
-                            setComment('');
-                            document.getElementById('commentModal').style.display = 'block';
-                          }}
+                          onClick={() => openCommentModal(request._id)}
                         >
                           Approve
                         </button>
                         <button
                           className="btn btn-danger btn-sm"
-                          onClick={() => {
-                            setSelectedRequest(request._id);
-                            setComment('');
-                            document.getElementById('commentModal').style.display = 'block';
-                          }}
+                          onClick={() => openCommentModal(request._id)}
                         >
                           Reject
                         </button>
@@ -162,7 +137,9 @@ const ServiceRequestPage = () => {
         <div className="modal-dialog">
           <div className="modal-content">
             <div className="modal-header">
-              <h5 className="modal-title" id="commentModalLabel">Add Comment</h5>
+              <h5 className="modal-title" id="commentModalLabel">
+                Add Comment
+              </h5>
               <button
                 type="button"
                 className="btn-close"
@@ -183,8 +160,11 @@ const ServiceRequestPage = () => {
               <button
                 className="btn btn-success"
                 onClick={() => {
-                  handleApprove(selectedRequest);
-                  document.getElementById('commentModal').style.display = 'none';
+                  handleAction('approve', selectedRequest);
+                  const modal = bootstrap.Modal.getInstance(
+                    document.getElementById('commentModal')
+                  );
+                  modal.hide();
                 }}
               >
                 Approve
@@ -192,8 +172,11 @@ const ServiceRequestPage = () => {
               <button
                 className="btn btn-danger"
                 onClick={() => {
-                  handleReject(selectedRequest);
-                  document.getElementById('commentModal').style.display = 'none';
+                  handleAction('reject', selectedRequest);
+                  const modal = bootstrap.Modal.getInstance(
+                    document.getElementById('commentModal')
+                  );
+                  modal.hide();
                 }}
               >
                 Reject
