@@ -89,3 +89,15 @@ a:hover {
   max-height: 550px;
   overflow: auto;
 }
+
+.card-like svg {
+  color: blue !important;
+}
+
+.like-section {
+  color: blue !important;
+}
+
+.like-section svg {
+  color: blue !important;
+}

@@ -166,10 +166,10 @@ export default function AnnouncementCard() {
                   <p className="card-text">{announcement.title}</p>
 
                   <div className="card-text fs-6">
-                    <PostCard post={announcement.description} size={80} />
+                    <PostCard post={announcement.description} size={118} />
                   </div>
 
-                  <div className="d-flex justify-content-between mt-2">
+                  <div className="d-flex justify-content-between mt-3">
                     <p
                       className="like-section"
                       onClick={(e) => {
@@ -190,11 +190,6 @@ export default function AnnouncementCard() {
                     </p>
                     {/* Date Badge */}
                     <div className="date-badge-container">
-                      <span className="date-badge">
-                        {new Date(
-                          announcement?.AnnouncementDate
-                        )?.getFullYear() || ""}
-                      </span>
                       <span className="date">
                         {new Date(announcement?.AnnouncementDate)?.getDate() ||
                           ""}
@@ -204,7 +199,13 @@ export default function AnnouncementCard() {
                         )?.toLocaleString("default", {
                           month: "short",
                         }) || ""}
-                      </span>
+                      </span>{" "}
+                      -
+                      <span className="date-badge">
+                        {new Date(
+                          announcement?.AnnouncementDate
+                        )?.getFullYear() || ""}
+                      </span>{" "}
                       <span className="location">
                         <FaMapMarkerAlt className="location-icon" />
                         {announcement?.location}

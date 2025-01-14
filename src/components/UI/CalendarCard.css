@@ -31,6 +31,10 @@
   cursor: pointer;
 }
 
+.text-danger {
+  color: #f0231f !important;
+}
+
 .calendar-card .event-dot.holiday {
   background-color: #ff6347;
   /* Example color for holiday */

@@ -181,7 +181,7 @@ export default function AnnouncementCard() {
                   </p>
                   <div className="card-text fs-6">
                     {" "}
-                    <PostCard post={announcement.description} size={60} />
+                    <PostCard post={announcement.description} size={90} />
                   </div>
 
                   <div className="d-flex mt-2 align-items-center justify-content-between">
@@ -221,11 +221,6 @@ export default function AnnouncementCard() {
                       </p>
                     </div>
                     <div className="date-badge-container">
-                      <div className="date-badge">
-                        {new Date(
-                          announcement?.AnnouncementDate
-                        )?.getFullYear() || ""}
-                      </div>
                       <span className="date">
                         {new Date(announcement?.AnnouncementDate)?.getDate() ||
                           ""}
@@ -235,7 +230,13 @@ export default function AnnouncementCard() {
                         )?.toLocaleString("default", {
                           month: "short",
                         }) || ""}
-                      </span>
+                      </span>{" "}
+                      -
+                      <div className="date-badge">
+                        {new Date(
+                          announcement?.AnnouncementDate
+                        )?.getFullYear() || ""}
+                      </div>
                       <span className="location">
                         <FaMapMarkerAlt className="location-icon" />
                         {announcement?.location}

@@ -12,7 +12,7 @@ import { useNavigate } from "react-router-dom";
 export default function CalendarCard() {
   const [date, setDate] = useState(new Date());
   const [events, setEvents] = useState([]);
-  const [hoveredEvents, setHoveredEvents] = useState([]);
+  const [selectedDateEvents, setSelectedDateEvents] = useState([]);
   const navigate = useNavigate();
 
   const fetchEvents = async (month, year) => {
@@ -47,51 +47,32 @@ export default function CalendarCard() {
     );
   };
 
+  const handleDateClick = (selectedDate) => {
+    setDate(selectedDate);
+    const eventsForDate = getEventsForDate(selectedDate);
+    setSelectedDateEvents(eventsForDate);
+  };
+
   const tileContent = ({ date, view }) => {
     if (view === "month") {
       const eventsForDate = getEventsForDate(date);
       if (eventsForDate.length > 0) {
         return (
-          <div
-            className="event-dots"
-            onMouseEnter={() => setHoveredEvents(eventsForDate)}
-            onMouseLeave={() => setHoveredEvents([])}
-          >
+          <div className="event-dots">
             {eventsForDate.slice(0, 2).map((event, index) => (
               <span
                 key={index}
                 className={`event-dot ${event.type.toLowerCase()}`}
-                data-bs-toggle="tooltip"
-                data-bs-placement="top"
-                title={`${event.title} (${event.type})`}
               />
             ))}
             {eventsForDate.length > 2 && (
-              <span className="more-events">
-                +{eventsForDate.length - 2}
-                <div className="hover-popup">
-                  {hoveredEvents.map((event, index) => (
-                    <div key={index} className="hover-event">
-                      <strong>{event.title}</strong> ({event.type})
-                    </div>
-                  ))}
-                </div>
-              </span>
+              <span className="more-events">+{eventsForDate.length - 2}</span>
             )}
           </div>
         );
       }
     }
   };
-
-  useEffect(() => {
-    const tooltipTriggerList = Array.from(
-      document.querySelectorAll('[data-bs-toggle="tooltip"]')
-    );
-    tooltipTriggerList.forEach((tooltipTriggerEl) => {
-      new window.bootstrap.Tooltip(tooltipTriggerEl);
-    });
-  }, [events]);
 
   const handleActiveStartDateChange = ({ activeStartDate, view }) => {
     if (view === "month") {
@@ -121,11 +102,24 @@ export default function CalendarCard() {
       </div>
       <div className="card-body card-scroll">
         <Calendar
-          onChange={setDate}
+          onChange={handleDateClick}
           value={date}
           tileContent={tileContent}
           onActiveStartDateChange={handleActiveStartDateChange}
         />
+        {selectedDateEvents.length > 0 && (
+          <div className="event-list mt-3">
+            <h6>Events on {date.toDateString()}:</h6>
+            <ul>
+              {selectedDateEvents.map((event, index) => (
+                <li key={index}>
+                  <strong>{event.title}</strong> -{" "}
+                  <span className="text-danger"> {event.type} </span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
       </div>
     </div>
   );
