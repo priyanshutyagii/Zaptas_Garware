@@ -117,7 +117,7 @@ export default function WorkAnniversary() {
                     .slice(currentIndex * 3, currentIndex * 3 + 3)
                     .map((wish, index) => (
                       <div className="col-md-3" key={index}>
-                        <div className="wish-card">
+                        <div className="wish-card shadow-sm">
                           <div className="user-image">
                             <img
                               src="public\user.PNG"
