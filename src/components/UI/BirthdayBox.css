@@ -12,7 +12,7 @@
 .birthday-wish .card-header {
     background: transparent;
     /* border-color: #fff !important; */
-    color: #6d6f72;
+    color: #f0231f;
     font-size: 22px;
     padding: 8px;
     font-weight: bold;
@@ -38,9 +38,9 @@
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 }
 
-/* .wish-content {
-    color: white;
-} */
+.wish-content {
+    text-align: center;
+}
 
 
 /* User Image - Positioned partially outside the box */
@@ -71,11 +71,11 @@
     margin-bottom: 0;
 }
 
-.info {
+/* .info {
     display: flex;
     gap: 20px;
     align-items: center;
-}
+} */
 
 .icon {
     margin-right: 5px;
