@@ -23,12 +23,14 @@
     border-radius: 5px;
     padding: 20px;
     transition: transform 0.2s, box-shadow 0.2s;
-    background-color: #6d6f72;
+    /* background-color: #6d6f72; */
     padding-bottom: 0;
-    background-image: url(public/wish.png);
-    background-size: contain;
+    background-image: url(public/birthday-cake.png);
+    background-size: auto;
     background-repeat: no-repeat;
-    background-position: 110% 76px;
+    background-position: 100% 100%;
+    border: 1px solid #6d6f72;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
 }
 
 .wish-card:hover {
@@ -36,9 +38,9 @@
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 }
 
-.wish-content {
+/* .wish-content {
     color: white;
-}
+} */
 
 
 /* User Image - Positioned partially outside the box */

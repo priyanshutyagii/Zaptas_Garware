@@ -127,11 +127,7 @@ export default function NewJoiners() {
 
       <div
         id="birthdayCarousel"
-<<<<<<< HEAD
-        className="carousel slide col-md-9"
-=======
         className="carousel slide col-md-12"
->>>>>>> cb9510ce9be4177305a62d51bd7274a1bc1914da
         data-bs-ride="carousel"
         data-bs-interval="false"
       >
@@ -145,7 +141,7 @@ export default function NewJoiners() {
                     .slice(currentIndex * 3, currentIndex * 3 + 3)
                     .map((wish, index) => (
                       <div className="col-md-3" key={index}>
-                        <div className="wish-card">
+                        <div className="wish-card shadow-sm">
                           <div className="user-image">
                             <img
                               src="public\user.PNG"

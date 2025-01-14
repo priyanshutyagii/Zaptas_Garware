@@ -91,11 +91,7 @@ export default function BirthdayBox() {
 
       <div
         id="birthdayCarousel"
-<<<<<<< HEAD
-        className="carousel slide col-md-9"
-=======
         className="carousel slide col-md-12"
->>>>>>> cb9510ce9be4177305a62d51bd7274a1bc1914da
         data-bs-ride="carousel"
         data-bs-interval="false"
       >

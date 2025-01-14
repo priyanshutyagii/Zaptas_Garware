@@ -9,13 +9,14 @@ import {
   FaUsers,
   FaLaptopCode,
   FaUserTie,
-  FaBell
+  FaBell,
 } from "react-icons/fa";
 import "./Header.css";
 import { useNavigate } from "react-router-dom";
 import { FiChevronDown } from "react-icons/fi";
 import { apiCall, getTokenFromLocalStorage } from "../../utils/apiCall";
 import ConnectMe from "../../config/connect";
+import { IoIosNotifications } from "react-icons/io";
 
 export default function Headers() {
   const navigate = useNavigate();
@@ -68,7 +69,6 @@ export default function Headers() {
     ],
   });
 
-
   const fetchNotificationCount = async () => {
     try {
       const token = getTokenFromLocalStorage();
@@ -81,8 +81,7 @@ export default function Headers() {
       const response = await apiCall(
         "GET",
         `${ConnectMe.BASE_URL}/it/api/getrequests?status=Pending&count=true&data=false`, // Update URL as needed
-        headers,
-
+        headers
       );
 
       if (response.success) {
@@ -92,11 +91,10 @@ export default function Headers() {
         setNotificationCount(0); // Reset to 0 if no notifications are found
       }
     } catch (error) {
-      console.error('Error fetching notification count:', error);
+      console.error("Error fetching notification count:", error);
       setNotificationCount(0); // In case of error, reset to 0
     }
   };
-
 
   const fetchQuickLinks = async () => {
     try {
@@ -388,19 +386,34 @@ export default function Headers() {
             >
               <FaLinkedinIn size={20} />
             </a>
-            <div className="notification-bell">
-              <button className="bell-icon" onClick={(()=>{
-                navigate('/service')
-              })}> 
-                <FaBell /> {/* React icon for the bell */}
+            <a
+              onClick={() => {
+                navigate("/service");
+              }}
+              className="mx-2"
+            >
+              <IoIosNotifications size={20} />
+              {notificationCount > 0 && (
+                <span className="notification-count">{notificationCount}</span>
+              )}
+            </a>
+            {/* <div className="notification-bell">
+              <button
+                className="bell-icon"
+                onClick={() => {
+                  navigate("/service");
+                }}
+              >
+                <FaBell />
                 {notificationCount > 0 && (
-                  <span className="notification-count">{notificationCount}</span>
+                  <span className="notification-count">
+                    {notificationCount}
+                  </span>
                 )}
               </button>
-            </div>
+            </div> */}
           </div>
         </div>
-
       </div>
     </header>
   );
