@@ -74,19 +74,19 @@ a.dropdown-item {
 .social-icons a {
     width: 40px;
     height: 40px;
-    background: #00659b;
+    background: #6d6f72;
     border-radius: 10px;
     color: #fff;
     text-align: center;
     display: flex;
     justify-content: center;
     align-items: center;
-    border: 1px solid #00659b;
+    border: 1px solid #6d6f72;
     transition: all .3s;
 }
 
 .social-icons a:hover {
-    color: #00659b;
+    color: #6d6f72;
     background-color: transparent;
-    border-color: #00659b;
+    border-color: #6d6f72;
 }

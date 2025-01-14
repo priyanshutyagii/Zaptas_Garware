@@ -23,7 +23,7 @@
 .location {
   display: flex;
   align-items: center;
-  color: #00659b;
+  color: #6d6f72;
   font-weight: 500;
   font-size: 0.85rem;
   margin-left: 10px;
@@ -34,7 +34,7 @@
 .location-icon {
   margin-right: 5px;
   font-size: 1rem;
-  color: #00659b;
+  color: #6d6f72;
 }
 
 .announcement-card {

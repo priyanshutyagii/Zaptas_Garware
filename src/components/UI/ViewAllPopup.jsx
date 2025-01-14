@@ -186,7 +186,7 @@ export default function ViewAllPage() {
                     >
                       <FaThumbsUp
                         style={{
-                          color: post.likedByUser ? "#00659b" : "gray",
+                          color: post.likedByUser ? "#6d6f72" : "gray",
                           cursor: "pointer",
                         }}
                       />{" "}

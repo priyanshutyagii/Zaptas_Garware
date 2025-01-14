@@ -5,12 +5,7 @@ import ConnectMe from "../../config/connect";
 
 const ITServiceRequestForm = () => {
   const [formData, setFormData] = useState({
-    requestId: "REQ-" + Date.now(),
-    requestDate: new Date().toISOString().split("T")[0],
-    requesterName: "John Doe",
-    requesterDept: "IT Department",
-    requesterDesignation: "Manager",
-    requesterLocation: "New York",
+
     typeOfService: "",
     fieldsData: {}, // Dynamically populated fields based on service type
   });
@@ -29,7 +24,7 @@ const ITServiceRequestForm = () => {
         const response = await apiCall("GET", url, headers);
 
         if (response && response.data) {
-          setServiceTypes(response.data); // Populate the service types dynamically
+          setServiceTypes(response.data);
         } else {
           console.error("Failed to fetch service types");
         }
@@ -44,27 +39,58 @@ const ITServiceRequestForm = () => {
   }, []);
 
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
-
-  const handleFieldChange = (e) => {
-    const { name, value } = e.target;
+    const { id, value } = e.target; // Use `id` instead of `name`
     setFormData((prevData) => ({
       ...prevData,
       fieldsData: {
         ...prevData.fieldsData,
-        [name]: value,
+        [id]: value, // Use `_id` as the key
       },
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleCheckboxChange = (e) => {
+    const { id, checked } = e.target; // Use `id` for checkboxes
+    setFormData((prevData) => ({
+      ...prevData,
+      fieldsData: {
+        ...prevData.fieldsData,
+        [id]: checked, // Track checkbox state
+      },
+    }));
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form Data Submitted: ", formData);
+    setIsLoading(true);
+
+    try {
+      const url = `${ConnectMe.BASE_URL}/it/api/service-requests`;
+      const token = getTokenFromLocalStorage();
+      const headers = {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      };
+
+      const response = await apiCall("POST", url, headers, formData);
+
+      if (response && response.success) {
+        alert("Service request submitted successfully!");
+        setFormData((prevData) => ({
+          ...prevData,
+          typeOfService: "",
+          fieldsData: {},
+        }));
+      } else {
+        console.error("Failed to submit the service request:", response.message);
+        alert("Failed to submit the service request. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error submitting the service request:", error);
+      alert("An error occurred while submitting the request. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -72,50 +98,20 @@ const ITServiceRequestForm = () => {
       <h3 className="mb-4 text-center">IT Service Request Form</h3>
 
       <Form onSubmit={handleSubmit}>
-        {/* Requester Details Section */}
+        {/* Requester Details */}
         <div className="mb-4">
-          <h4 className="text-primary mb-3">Requester Details</h4>
-          <Row>
-            <Col md={6}>
-              <Form.Group className="mb-3">
-                <Form.Label>Request ID</Form.Label>
-                <Form.Control type="text" value={formData.requestId} readOnly />
-              </Form.Group>
-            </Col>
+          {/* <h4 className="text-primary mb-3">Requester Details</h4> */}
+          {/* <Row>
             <Col md={6}>
               <Form.Group className="mb-3">
                 <Form.Label>Request Date</Form.Label>
                 <Form.Control type="date" value={formData.requestDate} readOnly />
               </Form.Group>
             </Col>
-            <Col md={6}>
-              <Form.Group className="mb-3">
-                <Form.Label>Requester Name</Form.Label>
-                <Form.Control type="text" value={formData.requesterName} readOnly />
-              </Form.Group>
-            </Col>
-            <Col md={6}>
-              <Form.Group className="mb-3">
-                <Form.Label>Requester Dept</Form.Label>
-                <Form.Control type="text" value={formData.requesterDept} readOnly />
-              </Form.Group>
-            </Col>
-            <Col md={6}>
-              <Form.Group className="mb-3">
-                <Form.Label>Requester Designation</Form.Label>
-                <Form.Control type="text" value={formData.requesterDesignation} readOnly />
-              </Form.Group>
-            </Col>
-            <Col md={6}>
-              <Form.Group className="mb-3">
-                <Form.Label>Requester Location</Form.Label>
-                <Form.Control type="text" value={formData.requesterLocation} readOnly />
-              </Form.Group>
-            </Col>
-          </Row>
+          </Row> */}
         </div>
 
-        {/* Service Request Details Section */}
+        {/* Service Request Details */}
         <div className="mb-4">
           <h4 className="text-primary mb-3">Service Request Details</h4>
           <Row>
@@ -125,47 +121,51 @@ const ITServiceRequestForm = () => {
                 <Form.Control
                   as="select"
                   name="typeOfService"
+                  id={formData._id}
                   value={formData.typeOfService}
-                  onChange={handleInputChange}
+                  onChange={(e) =>
+                    setFormData({ ...formData, typeOfService: e.target.value })
+                  }
                   disabled={isLoading}
                 >
                   <option value="" disabled>
                     {isLoading ? "Loading..." : "Select a service"}
                   </option>
-                  {serviceTypes.map((type, index) => (
-                    <option key={index} value={type.name}>
+                  {serviceTypes.map((type) => (
+                    <option key={type._id} value={type._id}>
                       {type.name}
                     </option>
                   ))}
                 </Form.Control>
               </Form.Group>
             </Col>
+
           </Row>
         </div>
 
-        {/* Dynamically Render Service Fields */}
+        {/* Dynamic Fields */}
         {serviceTypes
-          .filter((type) => type.name === formData.typeOfService)
-          .map((type, index) => (
-            <div key={index}>
-              {type.fields.map((field, fieldIndex) => (
-                <Row key={fieldIndex} className="mb-3">
+          .filter((type) => type._id === formData.typeOfService)
+          .map((type) => (
+            <div key={type._id}>
+              {type.fields.map((field) => (
+                <Row key={field._id} className="mb-3">
                   <Col md={12}>
                     <Form.Group className="mb-3">
                       <Form.Label>{field.fieldName}</Form.Label>
                       {field.fieldType === "Boolean" ? (
                         <Form.Check
                           type="checkbox"
-                          name={field.fieldName}
-                          checked={formData.fieldsData[field.fieldName] || false}
-                          onChange={(e) => handleFieldChange(e)}
+                          id={field._id}
+                          checked={formData.fieldsData[field._id] || false}
+                          onChange={handleCheckboxChange}
                         />
                       ) : (
                         <Form.Control
-                          type={field.fieldType === "String" || field.fieldType === "text" ? "text" : "date"}
-                          name={field.fieldName}
-                          value={formData.fieldsData[field.fieldName] || ""}
-                          onChange={(e) => handleFieldChange(e)}
+                          type={field.fieldType === "text" ? "text" : "date"}
+                          id={field._id}
+                          value={formData.fieldsData[field._id] || ""}
+                          onChange={handleInputChange}
                           required={field?.isRequired}
                         />
                       )}

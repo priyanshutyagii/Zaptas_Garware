@@ -10,6 +10,7 @@ import CalenderHoliday from "./admin/calenderHoliday";
 import ViewAllPopup from "./components/UI/ViewAllPopup";
 import CalendarViewAll from "./components/UI/CalendarViewAll";
 import ServiceTypePage from "./admin/ItReqedit";
+import ServiceRequestPage from "./pages/serviceRequest";
 
 const CsrPage = lazy(() => import("./admin/csr"));
 const IndustryPage = lazy(() => import("./admin/Industry"));
@@ -44,6 +45,7 @@ export const routes = [
       { path: "ITService", element: <ITServiceRequestForm /> },
       { path: "/gallery/:id", element: <GalleryDetails /> },
       { path: "/calendar-view-all", element: <CalendarViewAll /> },
+      { path: "/service",element:<ServiceRequestPage/>}
     ],
   },
   {

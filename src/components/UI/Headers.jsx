@@ -9,6 +9,7 @@ import {
   FaUsers,
   FaLaptopCode,
   FaUserTie,
+  FaBell
 } from "react-icons/fa";
 import "./Header.css";
 import { useNavigate } from "react-router-dom";
@@ -18,9 +19,11 @@ import ConnectMe from "../../config/connect";
 
 export default function Headers() {
   const navigate = useNavigate();
+  const [notificationCount, setNotificationCount] = useState(0);
 
   useEffect(() => {
     fetchQuickLinks();
+    fetchNotificationCount();
   }, []);
 
   // Hardcoded data with third-level submenus
@@ -64,6 +67,36 @@ export default function Headers() {
       },
     ],
   });
+
+
+  const fetchNotificationCount = async () => {
+    try {
+      const token = getTokenFromLocalStorage();
+      const headers = {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      };
+
+      // Send query parameters for status and count
+      const response = await apiCall(
+        "GET",
+        `${ConnectMe.BASE_URL}/it/api/getrequests?status=Pending&count=true&data=false`, // Update URL as needed
+        headers,
+
+      );
+
+      if (response.success) {
+        // Set the notification count from the API response
+        setNotificationCount(response.data.count);
+      } else {
+        setNotificationCount(0); // Reset to 0 if no notifications are found
+      }
+    } catch (error) {
+      console.error('Error fetching notification count:', error);
+      setNotificationCount(0); // In case of error, reset to 0
+    }
+  };
+
 
   const fetchQuickLinks = async () => {
     try {
@@ -355,8 +388,19 @@ export default function Headers() {
             >
               <FaLinkedinIn size={20} />
             </a>
+            <div className="notification-bell">
+              <button className="bell-icon" onClick={(()=>{
+                navigate('/service')
+              })}> 
+                <FaBell /> {/* React icon for the bell */}
+                {notificationCount > 0 && (
+                  <span className="notification-count">{notificationCount}</span>
+                )}
+              </button>
+            </div>
           </div>
         </div>
+
       </div>
     </header>
   );

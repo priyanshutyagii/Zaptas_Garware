@@ -43,7 +43,7 @@
 }
 
 .form-control:focus {
-    border-color: #00659b;
+    border-color: #6d6f72;
 }
 
 .toggle-btn, .login-btn {
@@ -60,7 +60,7 @@
 
 .toggle-btn {
     background-color: #f5f5f5;
-    color: #00659b;
+    color: #6d6f72;
 }
 
 .toggle-btn:hover {
@@ -68,7 +68,7 @@
 }
 
 .login-btn {
-    background-color: #00659b;
+    background-color: #6d6f72;
     color: white;
     font-weight: bold;
 }

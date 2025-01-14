@@ -127,11 +127,11 @@ export default function AnnouncementCard() {
   const formatText = (text) => {
     if (!text) return null;
 
-    // Replace `{hashtag|#|tag}` with `#tag` and style it in #00659b
+    // Replace `{hashtag|#|tag}` with `#tag` and style it in #6d6f72
     return text
       .replace(/{hashtag\|\\#\|/g, "#") // Replace starting hashtag syntax
       .replace(/}/g, "") // Remove closing syntax
-      .replace(/#(\w+)/g, '<span style="color:#00659b;">#$1</span>') // Make hashtags #00659b
+      .replace(/#(\w+)/g, '<span style="color:#6d6f72;">#$1</span>') // Make hashtags #6d6f72
       .replace(/(\r\n|\n|\r)/gm, "<br>"); // Replace line breaks with HTML <br> tags for proper rendering
   };
 
@@ -141,7 +141,7 @@ export default function AnnouncementCard() {
         <div className="card-header d-flex justify-content-between align-items-center">
           <div className="d-flex align-items-center">
             <AiOutlineSound className="me-2" />
-            <h5 className="mb-0">Management Message</h5>
+            <h5 className="mb-0">Legacy</h5>
           </div>
           <a href="#" className="text-decoration-none">
             View All <HiArrowCircleRight />
@@ -189,7 +189,7 @@ export default function AnnouncementCard() {
                     >
                       <FaThumbsUp
                         style={{
-                          color: announcement.likedByUser ? "#00659b" : "gray",
+                          color: announcement.likedByUser ? "#6d6f72" : "gray",
                           cursor: "pointer",
                         }}
                       />{" "}
@@ -264,7 +264,7 @@ export default function AnnouncementCard() {
                   href={link.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  style={{ textDecoration: "none", color: "#00659b" }}
+                  style={{ textDecoration: "none", color: "#6d6f72" }}
                 >
                   <div
                     style={{
@@ -328,7 +328,7 @@ export default function AnnouncementCard() {
                   )
                 }
                 style={{
-                  color: selectedAnnouncement.likedByUser ? "#00659b" : "gray",
+                  color: selectedAnnouncement.likedByUser ? "#6d6f72" : "gray",
                   cursor: "pointer",
                   marginRight: "8px",
                 }}

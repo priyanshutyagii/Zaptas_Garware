@@ -12,7 +12,7 @@
 .birthday-wish .card-header {
     background: transparent;
     /* border-color: #fff !important; */
-    color: #00659b;
+    color: #6d6f72;
     font-size: 22px;
     padding: 8px;
     font-weight: bold;
@@ -23,7 +23,7 @@
     border-radius: 5px;
     padding: 20px;
     transition: transform 0.2s, box-shadow 0.2s;
-    background-color: #00659b;
+    background-color: #6d6f72;
     padding-bottom: 0;
     background-image: url(public/wish.png);
     background-size: contain;

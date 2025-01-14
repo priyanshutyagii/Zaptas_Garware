@@ -13,15 +13,15 @@ const PostCard = ({ post, size = 108 }) => {
     const processedText = text
       .replace(/{hashtag\|\\#\|/g, "#") // Replace starting hashtag syntax
       .replace(/}/g, "") // Remove closing syntax
-      .replace(/#(\w+)/g, '<span style="color:#00659b;">#$1</span>') // Make hashtags #00659b
+      .replace(/#(\w+)/g, '<span style="color:#6d6f72;">#$1</span>') // Make hashtags #6d6f72
       .replace(/(\r\n|\n|\r)/gm, "<br>"); // Replace line breaks with HTML <br> tags for proper rendering
 
     if (showFullText) {
-      return `${processedText}<span class="toggle-text" style="cursor: pointer; color: #00659b;"> Show less</span>`;
+      return `${processedText}<span class="toggle-text" style="cursor: pointer; color: #6d6f72;"> Show less</span>`;
     }
 
     const truncatedText = processedText.slice(0, size);
-    return `${truncatedText}<span class="toggle-text" style="cursor: pointer; color: #00659b;">...Read more</span>`;
+    return `${truncatedText}<span class="toggle-text" style="cursor: pointer; color: #6d6f72;">...Read more</span>`;
   };
 
   const handleTextClick = (e) => {
