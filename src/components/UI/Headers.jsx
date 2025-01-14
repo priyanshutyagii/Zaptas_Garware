@@ -1,6 +1,15 @@
 import { useEffect, useState } from "react";
 import { RiLink } from "react-icons/ri";
-import { FaHome, FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn } from "react-icons/fa"
+import {
+  FaHome,
+  FaFacebookF,
+  FaTwitter,
+  FaInstagram,
+  FaLinkedinIn,
+  FaUsers,
+  FaLaptopCode,
+  FaUserTie,
+} from "react-icons/fa";
 import "./Header.css";
 import { useNavigate } from "react-router-dom";
 import { FiChevronDown } from "react-icons/fi";
@@ -19,7 +28,7 @@ export default function Headers() {
     links: [
       {
         id: "1",
-        title: "IT",
+        title: "M1",
         // link: "https://www.google.com",
         subMenu: [
           {
@@ -34,7 +43,7 @@ export default function Headers() {
       },
       {
         id: "2",
-        title: "Facebook",
+        title: "M2",
         link: "https://www.facebook.com",
         subMenu: [
           { title: "Facebook Ads", link: "https://www.facebook.com/ads" },
@@ -43,7 +52,7 @@ export default function Headers() {
       },
       {
         id: "3",
-        title: "LinkedIn",
+        title: "M3",
         link: "https://www.linkedin.com",
         subMenu: [
           {
@@ -115,10 +124,10 @@ export default function Headers() {
   };
 
   return (
-    <header className="navbar navbar-expand-lg navbar-light bg-light">
+    <header className="navbar navbar-expand-lg bg-main">
       <div className="container-fluid">
         <a className="navbar-brand" href="/">
-          <img src="./logo.png" alt="Logo" />
+          <img src="public/logo.png" alt="Logo" />
         </a>
 
         <button
@@ -156,8 +165,8 @@ export default function Headers() {
                 aria-expanded="false"
               >
                 <span className="d-flex flex-column align-items-center">
-                  <RiLink className="navbar-icon me-1" />
-                  <span>Menu</span>
+                  <FaUsers className="navbar-icon me-1" />
+                  <span>HR</span>
                 </span>
               </a>
               <ul
@@ -211,8 +220,8 @@ export default function Headers() {
                 aria-expanded="false"
               >
                 <span className="d-flex flex-column align-items-center">
-                  <RiLink className="navbar-icon me-1" />
-                  <span>Menu</span>
+                  <FaLaptopCode className="navbar-icon me-1" />
+                  <span>IT</span>
                 </span>
               </a>
               <ul
@@ -266,8 +275,8 @@ export default function Headers() {
                 aria-expanded="false"
               >
                 <span className="d-flex flex-column align-items-center">
-                  <RiLink className="navbar-icon me-1" />
-                  <span>Menu</span>
+                  <FaUserTie className="navbar-icon me-1" />
+                  <span>Accounts</span>
                 </span>
               </a>
               <ul
@@ -318,7 +327,7 @@ export default function Headers() {
               href="https://facebook.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-dark mx-2"
+              className="mx-2"
             >
               <FaFacebookF size={20} />
             </a>
@@ -326,7 +335,7 @@ export default function Headers() {
               href="https://twitter.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-dark mx-2"
+              className="mx-2"
             >
               <FaTwitter size={20} />
             </a>
@@ -334,7 +343,7 @@ export default function Headers() {
               href="https://instagram.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-dark mx-2"
+              className="mx-2"
             >
               <FaInstagram size={20} />
             </a>
@@ -342,7 +351,7 @@ export default function Headers() {
               href="https://linkedin.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-dark mx-2"
+              className="mx-2"
             >
               <FaLinkedinIn size={20} />
             </a>

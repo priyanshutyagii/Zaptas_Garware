@@ -87,22 +87,26 @@ export default function WorkAnniversary() {
 
   return (
     <div className="row">
-      <div className="col-md-3">
-        <div className="card text-center wish">
+      <div className="col-md-12">
+        <div className="wish mb-5">
           <div className="card-header">
             <FaBirthdayCake /> &nbsp;Work Anniversary
           </div>
-          <div className="card-body card-scroll d-flex align-items-center justify-content-center">
+          {/* <div className="card-body card-scroll d-flex align-items-center justify-content-center">
             <button className="btn btn-primary cartbtn">
               Work Anniversary
             </button>
-          </div>
+          </div> */}
         </div>
       </div>
 
       <div
         id="birthdayCarousel"
+<<<<<<< HEAD
         className="carousel slide col-md-9"
+=======
+        className="carousel slide col-md-12"
+>>>>>>> cb9510ce9be4177305a62d51bd7274a1bc1914da
         data-bs-ride="carousel"
         data-bs-interval="false"
       >
@@ -116,7 +120,7 @@ export default function WorkAnniversary() {
                   {workAnniversaries
                     .slice(currentIndex * 3, currentIndex * 3 + 3)
                     .map((wish, index) => (
-                      <div className="col-md-4" key={index}>
+                      <div className="col-md-3" key={index}>
                         <div className="wish-card">
                           <div className="user-image">
                             <img
@@ -144,7 +148,12 @@ export default function WorkAnniversary() {
                                 )}
                               </span>
                             </div>
-                            <button className="send-wish-btn">Send Wish</button>
+                            <div className="d-flex justify-content-center">
+                              {" "}
+                              <button className="send-wish-btn">
+                                Send Wish
+                              </button>
+                            </div>
                           </div>
                         </div>
                       </div>

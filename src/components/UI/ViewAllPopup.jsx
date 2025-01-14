@@ -10,7 +10,7 @@ import { FaThumbsUp } from "react-icons/fa";
 
 export default function ViewAllPage() {
   const { state } = useLocation();
-  const { title, type = "announcement" } = state;
+  const { title, type = "announcement", bannerImg } = state;
   const [selectedImage, setSelectedImage] = useState(null); // For full-size image preview
 
   const [posts, setPosts] = useState([]); // All fetched posts
@@ -25,6 +25,7 @@ export default function ViewAllPage() {
       setLoading(true);
       const url = `${ConnectMe.BASE_URL}/${type}/latest?page=${startRef.current}&limit=${limit}`;
       const token = getTokenFromLocalStorage();
+
       const headers = {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
@@ -130,14 +131,10 @@ export default function ViewAllPage() {
   return (
     <div className="view-all-page">
       {/* <header className="page-header"><h1>{title}</h1></header> */}
-      <div className="banner-img d-flex justify-content-between align-items-center">
-        <div className="box-img">
-          <img
-            src={`${ConnectMe.img_URL}${posts[0]?.imagePath[0]}`}
-            alt={title}
-            width={"100%"}
-          />
-        </div>
+      <div className="banner-img ">
+        <div className="bodx-img">
+          <img src={bannerImg} alt={title} width={"100%"} />
+          {/* </div>
         <div className="box-img">
           <img
             className="img2"
@@ -145,6 +142,7 @@ export default function ViewAllPage() {
             alt={title}
             width={"100%"}
           />
+        </div> */}
         </div>
       </div>
       {posts.length === 0 && !loading && <p>No posts available</p>}
@@ -188,7 +186,7 @@ export default function ViewAllPage() {
                     >
                       <FaThumbsUp
                         style={{
-                          color: post.likedByUser ? "blue" : "gray",
+                          color: post.likedByUser ? "#00659b" : "gray",
                           cursor: "pointer",
                         }}
                       />{" "}

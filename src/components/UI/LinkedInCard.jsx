@@ -198,14 +198,14 @@ export default function LinkedInCard() {
           <FaLinkedin className="me-2" />
           <h5 className="mb-0">LinkedIn</h5>
         </div>
-        <button
+        <a
           onClick={() => {
             navigate("/view-all");
           }}
           className="text-decoration-none"
         >
           View All <HiArrowCircleRight />
-        </button>
+        </a>
       </div>
 
       {loading ? (
@@ -275,7 +275,9 @@ export default function LinkedInCard() {
                             loadingPostIds.includes(post.id) ? "loading" : ""
                           }`}
                           style={{
-                            color: post?.fetchUserLikesStatus ? "blue" : "gray",
+                            color: post?.fetchUserLikesStatus
+                              ? "#00659b"
+                              : "gray",
                             cursor: "pointer",
                           }}
                           onClick={(event) => {
@@ -347,7 +349,9 @@ export default function LinkedInCard() {
                   loadingPostIds.includes(selectedPost?.id) ? "loading" : ""
                 }`}
                 style={{
-                  color: selectedPost?.fetchUserLikesStatus ? "blue" : "gray",
+                  color: selectedPost?.fetchUserLikesStatus
+                    ? "#00659b"
+                    : "gray",
                   cursor: "pointer",
                 }}
                 onClick={() =>

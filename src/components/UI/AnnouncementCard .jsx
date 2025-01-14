@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { HiArrowCircleRight } from "react-icons/hi";
 import { AiOutlineSound } from "react-icons/ai";
 import { Modal, Spinner } from "react-bootstrap";
-import { FaThumbsUp } from "react-icons/fa";
+import { FaMapMarkerAlt, FaThumbsUp } from "react-icons/fa";
 import "./AnnouncementCard.css";
 import ConnectMe from "../../config/connect";
 import { apiCall, getTokenFromLocalStorage } from "../../utils/apiCall";
@@ -144,6 +144,7 @@ export default function AnnouncementCard() {
                 state: {
                   title: "View All Announcements",
                   type: "announcements",
+                  bannerImg: "./bannerforusercsr.jpg",
                 },
               });
             }}
@@ -159,33 +160,13 @@ export default function AnnouncementCard() {
               onClick={() => handleShow(announcement)} // Open modal when clicking the card
               style={{ cursor: "pointer" }}
             >
-              <div className="d-flex align-items-start mb-4">
-                {/* Date Badge */}
-
-                <div className="date-badge-container">
-                  <div className="date-badge">
-                    {new Date(announcement?.AnnouncementDate)?.getFullYear() ||
-                      ""}
-                  </div>
-                  <span className="date date-badge">
-                    {new Date(announcement?.AnnouncementDate)?.getDate() || ""}
-                    &nbsp;
-                    {new Date(announcement?.AnnouncementDate)?.toLocaleString(
-                      "default",
-                      {
-                        month: "short",
-                      }
-                    ) || ""}
-                  </span>
-                  <span className="date">{announcement?.location}</span>
-                </div>
-
+              <div className="d-flex align-items-start mb-4 flex-column">
                 {/* Announcement Content */}
-                <div className="announcement-disc">
+                <div className="announcement-disc pb-2">
                   <p className="card-text">{announcement.title}</p>
 
                   <div className="card-text fs-6">
-                    <PostCard post={announcement.description} size={70} />
+                    <PostCard post={announcement.description} size={80} />
                   </div>
 
                   <div className="d-flex justify-content-between mt-2">
@@ -201,12 +182,34 @@ export default function AnnouncementCard() {
                     >
                       <FaThumbsUp
                         style={{
-                          color: announcement.likedByUser ? "blue" : "gray",
+                          color: announcement.likedByUser ? "#00659b" : "gray",
                           cursor: "pointer",
                         }}
                       />{" "}
                       {announcement?.likes?.length}
                     </p>
+                    {/* Date Badge */}
+                    <div className="date-badge-container">
+                      <span className="date-badge">
+                        {new Date(
+                          announcement?.AnnouncementDate
+                        )?.getFullYear() || ""}
+                      </span>
+                      <span className="date">
+                        {new Date(announcement?.AnnouncementDate)?.getDate() ||
+                          ""}
+                        &nbsp;
+                        {new Date(
+                          announcement?.AnnouncementDate
+                        )?.toLocaleString("default", {
+                          month: "short",
+                        }) || ""}
+                      </span>
+                      <span className="location">
+                        <FaMapMarkerAlt className="location-icon" />
+                        {announcement?.location}
+                      </span>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -269,7 +272,7 @@ export default function AnnouncementCard() {
                   href={link.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  style={{ textDecoration: "none", color: "#007bff" }}
+                  style={{ textDecoration: "none", color: "#00659b" }}
                 >
                   <div
                     style={{
@@ -332,7 +335,7 @@ export default function AnnouncementCard() {
                   )
                 }
                 style={{
-                  color: selectedAnnouncement.likedByUser ? "blue" : "gray",
+                  color: selectedAnnouncement.likedByUser ? "#00659b" : "gray",
                   cursor: "pointer",
                   marginRight: "8px",
                 }}

@@ -117,20 +117,20 @@ export default function GalleryCard() {
         </a>
       </div>
       <div className="card-body card-scroll">
-        <div className="row">
+        <div className="row d-flex flex-column">
           {/* Carousel for Announcements */}
-          <div className="col text-center">
-            <h6>Announcements</h6>
+          <div className="col text-center mb-3 border-bottom">
+            <h5>Announcements</h5>
             {renderCarousel(data.Announcements, "Announcements")}
           </div>
           {/* Carousel for CSR */}
-          <div className="col text-center">
-            <h6>CSR</h6>
+          <div className="col text-center mb-3 border-bottom">
+            <h5>CSR</h5>
             {renderCarousel(data.CsrType, "CSR")}
           </div>
           {/* Carousel for Awards */}
           <div className="col text-center">
-            <h6>Awards</h6>
+            <h5>Awards</h5>
             {renderCarousel(data.Awards, "Awards")}
           </div>
         </div>
