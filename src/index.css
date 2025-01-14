@@ -101,3 +101,14 @@ a:hover {
 .like-section svg {
   color: blue !important;
 }
+
+.h-bg {
+  background-color: #faebd7;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.h-bg .carousel {
+  width: 50%;
+}
