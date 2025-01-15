@@ -11,31 +11,7 @@ export default function BirthdayBox() {
 
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  const sampleData = [
-    {
-      FirstName: "John",
-      LastName: "Doe",
-      EmployeeCode: "EMP001",
-      BirthDate: "1990-01-10",
-      CustomField6: "Software Engineer",
-    },
-    {
-      FirstName: "Jane",
-      LastName: "Smith",
-      EmployeeCode: "EMP002",
-      BirthDate: "1992-02-15",
-      CustomField6: "Project Manager",
-    },
-    {
-      FirstName: "Sam",
-      LastName: "Wilson",
-      EmployeeCode: "EMP003",
-      BirthDate: "1988-03-20",
-      CustomField6: "HR Manager",
-    },
-  ];
 
-  const sampleData2 = ["./Group10.png", "./Group11.png", "./Group12.png"];
 
   const handleNext = () => {
     if ((currentIndex + 1) * 3 < birthdayWishes.length) {
@@ -65,11 +41,11 @@ export default function BirthdayBox() {
         setBirthdayWishes(response?.data?.birthdayWishes);
       } else {
         setError("Failed to fetch birthday wishes.");
-        setBirthdayWishes(sampleData2); // Use sample data in case of error
+
       }
     } catch (err) {
       setError("Error fetching birthday wishes.");
-      setBirthdayWishes(sampleData2); // Use sample data in case of error
+      // setBirthdayWishes(sampleData2); // Use sample data in case of error
     } finally {
       setLoading(false); // Hide loader after fetching
     }
@@ -83,9 +59,28 @@ export default function BirthdayBox() {
     <div className="row">
       <div className="col-md-12">
         <div className=" wish mb-5">
-          <div className="card-header">
-            <FaBirthdayCake /> &nbsp;Birthday Wishes
+          <div className="card-header" style={{
+            background: 'linear-gradient(90deg, #6d6f72, #a1a3a6)',
+            color: '#fff',
+            padding: '2px 5px',
+            borderRadius: '8px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontSize: '1.3rem',
+            fontWeight: 'bold',
+            boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)'
+          }}>
+            <FaBirthdayCake style={{ fontSize: '2.2rem', marginRight: '15px', color: '#ffffff' }} />
+            Get Ready for the Big Day: Birthday Eve!
           </div>
+
+
+          {/* <div className="card-body card-scroll d-flex align-items-center justify-content-center ">
+                   <button className="  card-header">
+                    <FaBirthdayCake /> &nbsp;Birthday Eves
+                   </button>
+                 </div> */}
         </div>
       </div>
 
@@ -97,67 +92,85 @@ export default function BirthdayBox() {
       >
         {/* Carousel Items */}
         <div className="carousel-inner">
-          {loading && (
-            <div className="loading-spinner">
-              <div className="spinner-border" role="status"></div>
-              <span>Loading...</span>
-            </div>
-          )}
-          {/* {error && !loading && <div>{error}</div>} */}
-          {!loading && birthdayWishes.length > 0 && (
-            // <div className="carousel-item active">
-            <div className="row g-3">
-              {" "}
-              {/* Bootstrap gap class for spacing */}
-              {birthdayWishes
-                .slice(currentIndex * 3, currentIndex * 3 + 3)
-                .map((wish, index) => (
-                  <div className="col-md-3" key={index}>
-                    <div className="card">
-                      <img
-                        src={wish}
-                        className="card-img-top img-fluid"
-                        alt={`Wish ${index + 1}`}
-                      />
-                    </div>
-                  </div>
-                ))}
-            </div>
+          {birthdayWishes.length > 0 ? (
+            <>
+              <div className="carousel-item active">
+                <div className="row">
+                  {birthdayWishes
+                    .slice(currentIndex * 4, currentIndex * 4 + 4)
+                    .map((wish, index) => (
+                      <div className="col-md-3" key={index}>
+                        <div className="wish-card shadow-sm" style={{
+                          backgroundImage: "url(./birthday-cake.png)",
+                          
+                        }}>
+                          <div className="user-image">
+                            <img
+                              src="public\user.PNG"
+                              alt="User"
+                              className="rounded-circle"
+                            />
+                          </div>
+                          <div className="wish-content">
+                          <h5 className="title card-text text-danger fw-bold celebrating-text">
+                              {`${wish?.FirstName || ''} ${wish?.MiddleName || ''} ${wish?.LastName || ''}`.trim()}
+                            </h5>
+                            <p className="message">{wish.CustomField6 || "Support"}</p>
+                            <p className="message">{`Employee Code: ${wish.EmployeeCode}`}</p>
+                            <div className="info">
+                              <span className="date">
+                                <FaBirthdayCake className="icon" />{" "}
+                                {new Date(wish.BirthDate).toLocaleDateString(
+                                  "en-GB",
+                                  {
+                                    day: "2-digit",
+                                    month: "short",
 
-            // </div>
-          )}
-          {!loading && birthdayWishes.length === 0 && !error && (
-            <div>No birthday wishes found.</div>
+                                  }
+                                )}
+                              </span>
+                            </div>
+                            <div className="d-flex justify-content-center">
+                              {" "}
+                              <button className="send-wish-btn">
+                                Send Wish
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                </div>
+              </div>
+            </>
+          ) : (
+            <div>No new joiners found.</div>
           )}
         </div>
 
-        {/* Conditionally render carousel controls */}
-        {!loading && !error && birthdayWishes.length > 0 && (
-          <>
-            <button
-              className="carousel-control-prev"
-              type="button"
-              onClick={handlePrev}
-            >
-              <span
-                className="carousel-control-prev-icon"
-                aria-hidden="true"
-              ></span>
-              <span className="visually-hidden">Previous</span>
-            </button>
-            <button
-              className="carousel-control-next"
-              type="button"
-              onClick={handleNext}
-            >
-              <span
-                className="carousel-control-next-icon"
-                aria-hidden="true"
-              ></span>
-              <span className="visually-hidden">Next</span>
-            </button>
-          </>
-        )}
+        {/* Previous and Next controls */}
+        <button
+          className="carousel-control-prev"
+          type="button"
+          onClick={handlePrev}
+        >
+          <span
+            className="carousel-control-prev-icon"
+            aria-hidden="true"
+          ></span>
+          <span className="visually-hidden">Previous</span>
+        </button>
+        <button
+          className="carousel-control-next"
+          type="button"
+          onClick={handleNext}
+        >
+          <span
+            className="carousel-control-next-icon"
+            aria-hidden="true"
+          ></span>
+          <span className="visually-hidden">Next</span>
+        </button>
       </div>
     </div>
   );

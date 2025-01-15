@@ -157,7 +157,7 @@ export default function ViewAllPosts() {
                   loadingPostIds.includes(post.id) ? "loading" : ""
                 }`}
                 style={{
-                  color: post?.fetchUserLikesStatus ? "#6d6f72" : "gray",
+                  color: post?.fetchUserLikesStatus ? "blue" : "gray",
                   cursor: "pointer",
                 }}
                 onClick={() =>

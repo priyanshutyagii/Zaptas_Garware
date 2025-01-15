@@ -54,9 +54,8 @@ export default function AnnouncementCard() {
   const handleLikedisslike = async (announcementId, isLiked) => {
     showToast(isLiked ? "Unlike success" : "Like success", "success");
     const token = getTokenFromLocalStorage();
-    const url = `${ConnectMe.BASE_URL}/announcements/${announcementId}/${
-      isLiked ? "unlike" : "like"
-    }`;
+    const url = `${ConnectMe.BASE_URL}/announcements/${announcementId}/${isLiked ? "unlike" : "like"
+      }`;
     const headers = {
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
@@ -72,8 +71,8 @@ export default function AnnouncementCard() {
               // Update the likes array and the likesCount locally
               const updatedLikes = isLiked
                 ? announcement.likes.filter(
-                    (userId) => userId !== response.userId
-                  )
+                  (userId) => userId !== response.userId
+                )
                 : [...announcement.likes, response.userId];
 
               return {
@@ -182,7 +181,7 @@ export default function AnnouncementCard() {
                     >
                       <FaThumbsUp
                         style={{
-                          color: announcement.likedByUser ? "#6d6f72" : "gray",
+                          color: announcement.likedByUser ? "blue" : "gray",
                           cursor: "pointer",
                         }}
                       />{" "}
@@ -191,26 +190,17 @@ export default function AnnouncementCard() {
                     {/* Date Badge */}
                     <div className="date-badge-container">
                       <span className="date">
-                        {new Date(announcement?.AnnouncementDate)?.getDate() ||
-                          ""}
-                        &nbsp;
-                        {new Date(
-                          announcement?.AnnouncementDate
-                        )?.toLocaleString("default", {
-                          month: "short",
-                        }) || ""}
-                      </span>{" "}
-                      -
-                      <span className="date-badge">
-                        {new Date(
-                          announcement?.AnnouncementDate
-                        )?.getFullYear() || ""}
-                      </span>{" "}
+                        {new Date(announcement?.AnnouncementDate)?.getDate() || ""}
+                        {" "}
+                        {new Date(announcement?.AnnouncementDate)?.toLocaleString("default", { month: "short" }) || ""}'
+                        {new Date(announcement?.AnnouncementDate)?.getFullYear().toString().slice(2) || ""}
+                      </span>
                       <span className="location">
                         <FaMapMarkerAlt className="location-icon" />
                         {announcement?.location}
                       </span>
                     </div>
+
                   </div>
                 </div>
               </div>
@@ -336,7 +326,7 @@ export default function AnnouncementCard() {
                   )
                 }
                 style={{
-                  color: selectedAnnouncement.likedByUser ? "#6d6f72" : "gray",
+                  color: selectedAnnouncement.likedByUser ? "blue" : "gray",
                   cursor: "pointer",
                   marginRight: "8px",
                 }}

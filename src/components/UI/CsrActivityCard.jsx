@@ -207,7 +207,7 @@ export default function AnnouncementCard() {
                     >
                       <FaThumbsUp
                         style={{
-                          color: announcement.likedByUser ? "#6d6f72" : "gray",
+                          color: announcement.likedByUser ? "blue" : "gray",
                           cursor: "pointer",
                         }}
                       />{" "}
@@ -350,7 +350,7 @@ export default function AnnouncementCard() {
                   )
                 }
                 style={{
-                  color: selectedAnnouncement.likedByUser ? "#6d6f72" : "gray",
+                  color: selectedAnnouncement.likedByUser ? "blue" : "gray",
                   cursor: "pointer",
                   marginRight: "8px",
                 }}
