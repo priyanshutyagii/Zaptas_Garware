@@ -40,10 +40,15 @@ const ServiceRequestPage = () => {
     }
 
     try {
-      const endpoint = `/api/service-requests/${requestId}/${action}`;
-      const response = await axios.put(endpoint, { comment });
 
-      if (response.data.success) {
+      const url = `${ConnectMe.BASE_URL}/it/api/servicerequests/${requestId}/${action}`;
+      const token = getTokenFromLocalStorage();
+      const headers = { Authorization: `Bearer ${token}` };
+      const response = await apiCall('PUT', url, headers, { comment });
+
+
+
+      if (response && response.data) {
         alert(`Service request ${action}ed successfully!`);
         setServiceRequests((prevState) =>
           prevState.map((request) =>

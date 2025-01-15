@@ -18,6 +18,7 @@ export default function AnnouncementCard() {
   const [error, setError] = useState("");
   const [show, setShow] = useState(false);
   const [selectedAnnouncement, setSelectedAnnouncement] = useState(null);
+  const [selectedImage, setSelectedImage] = useState(null); // For full-size image preview
   const navigate = useNavigate();
 
   // Fetch announcements on component mount
@@ -112,6 +113,10 @@ export default function AnnouncementCard() {
       setError("Error updating like.");
       fetchAnnouncements();
     }
+  };
+
+  const handleClosePreview = () => {
+    setSelectedImage(null);
   };
 
   const handleClose = () => setShow(false);
@@ -231,6 +236,7 @@ export default function AnnouncementCard() {
                   alt="User"
                   className="rounded-circle"
                   style={{ width: "50px", height: "50px" }}
+                 
                 />
               </div>
             </div>
@@ -309,6 +315,10 @@ export default function AnnouncementCard() {
                         src={`${ConnectMe.img_URL}${image}`} // Display the existing image
                         alt={`Selected Banner ${index + 1}`}
                         className="modelcard-image"
+                        onClick={() => {
+                          handleClose(); // Close the modal or menu
+                          setSelectedImage(`${ConnectMe.img_URL}${image}`); // Set the selected image for preview
+                        }}
                       />
                       {/* Cross icon in the top-right corner */}
                     </div>
@@ -339,6 +349,16 @@ export default function AnnouncementCard() {
       )}
 
       {/* view all popup code  */}
+
+      {selectedImage && (
+        <div className="image-preview-overlay" onClick={handleClosePreview}>
+          <img
+            src={selectedImage}
+            alt="Full View"
+            className="full-size-image"
+          />
+        </div>
+      )}
     </div>
   );
 }

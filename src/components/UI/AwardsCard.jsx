@@ -16,6 +16,7 @@ export default function AnnouncementCard() {
   const [error, setError] = useState("");
   const [show, setShow] = useState(false);
   const [selectedAnnouncement, setSelectedAnnouncement] = useState(null);
+  const [selectedImage, setSelectedImage] = useState(null); // For full-size image preview
   const navigate = useNavigate();
   // Fetch announcements on component mount
   useEffect(() => {
@@ -58,9 +59,8 @@ export default function AnnouncementCard() {
   const handleLikedisslike = async (announcementId, isLiked) => {
     showToast(isLiked ? "Unlike success" : "Like success", "success");
     const token = getTokenFromLocalStorage();
-    const url = `${ConnectMe.BASE_URL}/awards/${announcementId}/${
-      isLiked ? "unlike" : "like"
-    }`;
+    const url = `${ConnectMe.BASE_URL}/awards/${announcementId}/${isLiked ? "unlike" : "like"
+      }`;
     const headers = {
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
@@ -76,8 +76,8 @@ export default function AnnouncementCard() {
               // Update the likes array and the likesCount locally
               const updatedLikes = isLiked
                 ? announcement.likes.filter(
-                    (userId) => userId !== response.userId
-                  )
+                  (userId) => userId !== response.userId
+                )
                 : [...announcement.likes, response.userId];
 
               return {
@@ -113,7 +113,7 @@ export default function AnnouncementCard() {
         setError("Failed to update like.");
         fetchAnnouncements();
       }
-    } catch (err) {
+     } catch (err) {
       setError("Error updating like.");
       fetchAnnouncements();
     }
@@ -123,6 +123,9 @@ export default function AnnouncementCard() {
   const handleShow = (announcement) => {
     setSelectedAnnouncement(announcement);
     setShow(true);
+  };
+  const handleClosePreview = () => {
+    setSelectedImage(null);
   };
 
   if (loading) {
@@ -161,7 +164,10 @@ export default function AnnouncementCard() {
             <div
               className="mb-3 announcement-card"
               key={announcement._id}
-              onClick={() => handleShow(announcement)} // Open modal when clicking the card
+              onClick={(e) => {
+                e.stopPropagation(); // Prevent triggering `handleShow`
+                handleShow(announcement)
+              }} // Open modal when clicking the card
               style={{ cursor: "pointer" }}
             >
               <div className="d-flex align-items-start mb-4 flex-column">
@@ -170,13 +176,13 @@ export default function AnnouncementCard() {
                 {/* Announcement Content */}
                 <div
                   className="announcement-disc pb-2"
-                  onClick={handleCelebration}
+                
                 >
-                  <p className="card-text">
+                  <p className="card-text"   >
                     {announcement.AwardierName} (
                     {announcement.PersonDesignation})
                   </p>
-                  <p className="card-text text-danger fw-bold celebrating-text">
+                  <p className="card-text text-danger fw-bold celebrating-text" onClick={handleCelebration}>
                     {announcement.title} 🥳
                   </p>
                   <div className="card-text fs-6">
@@ -200,7 +206,7 @@ export default function AnnouncementCard() {
                       >
                         <FaThumbsUp
                           style={{
-                             color: announcement.likedByUser ? "blue" : "gray",
+                            color: announcement.likedByUser ? "blue" : "gray",
                             cursor: "pointer",
                           }}
                         />{" "}
@@ -338,6 +344,10 @@ export default function AnnouncementCard() {
                         src={`${ConnectMe.img_URL}${image}`} // Display the existing image
                         alt={`Selected Banner ${index + 1}`}
                         className="modelcard-image"
+                        onClick={() => {
+                          handleClose(); // Close the modal or menu
+                          setSelectedImage(`${ConnectMe.img_URL}${image}`); // Set the selected image for preview
+                        }}
                       />
                       {/* Cross icon in the top-right corner */}
                     </div>
@@ -363,8 +373,20 @@ export default function AnnouncementCard() {
               <span> {selectedAnnouncement?.likes?.length} Likes</span>{" "}
               {/* Display likes count */}
             </div>
-          </Modal.Body>
+              </Modal.Body>
         </Modal>
+      )}
+
+      {/* view all popup code  */}
+
+      {selectedImage && (
+        <div className="image-preview-overlay" onClick={handleClosePreview}>
+          <img
+            src={selectedImage}
+            alt="Full View"
+            className="full-size-image"
+          />
+        </div>
       )}
     </div>
   );

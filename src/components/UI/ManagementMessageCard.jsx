@@ -16,6 +16,7 @@ export default function AnnouncementCard() {
   const [error, setError] = useState("");
   const [show, setShow] = useState(false);
   const [selectedAnnouncement, setSelectedAnnouncement] = useState(null);
+  const [selectedImage, setSelectedImage] = useState(null); // For full-size image preview
 
   // Fetch announcements on component mount
   useEffect(() => {
@@ -104,7 +105,7 @@ export default function AnnouncementCard() {
         setError("Failed to update like.");
         fetchAnnouncements();
       }
-    } catch (err) {
+     } catch (err) {
       setError("Error updating like.");
       fetchAnnouncements();
     }
@@ -114,6 +115,9 @@ export default function AnnouncementCard() {
   const handleShow = (announcement) => {
     setSelectedAnnouncement(announcement);
     setShow(true);
+  };
+  const handleClosePreview = () => {
+    setSelectedImage(null);
   };
 
   if (loading) {
@@ -336,8 +340,20 @@ export default function AnnouncementCard() {
               <span> {selectedAnnouncement?.likes?.length} Likes</span>{" "}
               {/* Display likes count */}
             </div>
-          </Modal.Body>
+              </Modal.Body>
         </Modal>
+      )}
+
+      {/* view all popup code  */}
+
+      {selectedImage && (
+        <div className="image-preview-overlay" onClick={handleClosePreview}>
+          <img
+            src={selectedImage}
+            alt="Full View"
+            className="full-size-image"
+          />
+        </div>
       )}
     </div>
   );

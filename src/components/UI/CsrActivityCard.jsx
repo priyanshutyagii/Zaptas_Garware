@@ -111,7 +111,7 @@ export default function AnnouncementCard() {
         setError("Failed to update like.");
         fetchAnnouncements();
       }
-    } catch (err) {
+     } catch (err) {
       setError("Error updating like.");
       fetchAnnouncements();
     }
@@ -122,6 +122,7 @@ export default function AnnouncementCard() {
     setSelectedAnnouncement(announcement);
     setShow(true);
   };
+
 
   if (loading) {
     return (

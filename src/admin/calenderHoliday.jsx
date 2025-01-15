@@ -12,6 +12,7 @@ export default function CalenderHoliday() {
   const [error, setError] = useState("");
   const [hasMore, setHasMore] = useState(true);
   const [selectedAnnouncement, setSelectedAnnouncement] = useState(null);
+  const [selectedImage, setSelectedImage] = useState(null); // For full-size image preview
   const [formData, setFormData] = useState({
     title: "",
     location: "",
