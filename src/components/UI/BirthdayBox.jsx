@@ -106,7 +106,7 @@ export default function BirthdayBox() {
                         }}>
                           <div className="user-image">
                             <img
-                              src="public\user.PNG"
+                              src="./user.png"
                               alt="User"
                               className="rounded-circle"
                             />

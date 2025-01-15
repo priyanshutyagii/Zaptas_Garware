@@ -109,7 +109,7 @@ export default function NewJoiners() {
                         <div className="wish-card shadow-sm">
                           <div className="user-image">
                             <img
-                              src="public\user.PNG"
+                              src="./user.png"
                               alt="User"
                               className="rounded-circle"
                             />

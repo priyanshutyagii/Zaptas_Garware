@@ -276,7 +276,7 @@ export default function LinkedInCard() {
                           }`}
                           style={{
                             color: post?.fetchUserLikesStatus
-                              ? "#6d6f72"
+                              ? "blue"
                               : "gray",
                             cursor: "pointer",
                           }}
@@ -350,7 +350,7 @@ export default function LinkedInCard() {
                 }`}
                 style={{
                   color: selectedPost?.fetchUserLikesStatus
-                    ? "#6d6f72"
+                    ? "blue"
                     : "gray",
                   cursor: "pointer",
                 }}

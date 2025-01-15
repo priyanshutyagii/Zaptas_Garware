@@ -17,6 +17,7 @@ import { FiChevronDown } from "react-icons/fi";
 import { apiCall, getTokenFromLocalStorage } from "../../utils/apiCall";
 import ConnectMe from "../../config/connect";
 import { IoIosNotifications } from "react-icons/io";
+import { FaSquareXTwitter } from "react-icons/fa6";
 
 export default function Headers() {
   const navigate = useNavigate();
@@ -158,7 +159,7 @@ export default function Headers() {
     <header className="navbar navbar-expand-lg bg-main">
       <div className="container-fluid">
         <a className="navbar-brand" href="/">
-          <img src="public/logo.png" alt="Logo" />
+          <img src="./logo.png" alt="Logo" />
         </a>
 
         <button
@@ -368,7 +369,7 @@ export default function Headers() {
               rel="noopener noreferrer"
               className="mx-2"
             >
-              <FaTwitter size={20} />
+              <FaSquareXTwitter size={20} />
             </a>
             <a
               href="https://instagram.com"

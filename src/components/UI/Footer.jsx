@@ -6,6 +6,7 @@ import {
   FaTwitter,
 } from "react-icons/fa";
 import "./Footer.css";
+import { FaSquareXTwitter } from "react-icons/fa6";
 
 export default function Footer() {
   return (
@@ -26,7 +27,7 @@ export default function Footer() {
           rel="noopener noreferrer"
           className="social-icon mx-2"
         >
-          <FaTwitter size={20} />
+          <FaSquareXTwitter size={20} />
         </a>
         <a
           href="https://instagram.com"
