@@ -16,7 +16,7 @@ import { useNavigate } from "react-router-dom";
 import { FiChevronDown } from "react-icons/fi";
 import { apiCall, getTokenFromLocalStorage } from "../../utils/apiCall";
 import ConnectMe from "../../config/connect";
-import { IoIosNotifications } from "react-icons/io";
+import { IoIosNotifications, IoIosPerson } from "react-icons/io";
 import { FaSquareXTwitter } from "react-icons/fa6";
 
 export default function Headers() {
@@ -397,6 +397,16 @@ export default function Headers() {
               {notificationCount > 0 && (
                 <span className="notification-count">{notificationCount}</span>
               )}
+            </a>
+
+            <a
+              onClick={() => {
+                navigate("/profile");
+              }}
+              className="mx-2"
+            >
+              <IoIosPerson size={20} />
+
             </a>
             {/* <div className="notification-bell">
               <button
