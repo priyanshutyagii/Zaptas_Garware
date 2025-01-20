@@ -2,8 +2,9 @@ import axios from "axios";
 
 const cache = {};
 const cacheExpiry = {};
+const cooldownTimers = {}; // To track cooldown per endpoint or action
 
-const apiCall = async (method, url, headers = {}, data = null) => {
+const apiCall = async (method, url, headers = {}, data = null, cooldown = 2000) => {
   const cacheKey = `${method}_${url}_${JSON.stringify(data)}`;
 
   // Check if cached data is valid
@@ -13,6 +14,14 @@ const apiCall = async (method, url, headers = {}, data = null) => {
     Date.now() < cacheExpiry[cacheKey]
   ) {
     return cache[cacheKey];
+  }
+
+  // Prevent continuous hits during cooldown
+  if (cooldownTimers[cacheKey] && Date.now() < cooldownTimers[cacheKey]) {
+    return {
+      status: false,
+      message: "Too many requests. Please wait and try again.",
+    };
   }
 
   try {
@@ -26,11 +35,14 @@ const apiCall = async (method, url, headers = {}, data = null) => {
 
     const response = await axios(config);
 
-    // Cache the response with a 5-minute expiry
+    // Cache the response with a 5-minute expiry (for GET requests)
     if (method === "GET") {
       cache[cacheKey] = response?.data;
       cacheExpiry[cacheKey] = Date.now() + 5 * 60 * 1000; // 5 minutes
     }
+
+    // Set cooldown for subsequent calls
+    cooldownTimers[cacheKey] = Date.now() + cooldown;
 
     return response?.data;
   } catch (error) {

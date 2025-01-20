@@ -87,7 +87,7 @@ export default function Headers() {
 
       if (response.success) {
         // Set the notification count from the API response
-        setNotificationCount(response.data.count);
+        setNotificationCount(response.data);
       } else {
         setNotificationCount(0); // Reset to 0 if no notifications are found
       }
@@ -394,20 +394,34 @@ export default function Headers() {
               className="mx-2"
             >
               <IoIosNotifications size={20} />
-              {notificationCount > 0 && (
-                <span className="notification-count">{notificationCount}</span>
+              {notificationCount?.count > 0 && (
+                <span className="notification-count">{notificationCount?.count}</span>
               )}
             </a>
-
-            <a
+            <p
               onClick={() => {
                 navigate("/profile");
               }}
-              className="mx-2"
+              className="mx-2 d-inline-block"
             >
-              <IoIosPerson size={20} />
+              {notificationCount?.image?.images?.imagePath ? (
+                <img
+                  src={`${ConnectMe.img_URL}${notificationCount?.image?.images?.imagePath}`}
+                  alt="Profile"
+                  className="img-fluid rounded-circle border border-2  shadow-sm"
+                  style={{ width: 40, height: 40 }}
+                />
+              ) : (
+                <img
+                  src={`./user.png`}
+                  alt="Profile"
+                  className="img-fluid rounded-circle border border-2  shadow-sm"
+                  style={{ width: 40, height: 40 }}
+                />
+              )}
+            </p>
 
-            </a>
+
             {/* <div className="notification-bell">
               <button
                 className="bell-icon"
