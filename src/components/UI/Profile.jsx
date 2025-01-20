@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Form, Container, Row, Col, Image } from 'react-bootstrap';
+import { Button, Form, Container, Row, Col, Image, Card, Spinner } from 'react-bootstrap';
 import { FaCamera, FaTrash } from 'react-icons/fa';
 import showToast from '../../utils/toastHelper';
 import ConnectMe from '../../config/connect';
 import { apiCall, getTokenFromLocalStorage } from '../../utils/apiCall';
+import UpdatePassword from './updatePassComponent';
 
 const UserProfile = () => {
     const [selectedImages, setSelectedImages] = useState([]); // Array for selected images
@@ -11,7 +12,7 @@ const UserProfile = () => {
     const [updatedPhoto, setUpdatedPhoto] = useState(null);
     const [loading, setLoading] = useState(true);
  
-
+   
 
     const fetchWorkAnniversaries = async () => {
         try {
@@ -108,16 +109,6 @@ const UserProfile = () => {
     };
 
 
-
-
-
-
-
-
-
-
-
-
     const uploadImageAnnouncement = async () => {
         if (selectedImages.length === 0) {
             showToast('Please select at least one image.', 'error');
@@ -127,7 +118,6 @@ const UserProfile = () => {
         try {
             const url = `${ConnectMe.BASE_URL}/file/upload`;
             const token = getTokenFromLocalStorage();
-
             const formData = new FormData();
             for (const image of selectedImages) {
                 if (typeof image === 'string') {
@@ -144,13 +134,11 @@ const UserProfile = () => {
                     formData.append('files', image);
                 }
             }
-
             formData.append('name', 'ProfilePhoto');
 
             const headers = {
                 'Authorization': `Bearer ${token}`,
             };
-
             const response = await apiCall('POST', url, headers, formData);
             if (response.success) {
                 showToast('Banner uploaded successfully!', 'success')
@@ -164,7 +152,6 @@ const UserProfile = () => {
             showToast(`Error uploading banner: ${error.message || 'An unexpected error occurred'}`, 'error');
         }
     };
-
     return (
         <Container className="mt-5">
             <Row className="justify-content-center">
@@ -212,7 +199,6 @@ const UserProfile = () => {
                             <strong>Email:</strong> <br />
                             {userDetails?.user?.email || "N/A"}
                         </div>
-
                         {/* Employee Code */}
                         {userDetails?.employeeDetails?.EmployeeCode && (
                             <div className="mb-3">
@@ -220,7 +206,6 @@ const UserProfile = () => {
                                 {userDetails.employeeDetails.EmployeeCode}
                             </div>
                         )}
-
                         {/* Employee ID */}
                         {userDetails?.user?.EmployeeID && (
                             <div className="mb-3">
@@ -239,13 +224,12 @@ const UserProfile = () => {
 
                         {/* Update Button */}
                         <Button variant="success" type="button" className="mt-4" onClick={handleSubmit}>
-                            Update Profile
+                            Update Profile Photo
                         </Button>
                     </div>
                 </Col>
             </Row>
-
-         
+            <UpdatePassword email={userDetails?.user?.email}/>
         </Container>
     );
 };
