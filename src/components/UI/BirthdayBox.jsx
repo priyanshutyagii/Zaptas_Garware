@@ -105,8 +105,8 @@ export default function BirthdayBox() {
                           
                         }}>
                           <div className="user-image">
-                            <img
-                              src="./user.png"
+                          <img
+                              src={wish?.images?.imagePath ? `${ConnectMe.img_URL}${wish?.images?.imagePath}` : "./user.png"} // Check if `userImage` exists, else fallback to default
                               alt="User"
                               className="rounded-circle"
                             />

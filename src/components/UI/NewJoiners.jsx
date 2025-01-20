@@ -109,11 +109,12 @@ export default function NewJoiners() {
                         <div className="wish-card shadow-sm">
                           <div className="user-image">
                             <img
-                              src="./user.png"
+                              src={wish?.images?.imagePath ? `${ConnectMe.img_URL}${wish?.images?.imagePath}` : "./user.png"} // Check if `userImage` exists, else fallback to default
                               alt="User"
                               className="rounded-circle"
                             />
                           </div>
+
                           <div className="wish-content">
                             <h5 className="title card-text text-danger fw-bold celebrating-text">
                               {`${wish?.FirstName || ''} ${wish?.MiddleName || ''} ${wish?.LastName || ''}`.trim()}
